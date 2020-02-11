@@ -6,4 +6,6 @@ Game concepts:
 
 Rocket to space. Different levels. 
 
-2 players fight eachother with a combination of 
+Pong. This glorious new concept uses 
+requires you to operate 2 platforms at the same time.
+The second platform requires 

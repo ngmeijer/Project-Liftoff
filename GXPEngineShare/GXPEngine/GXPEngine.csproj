@@ -36,6 +36,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CameraFollow.cs" />
+    <Compile Include="Level.cs" />
+    <Compile Include="Platform.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="MyGame.cs" />
     <Compile Include="GXPEngine\Canvas.cs" />
     <Compile Include="GXPEngine\Game.cs" />
@@ -75,9 +79,5 @@
     <Compile Include="GXPEngine\SoLoud\Soloud.cs" />
     <Compile Include="GXPEngine\SoLoud\SoloudSoundSystem.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GXPEngine\" />
-    <Folder Include="GXPEngine\AddOns\" />
-    <Folder Include="GXPEngine\SoLoud\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>
