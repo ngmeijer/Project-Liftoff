@@ -1,0 +1,6 @@
+D:\Github\Project-Liftoff\GXPEngineShare\GXPEngine\bin\Debug\GXPEngine.exe
+D:\Github\Project-Liftoff\GXPEngineShare\GXPEngine\bin\Debug\GXPEngine.pdb
+D:\Github\Project-Liftoff\GXPEngineShare\GXPEngine\obj\x86\Debug\GXPEngine.csprojAssemblyReference.cache
+D:\Github\Project-Liftoff\GXPEngineShare\GXPEngine\obj\x86\Debug\GXPEngine.csproj.CoreCompileInputs.cache
+D:\Github\Project-Liftoff\GXPEngineShare\GXPEngine\obj\x86\Debug\GXPEngine.exe
+D:\Github\Project-Liftoff\GXPEngineShare\GXPEngine\obj\x86\Debug\GXPEngine.pdb
