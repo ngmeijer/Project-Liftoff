@@ -1,6 +1,7 @@
 ﻿using System;
+using GXPEngine;
 
-public class CameraFollow
+public class CameraFollow : GameObject
 {
     #region Variables
 
@@ -9,12 +10,14 @@ public class CameraFollow
     #endregion
 
     public CameraFollow(Player playerScript)
-	{
+    {
+        x = game.width / 2;
+        y = game.height / 2;
         _player = playerScript;
-	}
+    }
 
     private void Update()
     {
-
+        
     }
 }

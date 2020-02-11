@@ -8,8 +8,15 @@ public class Player : Sprite
 
     private float _moveSpeed = 5f;
     private float _jumpForce = 20f;
-    private float _fallMultiplier = 7f;
+    private float _fallMultiplier = 2f;
     private bool _isJumping = false;
+
+    private Platform _platform;
+    private bool _standingOnPlatform;
+    private bool _stillStandingOnPlatform;
+    private int _offset = 64;
+
+    private CameraFollow _cameraFollow;
 
     #endregion
 
@@ -17,14 +24,18 @@ public class Player : Sprite
 
     public Player() : base("PlayerSprite.png")
 	{
-        x = game.width / 2;
+        x = 500;
         y = 100;
+
+        _cameraFollow = new CameraFollow(this);
+        AddChild(_cameraFollow);
 	}
 
     private void Update()
     {
         MovePlayer();
         PlayerJump();
+        CheckForPlatformCollision();
     }
 
     #endregion
@@ -49,12 +60,11 @@ public class Player : Sprite
     {
         float tempPosY = 0;
 
-        if (Input.GetKeyDown(Key.SPACE))
+        if (Input.GetKeyDown(Key.SPACE) && _standingOnPlatform)
         {
             _isJumping = true;
             tempPosY += _jumpForce;
             Translate(0, _jumpForce);
-
         }
 
         if (Input.GetKeyUp(Key.SPACE))
@@ -68,11 +78,30 @@ public class Player : Sprite
         }
     }
 
-    private void OnCollision(Collider hitInfo)
+    private void OnCollision(GameObject hitInfo)
     {
-        if(hitInfo == Platform)
+        if(hitInfo is Platform)
         {
+            _platform = hitInfo as Platform;
+            _standingOnPlatform = true;
+            y = _platform.y - _offset;
+        }
+    }
 
+    private void CheckForPlatformCollision()
+    {
+        if (_standingOnPlatform)
+        {
+            _stillStandingOnPlatform = HitTest(_platform);
+
+            if (_stillStandingOnPlatform)
+            {
+                y = _platform.y;
+            }
+            else if (!_stillStandingOnPlatform)
+            {
+                _standingOnPlatform = false;
+            }
         }
     }
 

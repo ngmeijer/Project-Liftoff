@@ -9,7 +9,7 @@ public class MyGame : Game
 
     #endregion
 
-    public MyGame() : base(1920, 1080, true)
+    public MyGame() : base(1920, 1080, false)
     {
         _level = new Level();
         AddChild(_level);
