@@ -18,6 +18,6 @@ public class CameraFollow : GameObject
 
     private void Update()
     {
-        
+        Translate(_player.x, _player.y);
     }
 }

@@ -9,15 +9,25 @@ public class Level : GameObject
     private GroundCollider _groundCollider;
     private Player _player;
     private Platform[] _platformArray;
+    private Background _background;
 
     #endregion
 
     public Level()
 	{
+        _background = new Background();
+        AddChild(_background);
+
         InitializeGround();
         InitializePlayer();
         InitializePlatforms();
 	}
+
+    private void Update()
+    {
+
+    }
+
 
     private void InitializeGround()
     {
@@ -40,7 +50,7 @@ public class Level : GameObject
             _platformArray[count] = new Platform
             {
                 x = Utils.Random(0, game.width),
-                y = Utils.Random(0, game.height)
+                y = Utils.Random(100, 800)
             };
             AddChild(_platformArray[count]);
         }

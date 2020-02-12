@@ -36,6 +36,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Background.cs" />
     <Compile Include="CameraFollow.cs" />
     <Compile Include="GroundCollider.cs" />
     <Compile Include="Level.cs" />
