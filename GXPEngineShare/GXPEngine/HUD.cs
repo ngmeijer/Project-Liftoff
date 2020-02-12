@@ -6,9 +6,11 @@ public class HUD : Canvas
 {
 	#region
 
-	private readonly Player _player;
+	private readonly Player1 _player1;
+	private readonly Player2 _player2;
 
 	private readonly Brush _whiteBrush;
+	private readonly Brush _redBrush;
 	private readonly Font _arialFont;
 
 	private readonly float _xPosCounters = 0;
@@ -16,23 +18,32 @@ public class HUD : Canvas
 
 	#endregion
 
-	public HUD(Player playerScript) : base(1920, 1080, false)
+	public HUD(Player1 player1Script, Player2 player2Script) : base(1920, 1080, false)
 	{
-		_player = playerScript;
+		_player1 = player1Script;
+		_player2 = player2Script;
 
 		_whiteBrush = Brushes.White;
-		_arialFont = new Font("Arial", 40);
+		_redBrush = Brushes.Red;
+		_arialFont = new Font("Arial", 30);
 	}
 
 	private void Update()
 	{
-		ShowScoreLife();
+		graphics.Clear(Color.Empty);
+		ShowCountersP1();
+		ShowCountersP2();
 	}
 
-	private void ShowScoreLife()
+	private void ShowCountersP1()
 	{
-		graphics.Clear(Color.Empty);
-		graphics.DrawString("Score = " + _player.GetScoreCount(), _arialFont, _whiteBrush, _xPosCounters, _yPosCounters);
-		graphics.DrawString("Lives = " + _player.GetLifeCount(), _arialFont, _whiteBrush, _xPosCounters + 300, _yPosCounters);
+		graphics.DrawString("Score = " + _player1.scoreCount, _arialFont, _whiteBrush, _xPosCounters, _yPosCounters);
+		graphics.DrawString("Lives = " + _player1.lifeCount, _arialFont, _whiteBrush, _xPosCounters + 300, _yPosCounters);
+	}
+
+	private void ShowCountersP2()
+	{
+		graphics.DrawString("Score = " + _player2.scoreCount, _arialFont, _redBrush, _xPosCounters + 600, _yPosCounters);
+		graphics.DrawString("Lives = " + _player2.lifeCount, _arialFont, _redBrush, _xPosCounters + 900, _yPosCounters);
 	}
 }

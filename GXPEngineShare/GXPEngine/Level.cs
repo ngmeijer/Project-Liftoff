@@ -7,12 +7,14 @@ public class Level : GameObject
     #region Variables
 
     private StartPlatform _groundCollider;
-    private Player _player;
+    private Player1 _player1;
+    private Player2 _player2;
     private Platform[] _platformArray;
     private Background[] _backgroundArray;
     private Background _background;
     private Background _background2;
-    private StartPlatform _startPlatform;
+    private StartPlatform _startPlatform1;
+    private StartPlatform _startPlatform2;
     private PauseMenu _pauseMenu;
     private Coin[] _coinArray;
 
@@ -24,7 +26,7 @@ public class Level : GameObject
     public Level()
 	{
         InitializeBackground();
-        InitializePlayer();
+        InitializePlayers();
         InitializeHUD();
         InitializePlatforms();
         InitializeCoins();
@@ -32,10 +34,10 @@ public class Level : GameObject
 
     private void Update()
     {
-        if (Input.GetKeyDown(Key.TAB))
-        {
-            _pauseMenu.visible = true;
-        }
+        //if (Input.GetKeyDown(Key.TAB))
+        //{
+        //    _pauseMenu.visible = true;
+        //}
     }
 
 
@@ -51,10 +53,13 @@ public class Level : GameObject
         _background2.x = game.width;
     }
 
-    private void InitializePlayer()
+    private void InitializePlayers()
     {
-        _player = new Player();
-        AddChild(_player);
+        _player1 = new Player1(100, 200);
+        AddChild(_player1);
+
+        _player2 = new Player2(100, 400);
+        AddChild(_player2);
     }
 
     private void InitializePlatforms()
@@ -74,9 +79,13 @@ public class Level : GameObject
             }
         }
 
-        _startPlatform = new StartPlatform();
-        AddChild(_startPlatform);
-        _startPlatform.y = game.height / 2;
+        _startPlatform1 = new StartPlatform();
+        AddChild(_startPlatform1);
+        _startPlatform1.y = 300;
+
+        _startPlatform2 = new StartPlatform();
+        AddChild(_startPlatform2);
+        _startPlatform2.y = 700;
     }
 
     private void InitializeCoins()
@@ -98,7 +107,7 @@ public class Level : GameObject
 
     private void InitializeHUD()
     {
-        hud = new HUD(_player);
+        hud = new HUD(_player1, _player2);
         AddChild(hud);
     }
 
@@ -106,7 +115,7 @@ public class Level : GameObject
 
     private void CheckGameReset()
     {
-        if (_player.GetLifeCount() <= 0)
+        if (_player1.lifeCount <= 0)
         {
             resetGame = true;
             Destroy();

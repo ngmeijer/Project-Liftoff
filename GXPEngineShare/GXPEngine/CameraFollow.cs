@@ -5,11 +5,11 @@ public class CameraFollow : GameObject
 {
     #region Variables
 
-    private Player _player;
+    private Player1 _player;
 
     #endregion
 
-    public CameraFollow(Player playerScript)
+    public CameraFollow(Player1 playerScript)
     {
         x = game.width / 2;
         y = game.height / 2;

@@ -2,7 +2,7 @@
 using GXPEngine;
 using GXPEngine.Core;
 
-public class Player : Sprite
+public class Player1 : Sprite
 {
     #region Variables
 
@@ -26,26 +26,22 @@ public class Player : Sprite
     private const float spawnPointY = 100;
 
     private int coinPoint = 1;
-    private int scoreCount = 0;
-    public int GetScoreCount()
-    {
-        return scoreCount;
-    }
+    private bool playerHasDied;
 
-    private int lifeCount = 3;
-    public int GetLifeCount()
-    {
-        return lifeCount;
-    }
+    public int scoreCount { get; private set; }
+
+    public int lifeCount { get; private set; }
 
     #endregion
 
     #region Constructor & Update
 
-    public Player() : base("PlayerSprite.png")
+    public Player1(int xPos, int yPos) : base("PlayerSprite.png")
 	{
-        x = spawnPointX;
-        y = spawnPointY;
+        lifeCount = 3;
+
+        x = xPos;
+        y = yPos;
 
         _cameraFollow = new CameraFollow(this);
         AddChild(_cameraFollow);
@@ -66,12 +62,12 @@ public class Player : Sprite
     private void MovePlayer()
     {
         //These input conditions are temporary, of course! Will be replaced by the actual controller.
-        if (Input.GetKey(Key.A))
+        if (Input.GetKey(Key.LEFT))
         {
             Translate(-_moveSpeed, 0);
         }
 
-        if (Input.GetKey(Key.D))
+        if (Input.GetKey(Key.RIGHT))
         {
             Translate(_moveSpeed, 0);
         }
@@ -86,7 +82,7 @@ public class Player : Sprite
             speedY = speedY + 1;
         }
 
-        if (Input.GetKeyDown(Key.SPACE) && playerCanJump)
+        if (Input.GetKeyDown(Key.UP) && playerCanJump)
         {
             speedY = -_jumpForce;
             _isJumping = true;
@@ -97,16 +93,19 @@ public class Player : Sprite
     {
         if(x >= game.width)
         {
+            playerHasDied = true;
             RespawnPlayer();
         }
 
         if (x <= 0)
         {
+            playerHasDied = true;
             RespawnPlayer();
         }
 
         if(y > game.height)
         {
+            playerHasDied = true;
             RespawnPlayer();
         }
     }
@@ -171,7 +170,12 @@ public class Player : Sprite
         x = spawnPointX;
         y = spawnPointY;
 
-        lifeCount -= 1;
+
+        if (playerHasDied)
+        {
+            lifeCount -= 1;
+            playerHasDied = false;
+        }
 
         if(lifeCount <= 0)
         {
