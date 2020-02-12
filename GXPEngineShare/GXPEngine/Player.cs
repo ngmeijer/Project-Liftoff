@@ -7,8 +7,8 @@ public class Player : Sprite
     #region Variables
 
     private float _moveSpeed = 5f;
-    private float _jumpForce = 20f;
-    private float _fallMultiplier = 2f;
+    private float _jumpForce = 8f;
+    private float _fallMultiplier = 8f;
     private bool _isJumping = false;
 
     private Platform _platform;
@@ -58,23 +58,27 @@ public class Player : Sprite
 
     private void PlayerJump()
     {
-        float tempPosY = 0;
-
-        if (Input.GetKeyDown(Key.SPACE) && _standingOnPlatform)
+        if (Input.GetKeyDown(Key.SPACE))
         {
             _isJumping = true;
-            tempPosY += _jumpForce;
-            Translate(0, _jumpForce);
         }
 
-        if (Input.GetKeyUp(Key.SPACE))
-        {
-            _isJumping = false;
-        }
-
+        //By default, the player will fall down, due to "gravity" lol
         if (!_isJumping)
         {
             Translate(0, _fallMultiplier);
+        }
+
+        //If he is jumping, a certain amount of force is added to the player, decreasing his Y-position (therefore jumping up, in this case)
+        if (_isJumping)
+        {
+            Translate(0, -_jumpForce);
+
+            if (Input.GetKeyUp(Key.SPACE))
+            {
+                _isJumping = false;
+            }
+
         }
     }
 
