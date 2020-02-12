@@ -2,9 +2,9 @@
 using GXPEngine;
 using GXPEngine.Core;
 
-public class PauseMenu : GameObject
+public class PauseMenu : Sprite
 {
-	public PauseMenu()
+	public PauseMenu() : base("PauseMenuBackground.png")
 	{
 	}
 }

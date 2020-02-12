@@ -5,5 +5,6 @@ public class StartButton : Sprite
 {
 	public StartButton() : base("StartButton.png")
 	{
+        scale = 4;
 	}
 }

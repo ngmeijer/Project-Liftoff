@@ -1,10 +1,10 @@
 ﻿using System;
 using GXPEngine;
 
-public class GroundCollider : Sprite
+public class StartPlatform : Sprite
 {
-	public GroundCollider() : base("GroundCollider.png", true, true)
+	public StartPlatform() : base("GroundCollider.png", false, true)
 	{
-        scaleX = 25;
+        scaleX = 5;
 	}
 }

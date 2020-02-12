@@ -17,7 +17,7 @@ public class Player : Sprite
     private int _offset = 64;
 
     private CameraFollow _cameraFollow;
-    private GroundCollider _groundCollider;
+    private StartPlatform _groundCollider;
 
     #endregion
 
@@ -25,7 +25,7 @@ public class Player : Sprite
 
     public Player() : base("PlayerSprite.png")
 	{
-        x = 500;
+        x = 100;
         y = 100;
 
         _cameraFollow = new CameraFollow(this);
@@ -39,7 +39,6 @@ public class Player : Sprite
         CheckForPlatformCollision();
         CheckForScreenCollision();
     }
-
 
     #endregion
 
@@ -106,9 +105,9 @@ public class Player : Sprite
             y = _platform.y - _offset;
         }
 
-        if(hitInfo is GroundCollider)
+        if(hitInfo is StartPlatform)
         {
-            _groundCollider = hitInfo as GroundCollider;
+            _groundCollider = hitInfo as StartPlatform;
             y = _groundCollider.y - _offset;
         }
     }
