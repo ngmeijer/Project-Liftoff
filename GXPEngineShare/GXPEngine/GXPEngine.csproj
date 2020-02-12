@@ -38,7 +38,9 @@
   <ItemGroup>
     <Compile Include="Background.cs" />
     <Compile Include="CameraFollow.cs" />
+    <Compile Include="Coin.cs" />
     <Compile Include="GroundCollider.cs" />
+    <Compile Include="HUD.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="PauseMenu.cs" />

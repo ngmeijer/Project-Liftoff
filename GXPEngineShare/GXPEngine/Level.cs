@@ -14,15 +14,20 @@ public class Level : GameObject
     private Background _background2;
     private StartPlatform _startPlatform;
     private PauseMenu _pauseMenu;
+    private Coin[] _coinArray;
+
+    private HUD hud;
+    public bool resetGame;
 
     #endregion
 
     public Level()
 	{
-        InitializeHUD();
         InitializeBackground();
         InitializePlayer();
+        InitializeHUD();
         InitializePlatforms();
+        InitializeCoins();
 	}
 
     private void Update()
@@ -32,7 +37,10 @@ public class Level : GameObject
             _pauseMenu.visible = true;
         }
     }
-    
+
+
+    #region Draw level
+
     private void InitializeBackground()
     {
         _background = new Background();
@@ -71,11 +79,41 @@ public class Level : GameObject
         _startPlatform.y = game.height / 2;
     }
 
+    private void InitializeCoins()
+    {
+        _coinArray = new Coin[5];
+        for (int count = 0; count < _coinArray.Length; count++)
+        {
+            if (_coinArray[count] == null)
+            {
+                _coinArray[count] = new Coin
+                {
+                    x = Utils.Random(0, game.width),
+                    y = Utils.Random(100, 800),
+                };
+                AddChild(_coinArray[count]);
+            }
+        }
+    }
+
     private void InitializeHUD()
     {
-        //_pauseMenu = new PauseMenu();
-        //AddChild(_pauseMenu);
+        hud = new HUD(_player);
+        AddChild(hud);
+    }
 
-        //_pauseMenu.visible = false;
+    #endregion
+
+    private void CheckGameReset()
+    {
+        if (_player.GetLifeCount() <= 0)
+        {
+            resetGame = true;
+            Destroy();
+        }
+        else
+        {
+            resetGame = false;
+        }
     }
 }

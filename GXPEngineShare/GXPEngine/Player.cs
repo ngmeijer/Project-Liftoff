@@ -25,6 +25,19 @@ public class Player : Sprite
     private const float spawnPointX = 100;
     private const float spawnPointY = 100;
 
+    private int coinPoint = 1;
+    private int scoreCount = 0;
+    public int GetScoreCount()
+    {
+        return scoreCount;
+    }
+
+    private int lifeCount = 3;
+    public int GetLifeCount()
+    {
+        return lifeCount;
+    }
+
     #endregion
 
     #region Constructor & Update
@@ -114,6 +127,11 @@ public class Player : Sprite
             _standingOnStart = true;
             y = _startPlatform.y - _offset;
         }
+
+        if(hitInfo is Coin)
+        {
+            scoreCount += coinPoint;
+        }
     }
 
     private void CheckForPlatformCollision()
@@ -152,6 +170,13 @@ public class Player : Sprite
     {
         x = spawnPointX;
         y = spawnPointY;
+
+        lifeCount -= 1;
+
+        if(lifeCount <= 0)
+        {
+            Destroy();
+        }
     }
 
     #endregion

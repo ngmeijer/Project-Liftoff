@@ -35,27 +35,24 @@ public class Menu : GameObject
 
     private void Update()
     {
-        checkStartInput();
-        //CheckLevelReset();
+        CheckStartInput();
+        CheckLevelReset();
     }
 
     #endregion
 
-    #region Start game, reset check
-
-    //As the method name says, it checks if the level is being reset, IF there is a level. 
-    //private void CheckLevelReset()
-    //{
-    //    if (_newLevel != null)
-    //    {
-    //        if (_newLevel.resetGame)
-    //        {
-    //            _newLevel = null;
-    //            levelStarted = false;
-    //            hideShowMenu();
-    //        }
-    //    }
-    //}
+    private void CheckLevelReset()
+    {
+        if (_newLevel != null)
+        {
+            if (_newLevel.resetGame)
+            {
+                _newLevel = null;
+                levelStarted = false;
+                hideShowMenu();
+            }
+        }
+    }
 
     //Start the game by adding an instance of the Level class. 
     private void startGame()
@@ -68,12 +65,8 @@ public class Menu : GameObject
         }
     }
 
-    #endregion
-
-    #region Check for input
-
     //Checks if the start button has been pressed.
-    private void checkStartInput()
+    private void CheckStartInput()
     {
         if (Input.GetMouseButtonDown(0))
         {
@@ -97,7 +90,4 @@ public class Menu : GameObject
             _startButton.visible = true;
         }
     }
-
-    #endregion
-
 }
