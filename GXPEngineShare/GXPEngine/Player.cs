@@ -8,7 +8,7 @@ public class Player : Sprite
 
     private float _moveSpeed = 5f;
     private float _jumpForce = 8f;
-    private float _fallMultiplier = 9.81f;
+    private float _fallMultiplier = 1;
     private bool _isJumping = false;
 
     private Platform _platform;
@@ -18,6 +18,8 @@ public class Player : Sprite
 
     private CameraFollow _cameraFollow;
     private StartPlatform _groundCollider;
+    private bool _standingOnStart;
+    private float speedY;
 
     #endregion
 
@@ -60,27 +62,40 @@ public class Player : Sprite
 
     private void PlayerJump()
     {
-        if (Input.GetKeyDown(Key.SPACE))
+        y = y + speedY;
+        speedY = speedY + 1;
+
+        if (Input.GetKeyDown(Key.SPACE) && !_isJumping)
         {
+            speedY = -20;
             _isJumping = true;
         }
 
-        //By default, the player will fall down, due to "gravity" lol
-        if (!_isJumping)
-        {
-            Translate(0, _fallMultiplier);
-        }
+        //if (Input.GetKeyDown(Key.SPACE))
+        //{
+        //    _isJumping = true;
+        //}
 
-        //If he is jumping, a certain amount of force is added to the player, decreasing his Y-position (therefore jumping up, in this case)
-        if (_isJumping)
-        {
-            Translate(0, -_jumpForce);
+        //if (!_isJumping)
+        //{
+        //    y += _fallMultiplier;
+        //}
 
-            if (Input.GetKeyUp(Key.SPACE))
-            {
-                _isJumping = false;
-            }
-        }
+        //if (!_standingOnStart)
+        //{
+        //    _fallMultiplier *= 0.99f;
+        //}
+
+        ////If he is jumping, a certain amount of force is added to the player, decreasing his Y-position (therefore jumping up, in this case)
+        //if (_isJumping)
+        //{
+        //    Translate(0, -_jumpForce);
+
+        //    if (Input.GetKeyUp(Key.SPACE))
+        //    {
+        //        _isJumping = false;
+        //    }
+        //}
     }
 
     private void CheckForScreenCollision()
@@ -102,12 +117,14 @@ public class Player : Sprite
         {
             _platform = hitInfo as Platform;
             _standingOnPlatform = true;
+            _isJumping = false;
             y = _platform.y - _offset;
         }
 
         if(hitInfo is StartPlatform)
         {
             _groundCollider = hitInfo as StartPlatform;
+            _standingOnStart = true;
             y = _groundCollider.y - _offset;
         }
     }

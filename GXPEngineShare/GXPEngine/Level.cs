@@ -73,9 +73,9 @@ public class Level : GameObject
 
     private void InitializeHUD()
     {
-        _pauseMenu = new PauseMenu();
-        AddChild(_pauseMenu);
+        //_pauseMenu = new PauseMenu();
+        //AddChild(_pauseMenu);
 
-        _pauseMenu.visible = false;
+        //_pauseMenu.visible = false;
     }
 }
