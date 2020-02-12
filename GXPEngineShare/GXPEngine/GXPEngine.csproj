@@ -40,6 +40,8 @@
     <Compile Include="CameraFollow.cs" />
     <Compile Include="GroundCollider.cs" />
     <Compile Include="Level.cs" />
+    <Compile Include="Menu.cs" />
+    <Compile Include="PauseMenu.cs" />
     <Compile Include="Platform.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="MyGame.cs" />
@@ -80,6 +82,7 @@
     <Compile Include="GXPEngine\FMOD\FMODSoundSystem.cs" />
     <Compile Include="GXPEngine\SoLoud\Soloud.cs" />
     <Compile Include="GXPEngine\SoLoud\SoloudSoundSystem.cs" />
+    <Compile Include="StartButton.cs" />
   </ItemGroup>
   <ItemGroup />
 </Project>

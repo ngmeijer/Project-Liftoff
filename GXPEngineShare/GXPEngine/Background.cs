@@ -10,5 +10,15 @@ public class Background : Sprite
     private void Update()
     {
         x -= 5;
+
+        ReuseBackgrounds();
+    }
+
+    private void ReuseBackgrounds()
+    {
+        if(x + 1920 <= 0)
+        {
+            x = 1920;
+        }
     }
 }

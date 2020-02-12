@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using GXPEngine;
 
 public class Platform : Sprite
@@ -7,7 +9,8 @@ public class Platform : Sprite
 
     private float _moveSpeedX;
 	private float _moveSpeedY = 1;
-    private float yDir = 1;
+    private int yDir = 1;
+    private Random rand = new Random();
 
     #endregion
 
@@ -46,6 +49,9 @@ public class Platform : Sprite
         if(x <= -64)
         {
             x = game.width + 128;
+            y = Utils.Random(50, 950);
+
+            
         }
     }
 }
