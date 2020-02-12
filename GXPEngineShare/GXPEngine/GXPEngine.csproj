@@ -37,6 +37,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CameraFollow.cs" />
+    <Compile Include="GroundCollider.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="Platform.cs" />
     <Compile Include="Player.cs" />

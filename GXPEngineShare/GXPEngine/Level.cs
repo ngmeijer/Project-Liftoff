@@ -6,19 +6,25 @@ public class Level : GameObject
 {
     #region Variables
 
+    private GroundCollider _groundCollider;
     private Player _player;
     private Platform[] _platformArray;
 
     #endregion
+
     public Level()
 	{
+        InitializeGround();
         InitializePlayer();
         InitializePlatforms();
-
-        foreach(GameObject Platform in _platformArray)
-        {
-        }
 	}
+
+    private void InitializeGround()
+    {
+        _groundCollider = new GroundCollider();
+        _groundCollider.y = game.height - 64;
+        AddChild(_groundCollider);
+    }
 
     private void InitializePlayer()
     {

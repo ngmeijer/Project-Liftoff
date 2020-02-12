@@ -8,7 +8,7 @@ public class Player : Sprite
 
     private float _moveSpeed = 5f;
     private float _jumpForce = 8f;
-    private float _fallMultiplier = 8f;
+    private float _fallMultiplier = 9.81f;
     private bool _isJumping = false;
 
     private Platform _platform;
@@ -17,6 +17,7 @@ public class Player : Sprite
     private int _offset = 64;
 
     private CameraFollow _cameraFollow;
+    private GroundCollider _groundCollider;
 
     #endregion
 
@@ -36,7 +37,9 @@ public class Player : Sprite
         MovePlayer();
         PlayerJump();
         CheckForPlatformCollision();
+        CheckForScreenCollision();
     }
+
 
     #endregion
 
@@ -78,7 +81,19 @@ public class Player : Sprite
             {
                 _isJumping = false;
             }
+        }
+    }
 
+    private void CheckForScreenCollision()
+    {
+        if(x >= game.width)
+        {
+            Console.WriteLine("player dies");
+        }
+
+        if (x <= 0)
+        {
+            Console.WriteLine("player dies");
         }
     }
 
@@ -89,6 +104,12 @@ public class Player : Sprite
             _platform = hitInfo as Platform;
             _standingOnPlatform = true;
             y = _platform.y - _offset;
+        }
+
+        if(hitInfo is GroundCollider)
+        {
+            _groundCollider = hitInfo as GroundCollider;
+            y = _groundCollider.y - _offset;
         }
     }
 
