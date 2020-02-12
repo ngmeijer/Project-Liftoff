@@ -7,8 +7,8 @@ public class Player : Sprite
     #region Variables
 
     private float _moveSpeed = 5f;
-    private float _jumpForce = 8f;
-    private float _fallMultiplier = 1;
+    private float _jumpForce = 20f;
+    private float _fallMultiplier = 25;
     private bool _isJumping = false;
 
     private Platform _platform;
@@ -17,9 +17,13 @@ public class Player : Sprite
     private int _offset = 64;
 
     private CameraFollow _cameraFollow;
-    private StartPlatform _groundCollider;
+    private StartPlatform _startPlatform;
     private bool _standingOnStart;
     private float speedY;
+    private bool playerCanJump;
+    private bool _stillStandingOnStart;
+    private const float spawnPointX = 100;
+    private const float spawnPointY = 100;
 
     #endregion
 
@@ -27,8 +31,8 @@ public class Player : Sprite
 
     public Player() : base("PlayerSprite.png")
 	{
-        x = 100;
-        y = 100;
+        x = spawnPointX;
+        y = spawnPointY;
 
         _cameraFollow = new CameraFollow(this);
         AddChild(_cameraFollow);
@@ -63,51 +67,34 @@ public class Player : Sprite
     private void PlayerJump()
     {
         y = y + speedY;
-        speedY = speedY + 1;
 
-        if (Input.GetKeyDown(Key.SPACE) && !_isJumping)
+        if (speedY <= _fallMultiplier)
         {
-            speedY = -20;
-            _isJumping = true;
+            speedY = speedY + 1;
         }
 
-        //if (Input.GetKeyDown(Key.SPACE))
-        //{
-        //    _isJumping = true;
-        //}
-
-        //if (!_isJumping)
-        //{
-        //    y += _fallMultiplier;
-        //}
-
-        //if (!_standingOnStart)
-        //{
-        //    _fallMultiplier *= 0.99f;
-        //}
-
-        ////If he is jumping, a certain amount of force is added to the player, decreasing his Y-position (therefore jumping up, in this case)
-        //if (_isJumping)
-        //{
-        //    Translate(0, -_jumpForce);
-
-        //    if (Input.GetKeyUp(Key.SPACE))
-        //    {
-        //        _isJumping = false;
-        //    }
-        //}
+        if (Input.GetKeyDown(Key.SPACE) && playerCanJump)
+        {
+            speedY = -_jumpForce;
+            _isJumping = true;
+        }
     }
 
     private void CheckForScreenCollision()
     {
         if(x >= game.width)
         {
-            Console.WriteLine("player dies");
+            RespawnPlayer();
         }
 
         if (x <= 0)
         {
-            Console.WriteLine("player dies");
+            RespawnPlayer();
+        }
+
+        if(y > game.height)
+        {
+            RespawnPlayer();
         }
     }
 
@@ -123,9 +110,9 @@ public class Player : Sprite
 
         if(hitInfo is StartPlatform)
         {
-            _groundCollider = hitInfo as StartPlatform;
+            _startPlatform = hitInfo as StartPlatform;
             _standingOnStart = true;
-            y = _groundCollider.y - _offset;
+            y = _startPlatform.y - _offset;
         }
     }
 
@@ -137,13 +124,34 @@ public class Player : Sprite
 
             if (_stillStandingOnPlatform)
             {
-                y = _platform.y;
+                playerCanJump = true;
             }
             else if (!_stillStandingOnPlatform)
             {
                 _standingOnPlatform = false;
+                playerCanJump = false;
             }
         }
+
+        if (_standingOnStart)
+        {
+            _stillStandingOnStart = HitTest(_startPlatform);
+
+            if (_stillStandingOnStart)
+            {
+                playerCanJump = true;
+            } else if (!_stillStandingOnStart)
+            {
+                _standingOnStart = false;
+                playerCanJump = false;
+            }
+        }
+    }
+
+    private void RespawnPlayer()
+    {
+        x = spawnPointX;
+        y = spawnPointY;
     }
 
     #endregion
