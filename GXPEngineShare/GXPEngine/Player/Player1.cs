@@ -40,7 +40,7 @@ public class Player1 : AnimationSprite
 
     #region Constructor & Update
 
-    public Player1(int xPos, int yPos) : base("PlayerRun.png", 4, 1)
+    public Player1(int xPos, int yPos) : base("InkaSpritesheet.png", 4, 1)
     {
         scale = 0.75f;
         SetOrigin(this.x / 2, this.y + 65);

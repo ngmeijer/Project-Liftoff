@@ -35,12 +35,15 @@ public class Player2 : AnimationSprite
 
     private readonly int _animationDrawsBetweenFrames;
     private int _step;
+    private bool playerMoving;
+    private bool playerIdle;
+    private bool playerJumping;
 
     #endregion
 
     #region Constructor & Update
 
-    public Player2(int xPos, int yPos) : base("PlayerRun.png", 4, 1)
+    public Player2(int xPos, int yPos) : base("InkaSpritesheet.png", 4, 3)
     {
         scale = 0.75f;
         SetOrigin(this.x / 2, this.y + 65);
@@ -70,10 +73,28 @@ public class Player2 : AnimationSprite
     {
         _step += 1;
 
-        if (_step > _animationDrawsBetweenFrames)
+        if (playerIdle)
         {
-            NextFrame();
-            _step = 0;
+
+        }
+
+        if (playerMoving) {
+            //This makes sure the animation has some sort of delay between sprite switches for a certain animation cycle.
+            if (_step > _animationDrawsBetweenFrames)
+            {
+                //This limits the frames for the desired action.
+                if (currentFrame >= 9 && currentFrame <= 12)
+                {
+                    
+                    NextFrame();
+                    _step = 0;
+                }
+            }
+        }
+
+        if (playerJumping)
+        {
+
         }
     }
 
@@ -83,9 +104,7 @@ public class Player2 : AnimationSprite
         if (Input.GetKey(Key.A))
         {
             Translate(-_moveSpeed, 0);
-        }
-
-        if (Input.GetKey(Key.D))
+        } else if (Input.GetKey(Key.D))
         {
             Translate(_moveSpeed, 0);
         }
