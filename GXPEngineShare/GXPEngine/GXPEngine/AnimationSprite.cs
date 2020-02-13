@@ -75,11 +75,11 @@ namespace GXPEngine
 			name = "BMP " + bitmap.Width + "x" + bitmap.Height;
 			initializeAnimFrames(cols, rows, frames);
 		}
-			
-		//------------------------------------------------------------------------------------------------------------------------
-		//														initializeAnimFrames()
-		//------------------------------------------------------------------------------------------------------------------------
-		protected void initializeAnimFrames(int cols, int rows, int frames=-1) 
+
+        //------------------------------------------------------------------------------------------------------------------------
+        //														initializeAnimFrames()
+        //------------------------------------------------------------------------------------------------------------------------
+        protected void initializeAnimFrames(int cols, int rows, int frames=-1) 
 		{
 			if (frames < 0) frames = rows * cols;
 			if (frames > rows * cols) frames = rows * cols;

@@ -36,6 +36,7 @@ public class Level : GameObject
         InitializeHUD();
         InitializePlatforms();
         InitializeCoins();
+        CheckGameReset();
 	}
 
     #region Draw level

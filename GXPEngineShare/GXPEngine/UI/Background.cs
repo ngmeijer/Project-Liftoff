@@ -5,7 +5,7 @@ public class Background : Sprite
 {
     private float moveSpeed = 1;
 
-	public Background() : base("Background.png")
+	public Background() : base("PlaceholderBackground.png")
 	{   
 	}
 
@@ -21,9 +21,9 @@ public class Background : Sprite
 
     private void ReuseBackgrounds()
     {
-        if(x + 1920 <= 0)
+        if(x + game.width <= 0)
         {
-            x = 1920;
+            x = game.width;
         }
     }
 }

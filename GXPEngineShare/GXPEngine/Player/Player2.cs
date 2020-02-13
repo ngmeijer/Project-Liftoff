@@ -2,7 +2,7 @@
 using GXPEngine;
 using GXPEngine.Core;
 
-public class Player2 : Sprite
+public class Player2 : AnimationSprite
 {
     #region Variables
 
@@ -18,6 +18,7 @@ public class Player2 : Sprite
 
     private CameraFollow _cameraFollow;
     private StartPlatform _startPlatform;
+    private FallingPlatform _fallingPlatform;
     private bool _standingOnStart;
     private float speedY;
     private bool playerCanJump;
@@ -32,13 +33,22 @@ public class Player2 : Sprite
 
     public int lifeCount { get; private set; }
 
+    private readonly int _animationDrawsBetweenFrames;
+    private int _step;
+
     #endregion
 
     #region Constructor & Update
 
-    public Player2(int xPos, int yPos) : base("PlayerSprite.png")
+    public Player2(int xPos, int yPos) : base("PlayerRun.png", 4, 1)
     {
+        scale = 0.75f;
+        SetOrigin(this.x / 2, this.y + 65);
+
         lifeCount = 3;
+
+        _step = 0;
+        _animationDrawsBetweenFrames = 16;
 
         x = xPos;
         y = yPos;
@@ -50,11 +60,22 @@ public class Player2 : Sprite
         PlayerJump();
         CheckForPlatformCollision();
         CheckForScreenCollision();
+        playAnimation();
     }
 
     #endregion
 
     #region Functions
+    private void playAnimation()
+    {
+        _step += 1;
+
+        if (_step > _animationDrawsBetweenFrames)
+        {
+            NextFrame();
+            _step = 0;
+        }
+    }
 
     private void MovePlayer()
     {
@@ -109,12 +130,11 @@ public class Player2 : Sprite
 
     private void OnCollision(GameObject hitInfo)
     {
-        if (hitInfo is NormalPlatform)
+        if (hitInfo is FallingPlatform)
         {
-            _platform = hitInfo as NormalPlatform;
-            _standingOnPlatform = true;
-            _isJumping = false;
-            y = _platform.y - _offset;
+            _fallingPlatform = hitInfo as FallingPlatform;
+            playerCanJump = true;
+            y = _fallingPlatform.y - _offset;
         }
 
         if (hitInfo is StartPlatform)

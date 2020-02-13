@@ -56,11 +56,11 @@ public class FakePlatform : Sprite
         }
     }
 
-    //private void OnCollision(GameObject hitInfo)
-    //{
-    //    if((hitInfo is Player1) || (hitInfo is Player2))
-    //    {
-    //        LateDestroy();
-    //    }
-    //}
+    private void OnCollision(GameObject hitInfo)
+    {
+        if ((hitInfo is Player1) || (hitInfo is Player2))
+        {
+            LateDestroy();
+        }
+    }
 }

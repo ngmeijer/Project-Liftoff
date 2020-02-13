@@ -14,36 +14,49 @@ public class FallingPlatform : AnimationSprite
     private int randomChance;
     private bool _playerOnPlatform;
 
+    private readonly int _animationDrawsBetweenFrames;
+    private int _step;
+
+    private Player1 _player1;
+    private Player2 _player2;
+
     #endregion
 
-    public FallingPlatform() : base("PlatformCrumblingSpritesheet.png", 1, 10, 1, true, true)
+    public FallingPlatform() : base("PlatformCrumblingSpritesheet.png", 10, 1, 1, true, true)
 	{
+        scale = 0.5f;
+        _step = 0;
+        _animationDrawsBetweenFrames = 16;
+
         randomChance = Utils.Random(0, 4);
         _moveSpeedX = Utils.Random(1, 3);
         _moveSpeedY = Utils.Random(1, 3);
-		scaleY = 0.2f;
 	}
 
 	private void Update()
 	{
+
+        Console.WriteLine(_playerOnPlatform);
         y += _moveSpeedY * yDir;
 
         x -= _moveSpeedX;
-
-        if (!_playerOnPlatform)
-        {
-            currentFrame = 1;
-        }
-        else if(_playerOnPlatform)
-        {
-
-        }
 
         InversePlatforms();
         RespawnPlatforms();
 	}
 
-	private void InversePlatforms()
+    private void playAnimation()
+    {
+        _step += 1;
+
+        if (_step > _animationDrawsBetweenFrames)
+        {
+            NextFrame();
+            _step = 0;
+        }
+    }
+
+    private void InversePlatforms()
 	{
 		if(y <= 50)
 		{
@@ -65,15 +78,17 @@ public class FallingPlatform : AnimationSprite
         }
     }
 
-    //private void OnCollision(GameObject hitInfo)
-    //{
-    //    if((hitInfo is Player1) || (hitInfo is Player2))
-    //    {
-    //        
-    //    }
-    //    else
-    //    {
-    //        _playerOnPlatform = false;
-    //    }
-    //}
+    private void OnCollision(GameObject hitInfo)
+    {
+        if ((hitInfo is Player1) || (hitInfo is Player2))
+        {
+            _player1 = hitInfo as Player1;
+            _player2 = hitInfo as Player2;
+            _playerOnPlatform = true;
+        }
+        else
+        {
+            _playerOnPlatform = false;
+        }
+    }
 }
