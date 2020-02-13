@@ -36,16 +36,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Background.cs" />
+    <Compile Include="Platforms\FakePlatform.cs" />
+    <Compile Include="Platforms\FallingPlatform.cs" />
+    <Compile Include="Timer.cs" />
+    <Compile Include="UI\Background.cs" />
     <Compile Include="CameraFollow.cs" />
     <Compile Include="Coin.cs" />
     <Compile Include="GroundCollider.cs" />
-    <Compile Include="HUD.cs" />
+    <Compile Include="UI\HUD.cs" />
     <Compile Include="Level.cs" />
-    <Compile Include="Menu.cs" />
-    <Compile Include="PauseMenu.cs" />
-    <Compile Include="Platform.cs" />
-    <Compile Include="Player1.cs" />
+    <Compile Include="UI\Menu.cs" />
+    <Compile Include="UI\PauseMenu.cs" />
+    <Compile Include="Platforms\NormalPlatform.cs" />
+    <Compile Include="Player\Player1.cs" />
     <Compile Include="MyGame.cs" />
     <Compile Include="GXPEngine\Canvas.cs" />
     <Compile Include="GXPEngine\Game.cs" />
@@ -84,8 +87,8 @@
     <Compile Include="GXPEngine\FMOD\FMODSoundSystem.cs" />
     <Compile Include="GXPEngine\SoLoud\Soloud.cs" />
     <Compile Include="GXPEngine\SoLoud\SoloudSoundSystem.cs" />
-    <Compile Include="Player2.cs" />
-    <Compile Include="StartButton.cs" />
+    <Compile Include="Player\Player2.cs" />
+    <Compile Include="UI\StartButton.cs" />
   </ItemGroup>
   <ItemGroup />
 </Project>

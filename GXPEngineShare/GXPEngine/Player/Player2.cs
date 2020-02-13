@@ -2,16 +2,16 @@
 using GXPEngine;
 using GXPEngine.Core;
 
-public class Player1 : Sprite
+public class Player2 : Sprite
 {
     #region Variables
 
-    private float _moveSpeed = 5f;
+    private float _moveSpeed = 6f;
     private float _jumpForce = 20f;
-    private float _fallMultiplier = 25;
+    private float _fallMultiplier = 7.5f;
     private bool _isJumping = false;
 
-    private Platform _platform;
+    private NormalPlatform _platform;
     private bool _standingOnPlatform;
     private bool _stillStandingOnPlatform;
     private int _offset = 64;
@@ -36,16 +36,13 @@ public class Player1 : Sprite
 
     #region Constructor & Update
 
-    public Player1(int xPos, int yPos) : base("PlayerSprite.png")
-	{
+    public Player2(int xPos, int yPos) : base("PlayerSprite.png")
+    {
         lifeCount = 3;
 
         x = xPos;
         y = yPos;
-
-        _cameraFollow = new CameraFollow(this);
-        AddChild(_cameraFollow);
-	}
+    }
 
     private void Update()
     {
@@ -62,12 +59,12 @@ public class Player1 : Sprite
     private void MovePlayer()
     {
         //These input conditions are temporary, of course! Will be replaced by the actual controller.
-        if (Input.GetKey(Key.LEFT))
+        if (Input.GetKey(Key.A))
         {
             Translate(-_moveSpeed, 0);
         }
 
-        if (Input.GetKey(Key.RIGHT))
+        if (Input.GetKey(Key.D))
         {
             Translate(_moveSpeed, 0);
         }
@@ -82,7 +79,7 @@ public class Player1 : Sprite
             speedY = speedY + 1;
         }
 
-        if (Input.GetKeyDown(Key.UP) && playerCanJump)
+        if (Input.GetKeyDown(Key.SPACE) && playerCanJump)
         {
             speedY = -_jumpForce;
             _isJumping = true;
@@ -91,7 +88,7 @@ public class Player1 : Sprite
 
     private void CheckForScreenCollision()
     {
-        if(x >= game.width)
+        if (x >= game.width)
         {
             playerHasDied = true;
             RespawnPlayer();
@@ -103,7 +100,7 @@ public class Player1 : Sprite
             RespawnPlayer();
         }
 
-        if(y > game.height)
+        if (y > game.height)
         {
             playerHasDied = true;
             RespawnPlayer();
@@ -112,22 +109,22 @@ public class Player1 : Sprite
 
     private void OnCollision(GameObject hitInfo)
     {
-        if(hitInfo is Platform)
+        if (hitInfo is NormalPlatform)
         {
-            _platform = hitInfo as Platform;
+            _platform = hitInfo as NormalPlatform;
             _standingOnPlatform = true;
             _isJumping = false;
             y = _platform.y - _offset;
         }
 
-        if(hitInfo is StartPlatform)
+        if (hitInfo is StartPlatform)
         {
             _startPlatform = hitInfo as StartPlatform;
             _standingOnStart = true;
             y = _startPlatform.y - _offset;
         }
 
-        if(hitInfo is Coin)
+        if (hitInfo is Coin)
         {
             scoreCount += coinPoint;
         }
@@ -157,7 +154,8 @@ public class Player1 : Sprite
             if (_stillStandingOnStart)
             {
                 playerCanJump = true;
-            } else if (!_stillStandingOnStart)
+            }
+            else if (!_stillStandingOnStart)
             {
                 _standingOnStart = false;
                 playerCanJump = false;
@@ -177,7 +175,7 @@ public class Player1 : Sprite
             playerHasDied = false;
         }
 
-        if(lifeCount <= 0)
+        if (lifeCount <= 0)
         {
             Destroy();
         }

@@ -6,20 +6,26 @@ public class Level : GameObject
 {
     #region Variables
 
-    private StartPlatform _groundCollider;
+    //Players
     private Player1 _player1;
     private Player2 _player2;
-    private Platform[] _platformArray;
-    private Background[] _backgroundArray;
+
     private Background _background;
     private Background _background2;
-    private StartPlatform _startPlatform1;
-    private StartPlatform _startPlatform2;
-    private PauseMenu _pauseMenu;
-    private Coin[] _coinArray;
 
     private HUD hud;
     public bool resetGame;
+
+    //Pickups
+    private Coin[] _coinArray;
+
+    //Platforms
+    private StartPlatform _startPlatform1;
+    private StartPlatform _startPlatform2;
+
+    private NormalPlatform[] _platformArray;
+    private FallingPlatform[] _fallingPlatformArray;
+    private FakePlatform[] _fakePlatformArray;
 
     #endregion
 
@@ -31,15 +37,6 @@ public class Level : GameObject
         InitializePlatforms();
         InitializeCoins();
 	}
-
-    private void Update()
-    {
-        //if (Input.GetKeyDown(Key.TAB))
-        //{
-        //    _pauseMenu.visible = true;
-        //}
-    }
-
 
     #region Draw level
 
@@ -64,20 +61,53 @@ public class Level : GameObject
 
     private void InitializePlatforms()
     {
-        _platformArray = new Platform[25];
+        //Normal platforms
+        _platformArray = new NormalPlatform[8];
         for (int count = 0; count < _platformArray.Length; count++)
         {
             if (_platformArray[count] == null)
             {
-                _platformArray[count] = new Platform
+                _platformArray[count] = new NormalPlatform
                 {
                     x = Utils.Random(0, game.width),
                     y = Utils.Random(100, 800),
                 };
                 AddChild(_platformArray[count]);
-                _platformArray[count].x += 1920;
+                _platformArray[count].x += 800;
             }
         }
+
+        ////Falling platforms
+        _fallingPlatformArray = new FallingPlatform[8];
+        for (int count = 0; count < _fallingPlatformArray.Length; count++)
+        {
+            if (_fallingPlatformArray[count] == null)
+            {
+                _fallingPlatformArray[count] = new FallingPlatform
+                {
+                    x = Utils.Random(0, game.width),
+                    y = Utils.Random(100, 800),
+                };
+                AddChild(_fallingPlatformArray[count]);
+                _fallingPlatformArray[count].x += 800;
+            }
+        }
+
+        ////Fake platforms
+        //_fakePlatformArray = new FakePlatform[8];
+        //for (int count = 0; count < _fakePlatformArray.Length; count++)
+        //{
+        //    if (_fakePlatformArray[count] == null)
+        //    {
+        //        _fakePlatformArray[count] = new FakePlatform
+        //        {
+        //            x = Utils.Random(0, game.width),
+        //            y = Utils.Random(100, 800),
+        //        };
+        //        AddChild(_fakePlatformArray[count]);
+        //        _fakePlatformArray[count].x += 800;
+        //    }
+        //}
 
         _startPlatform1 = new StartPlatform();
         AddChild(_startPlatform1);

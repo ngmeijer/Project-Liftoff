@@ -11,7 +11,7 @@ public class Coin : Sprite
 
 	private void OnCollision(GameObject hitInfo)
 	{
-		if(hitInfo is Player1)
+		if((hitInfo is Player1) || (hitInfo is Player2))
 		{
 			LateDestroy();
 		}
