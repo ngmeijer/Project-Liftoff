@@ -2,7 +2,7 @@
 using GXPEngine;
 using GXPEngine.Core;
 
-public class Player2 : AnimationSprite
+public class Player2 : Sprite
 {
     #region Variables
 
@@ -22,6 +22,7 @@ public class Player2 : AnimationSprite
     private bool _standingOnStart;
     private float speedY;
     private bool playerCanJump;
+    private bool playerIsMoving;
     private bool _stillStandingOnStart;
     private const float spawnPointX = 100;
     private const float spawnPointY = 100;
@@ -35,15 +36,12 @@ public class Player2 : AnimationSprite
 
     private readonly int _animationDrawsBetweenFrames;
     private int _step;
-    private bool playerMoving;
-    private bool playerIdle;
-    private bool playerJumping;
 
     #endregion
 
     #region Constructor & Update
 
-    public Player2(int xPos, int yPos) : base("InkaSpritesheet.png", 4, 3)
+    public Player2(int xPos, int yPos) : base("TestPlayer.png", true, true)
     {
         scale = 0.75f;
         SetOrigin(this.x / 2, this.y + 65);
@@ -73,39 +71,25 @@ public class Player2 : AnimationSprite
     {
         _step += 1;
 
-        if (playerIdle)
+        if (_step > _animationDrawsBetweenFrames)
         {
-
-        }
-
-        if (playerMoving) {
-            //This makes sure the animation has some sort of delay between sprite switches for a certain animation cycle.
-            if (_step > _animationDrawsBetweenFrames)
-            {
-                //This limits the frames for the desired action.
-                if (currentFrame >= 9 && currentFrame <= 12)
-                {
-                    
-                    NextFrame();
-                    _step = 0;
-                }
-            }
-        }
-
-        if (playerJumping)
-        {
-
+            //NextFrame();
+            _step = 0;
         }
     }
 
     private void MovePlayer()
     {
         //These input conditions are temporary, of course! Will be replaced by the actual controller.
-        if (Input.GetKey(Key.A))
+        if (Input.GetKey(Key.LEFT))
         {
+            playerIsMoving = true;
             Translate(-_moveSpeed, 0);
-        } else if (Input.GetKey(Key.D))
+        }
+
+        if (Input.GetKey(Key.RIGHT))
         {
+            playerIsMoving = true;
             Translate(_moveSpeed, 0);
         }
     }
@@ -119,11 +103,13 @@ public class Player2 : AnimationSprite
             speedY = speedY + 1;
         }
 
-        if (Input.GetKeyDown(Key.SPACE) && playerCanJump)
+        if (Input.GetKeyDown(Key.UP) && playerCanJump)
         {
             speedY = -_jumpForce;
             _isJumping = true;
         }
+
+
     }
 
     private void CheckForScreenCollision()
@@ -153,7 +139,13 @@ public class Player2 : AnimationSprite
         {
             _fallingPlatform = hitInfo as FallingPlatform;
             playerCanJump = true;
+            playerIsMoving = true;
+            _standingOnPlatform = true;
             y = _fallingPlatform.y - _offset;
+            if (!playerIsMoving)
+            {
+                x = _fallingPlatform.x;
+            }
         }
 
         if (hitInfo is StartPlatform)

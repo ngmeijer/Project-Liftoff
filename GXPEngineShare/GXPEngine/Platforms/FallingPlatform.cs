@@ -35,8 +35,6 @@ public class FallingPlatform : AnimationSprite
 
 	private void Update()
 	{
-
-        Console.WriteLine(_playerOnPlatform);
         y += _moveSpeedY * yDir;
 
         x -= _moveSpeedX;

@@ -2,7 +2,7 @@
 using GXPEngine;
 using GXPEngine.Core;
 
-public class Player1 : AnimationSprite
+public class Player1 : Sprite
 {
     #region Variables
 
@@ -11,13 +11,12 @@ public class Player1 : AnimationSprite
     private float _fallMultiplier = 7.5f;
     private bool _isJumping = false;
 
-    private NormalPlatform _platform;
     private bool _standingOnPlatform;
     private bool _stillStandingOnPlatform;
     private int _offset = 64;
 
-    private CameraFollow _cameraFollow;
     private StartPlatform _startPlatform;
+    private NormalPlatform _normalPlatform;
     private FallingPlatform _fallingPlatform;
     private bool _standingOnStart;
     private float speedY;
@@ -35,12 +34,16 @@ public class Player1 : AnimationSprite
 
     private readonly int _animationDrawsBetweenFrames;
     private int _step;
+    private bool _stillStandingOnFallingPlatform;
+    private bool _playerIsMoving;
+    private bool playerHasMovedOnPlatform;
+    private float _movedDistance;
 
     #endregion
 
     #region Constructor & Update
 
-    public Player1(int xPos, int yPos) : base("InkaSpritesheet.png", 4, 1)
+    public Player1(int xPos, int yPos) : base("TestPlayer.png", true, true)
     {
         scale = 0.75f;
         SetOrigin(this.x / 2, this.y + 65);
@@ -72,7 +75,7 @@ public class Player1 : AnimationSprite
 
         if (_step > _animationDrawsBetweenFrames)
         {
-            NextFrame();
+            //NextFrame();
             _step = 0;
         }
     }
@@ -82,12 +85,27 @@ public class Player1 : AnimationSprite
         //These input conditions are temporary, of course! Will be replaced by the actual controller.
         if (Input.GetKey(Key.LEFT))
         {
+            _playerIsMoving = true;
             Translate(-_moveSpeed, 0);
+            if (_standingOnPlatform)
+            {
+                _movedDistance -= _moveSpeed;
+                playerHasMovedOnPlatform = true;
+            }
         }
-
-        if (Input.GetKey(Key.RIGHT))
+        else if (Input.GetKey(Key.RIGHT))
         {
+            _playerIsMoving = true;
             Translate(_moveSpeed, 0);
+            if (_standingOnPlatform)
+            {
+                _movedDistance += _moveSpeed;
+                playerHasMovedOnPlatform = true;
+            }
+        }
+        else
+        {
+            _playerIsMoving = false;
         }
     }
 
@@ -128,23 +146,44 @@ public class Player1 : AnimationSprite
         }
     }
 
-    private void OnCollision(GameObject hitInfo)
+    private void OnCollision(GameObject other)
     {
-        if (hitInfo is FallingPlatform)
+        if (other is NormalPlatform)
         {
-            _fallingPlatform = hitInfo as FallingPlatform;
-            playerCanJump = true;
+            _normalPlatform = other as NormalPlatform;
+            if (!_playerIsMoving)
+            {
+                x = _normalPlatform.x;
+                if (playerHasMovedOnPlatform)
+                {
+                    x = _normalPlatform.x + _movedDistance;
+                }
+            }
+            y = _normalPlatform.y - _offset;
+        }
+
+        if (other is FallingPlatform)
+        {
+            _fallingPlatform = other as FallingPlatform;
+            if (!_playerIsMoving)
+            {
+                x = _fallingPlatform.x + 50;
+                if (playerHasMovedOnPlatform)
+                {
+                    x = _fallingPlatform.x + _movedDistance;
+                }
+            }
             y = _fallingPlatform.y - _offset;
         }
 
-        if (hitInfo is StartPlatform)
+        if (other is StartPlatform)
         {
-            _startPlatform = hitInfo as StartPlatform;
+            _startPlatform = other as StartPlatform;
             _standingOnStart = true;
             y = _startPlatform.y - _offset;
         }
 
-        if (hitInfo is Coin)
+        if (other is Coin)
         {
             scoreCount += coinPoint;
         }
@@ -154,11 +193,36 @@ public class Player1 : AnimationSprite
     {
         if (_standingOnPlatform)
         {
-            _stillStandingOnPlatform = HitTest(_platform);
+            _stillStandingOnPlatform = HitTest(_normalPlatform);
 
             if (_stillStandingOnPlatform)
             {
                 playerCanJump = true;
+                if (!_isJumping)
+                {
+                    x = _normalPlatform.x;
+                    y = _normalPlatform.y;
+                }
+            }
+            else if (!_stillStandingOnPlatform)
+            {
+                _standingOnPlatform = false;
+                playerCanJump = false;
+            }
+        }
+
+        if (_standingOnPlatform)
+        {
+            _stillStandingOnFallingPlatform = HitTest(_fallingPlatform);
+
+            if (_stillStandingOnPlatform)
+            {
+                playerCanJump = true;
+                if (!_isJumping)
+                {
+                    x = _fallingPlatform.x;
+                    y = _fallingPlatform.y;
+                }
             }
             else if (!_stillStandingOnPlatform)
             {

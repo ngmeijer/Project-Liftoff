@@ -32,9 +32,9 @@ public class HUD : Canvas
 	{
 		graphics.Clear(Color.Empty);
 		ShowCountersP1();
-		ShowCountersP2();
+		//ShowCountersP2();
 
-        DisplayWinner();
+        //DisplayWinner();
         RestartGame();
 	}
 
