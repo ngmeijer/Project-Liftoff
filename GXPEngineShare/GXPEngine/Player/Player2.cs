@@ -33,8 +33,6 @@ public class Player2 : AnimationSprite
 
     public int lifeCount { get; private set; }
 
-    private readonly int _animationDrawsBetweenFrames;
-    private int _step;
     private bool _stillStandingOnFallingPlatform;
     private bool _playerIsMoving;
     private bool playerHasMovedOnPlatform;
@@ -47,13 +45,10 @@ public class Player2 : AnimationSprite
 
     public Player2(int xPos, int yPos) : base("PlayerSpritesheet.png", 4, 3)
     {
-        scale = 0.75f;
+        scale = 0.65f;
         SetOrigin(this.x / 2, this.y + 65);
 
         lifeCount = 3;
-
-        _step = 0;
-        _animationDrawsBetweenFrames = 16;
 
         x = xPos;
         y = yPos;
@@ -103,7 +98,6 @@ public class Player2 : AnimationSprite
 
     private void MovePlayer()
     {
-        //These input conditions are temporary, of course! Will be replaced by the actual controller.
         if (Input.GetKey(Key.LEFT))
         {
             handleRunAnimation();
@@ -283,7 +277,6 @@ public class Player2 : AnimationSprite
     {
         x = spawnPointX;
         y = spawnPointY;
-
 
         if (playerHasDied)
         {

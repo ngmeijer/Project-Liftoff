@@ -47,7 +47,7 @@ public class Player1 : AnimationSprite
 
     public Player1(int xPos, int yPos) : base("Spritesheet_Jones.png", 4, 3)
     {
-        scale = 0.75f;
+        scale = 0.65f;
         SetOrigin(this.x / 2, this.y + 65);
 
         lifeCount = 3;
@@ -66,6 +66,11 @@ public class Player1 : AnimationSprite
         CheckForPlatformCollision();
         CheckForScreenCollision();
         TrackScore();
+
+        if (this == null)
+        {
+            Console.WriteLine("player 1 null");
+        }
     }
 
     #endregion
@@ -284,7 +289,6 @@ public class Player1 : AnimationSprite
         x = spawnPointX;
         y = spawnPointY;
 
-
         if (playerHasDied)
         {
             lifeCount -= 1;
@@ -293,7 +297,7 @@ public class Player1 : AnimationSprite
 
         if (lifeCount <= 0)
         {
-            Destroy();
+            LateDestroy();
         }
     }
 

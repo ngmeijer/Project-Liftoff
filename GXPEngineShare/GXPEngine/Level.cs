@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using GXPEngine;
 using GXPEngine.Core;
 
@@ -26,6 +28,9 @@ public class Level : GameObject
     private NormalPlatform[] _platformArray;
     private FallingPlatform[] _fallingPlatformArray;
     private FakePlatform[] _fakePlatformArray;
+
+    private float yPos;
+    private float xPos;
 
     //SFX
     private Sound _backgroundMusic;
@@ -69,46 +74,42 @@ public class Level : GameObject
     private void InitializePlatforms()
     {
         //Normal platforms
-        _platformArray = new NormalPlatform[6];
+        _platformArray = new NormalPlatform[5];
+
         for (int count = 0; count < _platformArray.Length; count++)
         {
-            if (_platformArray[count] == null)
-            {
-                _platformArray[count] = new NormalPlatform
-                {
-                    y = Utils.Random(100, 800),
-                };
-                AddChild(_platformArray[count]);
-                _platformArray[count].x += 100;
-            }
+            _platformArray[count] = new NormalPlatform();
+            _platformArray[count].SetSpawnPosition(xPos, yPos);
+            xPos = xPos + 100;
+            yPos = yPos + 64;
+
+            AddChild(_platformArray[count]);
         }
 
-        ////Falling platforms
-        _fallingPlatformArray = new FallingPlatform[6];
+        //Falling platforms
+        _fallingPlatformArray = new FallingPlatform[5];
+
         for (int count = 0; count < _fallingPlatformArray.Length; count++)
         {
-            if (_fallingPlatformArray[count] == null)
-            {
-                _fallingPlatformArray[count] = new FallingPlatform
-                {
-                    y = Utils.Random(100, 800),
-                };
-                AddChild(_fallingPlatformArray[count]);
-            }
+            _fallingPlatformArray[count] = new FallingPlatform();
+            _fallingPlatformArray[count].SetSpawnPosition(xPos, yPos);
+            xPos = xPos + 100;
+            yPos = yPos + 64;
+
+            AddChild(_fallingPlatformArray[count]);
         }
 
         //Fake platforms
-        _fakePlatformArray = new FakePlatform[6];
+        _fakePlatformArray = new FakePlatform[5];
+
         for (int count = 0; count < _fakePlatformArray.Length; count++)
         {
-            if (_fakePlatformArray[count] == null)
-            {
-                _fakePlatformArray[count] = new FakePlatform
-                {
-                    y = Utils.Random(100, 800),
-                };
-                AddChild(_fakePlatformArray[count]);
-            }
+            _fakePlatformArray[count] = new FakePlatform();
+            _fakePlatformArray[count].SetSpawnPosition(xPos, yPos);
+            xPos = xPos + 100;
+            yPos = yPos + 64;
+
+            AddChild(_fallingPlatformArray[count]);
         }
 
         _startPlatform1 = new StartPlatform();
@@ -150,6 +151,7 @@ public class Level : GameObject
         if (_player1.lifeCount <= 0)
         {
             resetGame = true;
+            _player1 = null;
             Destroy();
         }
         else

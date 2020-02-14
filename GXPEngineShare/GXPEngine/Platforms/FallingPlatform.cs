@@ -19,18 +19,16 @@ public class FallingPlatform : AnimationSprite
 
     private Player1 _player1;
     private Player2 _player2;
+    private int _animationTimer;
 
     #endregion
 
-    public FallingPlatform() : base("PlatformCrumblingSpritesheet.png", 10, 1, 1, true, true)
+    public FallingPlatform() : base("PlatformCrumblingSpritesheet.png", 10, 1)
 	{
         scale = 0.5f;
-        _step = 0;
-        _animationDrawsBetweenFrames = 16;
-
         x = Utils.Random(400, 1800);
-        _moveSpeedX = Utils.Random(1, 3);
-        _moveSpeedY = Utils.Random(1, 3);
+        _moveSpeedX = Utils.Random(1, 2);
+        _moveSpeedY = Utils.Random(1, 2);
 	}
 
 	private void Update()
@@ -43,15 +41,23 @@ public class FallingPlatform : AnimationSprite
         RespawnPlatforms();
 	}
 
-    private void playAnimation()
+    private void handleCrumbleAnimation()
     {
-        _step += 1;
+        _animationTimer += Time.deltaTime;
+        int frame = (int)(_animationTimer / 350f) % 4 + 1;
 
-        if (_step > _animationDrawsBetweenFrames)
+        SetFrame(frame);
+
+        if(frame >= 5)
         {
-            NextFrame();
-            _step = 0;
+            LateDestroy();
         }
+    }
+
+    public void SetSpawnPosition(float xPos, float yPos)
+    {
+        x = xPos;
+        y = yPos;
     }
 
     private void InversePlatforms()
@@ -82,7 +88,7 @@ public class FallingPlatform : AnimationSprite
         {
             _player1 = hitInfo as Player1;
             _player2 = hitInfo as Player2;
-            _playerOnPlatform = true;
+            handleCrumbleAnimation();
         }
         else
         {

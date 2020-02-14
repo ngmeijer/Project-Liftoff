@@ -16,8 +16,8 @@ public class FakePlatform : Sprite
     public FakePlatform() : base("Platform.png", true, true)
 	{
         x = Utils.Random(400, 1800);
-        _moveSpeedX = Utils.Random(1, 3);
-        _moveSpeedY = Utils.Random(1, 3);
+        _moveSpeedX = Utils.Random(1, 2);
+        _moveSpeedY = Utils.Random(1, 2);
         scale = 0.2f;
 	}
 
@@ -43,6 +43,12 @@ public class FakePlatform : Sprite
             yDir *= -1;
 		}
 	}
+
+    public void SetSpawnPosition(float xPos, float yPos)
+    {
+        x = xPos;
+        y = yPos;
+    }
 
     private void RespawnPlatforms()
     {

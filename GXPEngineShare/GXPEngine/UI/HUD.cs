@@ -47,8 +47,8 @@ public class HUD : Canvas
 
 	private void ShowCountersP2()
 	{
-		graphics.DrawString("Score = " + _player2.scoreCount, _arialFont, _redBrush, _xPosCounters + 600, _yPosCounters);
-		graphics.DrawString("Lives = " + _player2.lifeCount, _arialFont, _redBrush, _xPosCounters + 900, _yPosCounters);
+		graphics.DrawString("Score = " + _player2.scoreCount, _arialFont, _redBrush, game.width - 500, _yPosCounters);
+		graphics.DrawString("Lives = " + _player2.lifeCount, _arialFont, _redBrush, game.width - 200, _yPosCounters);
 	}
 
     private void DisplayWinner()
@@ -66,6 +66,9 @@ public class HUD : Canvas
 
     private void RestartGame()
     {
-
+        if((_player1 == null) && (_player2 == null))
+        {
+            Console.WriteLine("reset game");
+        }
     }
 }
