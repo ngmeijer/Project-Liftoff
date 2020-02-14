@@ -30,14 +30,14 @@ public class Level : GameObject
     #endregion
 
     public Level()
-	{
+    {
         InitializeBackground();
         InitializePlayers();
         InitializeHUD();
         InitializePlatforms();
         InitializeCoins();
         CheckGameReset();
-	}
+    }
 
     #region Draw level
 
@@ -63,50 +63,45 @@ public class Level : GameObject
     private void InitializePlatforms()
     {
         //Normal platforms
-        _platformArray = new NormalPlatform[8];
+        _platformArray = new NormalPlatform[6];
         for (int count = 0; count < _platformArray.Length; count++)
         {
             if (_platformArray[count] == null)
             {
                 _platformArray[count] = new NormalPlatform
                 {
-                    x = Utils.Random(0, game.width),
                     y = Utils.Random(100, 800),
                 };
                 AddChild(_platformArray[count]);
-                _platformArray[count].x += 800;
+                _platformArray[count].x += 100;
             }
         }
 
         ////Falling platforms
-        _fallingPlatformArray = new FallingPlatform[8];
+        _fallingPlatformArray = new FallingPlatform[6];
         for (int count = 0; count < _fallingPlatformArray.Length; count++)
         {
             if (_fallingPlatformArray[count] == null)
             {
                 _fallingPlatformArray[count] = new FallingPlatform
                 {
-                    x = Utils.Random(0, game.width),
                     y = Utils.Random(100, 800),
                 };
                 AddChild(_fallingPlatformArray[count]);
-                _fallingPlatformArray[count].x += 800;
             }
         }
 
         //Fake platforms
-        _fakePlatformArray = new FakePlatform[8];
+        _fakePlatformArray = new FakePlatform[6];
         for (int count = 0; count < _fakePlatformArray.Length; count++)
         {
             if (_fakePlatformArray[count] == null)
             {
                 _fakePlatformArray[count] = new FakePlatform
                 {
-                    x = Utils.Random(0, game.width),
                     y = Utils.Random(100, 800),
                 };
                 AddChild(_fakePlatformArray[count]);
-                _fakePlatformArray[count].x += 800;
             }
         }
 

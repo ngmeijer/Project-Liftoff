@@ -28,7 +28,7 @@ public class FallingPlatform : AnimationSprite
         _step = 0;
         _animationDrawsBetweenFrames = 16;
 
-        randomChance = Utils.Random(0, 4);
+        x = Utils.Random(400, 1800);
         _moveSpeedX = Utils.Random(1, 3);
         _moveSpeedY = Utils.Random(1, 3);
 	}

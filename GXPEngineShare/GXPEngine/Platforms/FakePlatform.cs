@@ -11,14 +11,11 @@ public class FakePlatform : Sprite
 	private float _moveSpeedY = 1;
     private int yDir = 1;
 
-    private Timer _timer;
-    private int randomChance;
-
     #endregion
 
     public FakePlatform() : base("Platform.png", true, true)
 	{
-        randomChance = Utils.Random(0, 4);
+        x = Utils.Random(400, 1800);
         _moveSpeedX = Utils.Random(1, 3);
         _moveSpeedY = Utils.Random(1, 3);
 		scaleY = 0.2f;
