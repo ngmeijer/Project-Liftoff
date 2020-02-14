@@ -103,7 +103,7 @@ public class Player1 : AnimationSprite
 
     private void TrackScore()
     {
-        scoreCount = Time.time / 100 + coinScore;
+        scoreCount = Time.time / 150 + coinScore;
     }
 
     private void MovePlayer()

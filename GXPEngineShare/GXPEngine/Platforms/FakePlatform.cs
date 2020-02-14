@@ -11,15 +11,20 @@ public class FakePlatform : Sprite
 	private float _moveSpeedY = 1;
     private int yDir = 1;
 
+    public float offsetX;
+    public float offsetY;
+
     #endregion
 
     public FakePlatform() : base("Platform.png", true, true)
 	{
-        x = Utils.Random(400, 1800);
-        _moveSpeedX = Utils.Random(1, 2);
+        _moveSpeedX = 2.5f;
         _moveSpeedY = Utils.Random(1, 2);
         scale = 0.2f;
-	}
+
+        offsetX = Utils.Random(-300, 500);
+        offsetY = Utils.Random(-300, 300);
+    }
 
 	private void Update()
 	{

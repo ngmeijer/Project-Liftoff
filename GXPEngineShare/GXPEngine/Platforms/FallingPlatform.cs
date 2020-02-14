@@ -9,27 +9,29 @@ public class FallingPlatform : AnimationSprite
 
     private float _moveSpeedX;
 	private float _moveSpeedY = 1;
+    public float offsetX;
+    public float offsetY;
     private int yDir = 1;
 
-    private int randomChance;
-    private bool _playerOnPlatform;
-
-    private readonly int _animationDrawsBetweenFrames;
-    private int _step;
+    //Decrease to increase speed
+    private int _animationSpeed = 200;
 
     private Player1 _player1;
     private Player2 _player2;
     private int _animationTimer;
+    private bool _playerOnPlatform;
 
     #endregion
 
     public FallingPlatform() : base("PlatformCrumblingSpritesheet.png", 10, 1)
 	{
         scale = 0.5f;
-        x = Utils.Random(400, 1800);
-        _moveSpeedX = Utils.Random(1, 2);
-        _moveSpeedY = Utils.Random(1, 2);
-	}
+        _moveSpeedX = 2.5f;
+        _moveSpeedY = Utils.Random(0, 3);
+
+        offsetX = Utils.Random(-300, 500);
+        offsetY = Utils.Random(-300, 300);
+    }
 
 	private void Update()
 	{
@@ -44,11 +46,20 @@ public class FallingPlatform : AnimationSprite
     private void handleCrumbleAnimation()
     {
         _animationTimer += Time.deltaTime;
-        int frame = (int)(_animationTimer / 350f) % 4 + 1;
+        int frame = (int)(_animationTimer / _animationSpeed) % 10 + 5;
 
-        SetFrame(frame);
+        if (_playerOnPlatform)
+        {
+            SetFrame(frame);
 
-        if(frame >= 5)
+            if (frame >= 7)
+            {
+                _animationSpeed *= (int)1.4;
+                LateDestroy();
+            }
+        }
+
+        if((frame >= 2) && (!_playerOnPlatform))
         {
             LateDestroy();
         }
@@ -62,12 +73,12 @@ public class FallingPlatform : AnimationSprite
 
     private void InversePlatforms()
 	{
-		if(y <= 50)
+		if(y <= 0)
 		{
             yDir *= -1;
 		}
 		
-		if(y >= 900)
+		if(y >= 1080)
 		{
             yDir *= -1;
 		}
@@ -88,6 +99,7 @@ public class FallingPlatform : AnimationSprite
         {
             _player1 = hitInfo as Player1;
             _player2 = hitInfo as Player2;
+            _playerOnPlatform = true;
             handleCrumbleAnimation();
         }
         else

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using GXPEngine;
-using GXPEngine.Core;
+﻿using GXPEngine;
 
 public class Level : GameObject
 {
@@ -19,7 +15,7 @@ public class Level : GameObject
     public bool resetGame;
 
     //Pickups
-    private Pickup[] _coinArray;
+    private Pickup[] _pickupArray;
 
     //Platforms
     private StartPlatform _startPlatform1;
@@ -29,8 +25,17 @@ public class Level : GameObject
     private FallingPlatform[] _fallingPlatformArray;
     private FakePlatform[] _fakePlatformArray;
 
-    private float yPos;
-    private float xPos;
+    private float xPosNormal = 800;
+    private float yPosNormal = 100;
+
+    private float xPosFalling = 1000;
+    private float yPosFalling = 100;
+
+    private float xPosFake = 1200;
+    private float yPosFake = 100;
+
+    private float xPosCoins = 600;
+    private float yPosCoins = 100;
 
     //SFX
     private Sound _backgroundMusic;
@@ -71,49 +76,54 @@ public class Level : GameObject
         AddChild(_player2);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     private void InitializePlatforms()
     {
         //Normal platforms
-        _platformArray = new NormalPlatform[5];
+        _platformArray = new NormalPlatform[7];
 
         for (int count = 0; count < _platformArray.Length; count++)
         {
             _platformArray[count] = new NormalPlatform();
-            _platformArray[count].SetSpawnPosition(xPos, yPos);
-            xPos = xPos + 100;
-            yPos = yPos + 64;
+            _platformArray[count].SetSpawnPosition(xPosNormal, yPosNormal);
+            xPosNormal += 200;
+            yPosNormal += 100;
 
             AddChild(_platformArray[count]);
         }
 
         //Falling platforms
-        _fallingPlatformArray = new FallingPlatform[5];
+        _fallingPlatformArray = new FallingPlatform[7];
 
         for (int count = 0; count < _fallingPlatformArray.Length; count++)
         {
             _fallingPlatformArray[count] = new FallingPlatform();
-            _fallingPlatformArray[count].SetSpawnPosition(xPos, yPos);
-            xPos = xPos + 100;
-            yPos = yPos + 64;
+            _fallingPlatformArray[count].SetSpawnPosition(xPosFalling, yPosFalling);
+            xPosFalling += 200;
+            yPosFalling += 100;
 
             AddChild(_fallingPlatformArray[count]);
         }
 
         //Fake platforms
-        _fakePlatformArray = new FakePlatform[5];
+        _fakePlatformArray = new FakePlatform[7];
 
         for (int count = 0; count < _fakePlatformArray.Length; count++)
         {
             _fakePlatformArray[count] = new FakePlatform();
-            _fakePlatformArray[count].SetSpawnPosition(xPos, yPos);
-            xPos = xPos + 100;
-            yPos = yPos + 64;
+            _fakePlatformArray[count].SetSpawnPosition(xPosFake, yPosFake);
+            xPosFake += 200;
+            yPosFake += 100;
 
-            AddChild(_fallingPlatformArray[count]);
+            AddChild(_fakePlatformArray[count]);
         }
 
+        //Start platforms. Clean this up.
         _startPlatform1 = new StartPlatform();
         AddChild(_startPlatform1);
+
         _startPlatform1.y = 300;
 
         _startPlatform2 = new StartPlatform();
@@ -123,18 +133,16 @@ public class Level : GameObject
 
     private void InitializeCoins()
     {
-        _coinArray = new Pickup[5];
-        for (int count = 0; count < _coinArray.Length; count++)
+        _pickupArray = new Pickup[5];
+
+        for (int count = 0; count < _pickupArray.Length; count++)
         {
-            if (_coinArray[count] == null)
-            {
-                _coinArray[count] = new Pickup
-                {
-                    x = Utils.Random(0, game.width),
-                    y = Utils.Random(100, 800),
-                };
-                AddChild(_coinArray[count]);
-            }
+            _pickupArray[count] = new Pickup();
+            _pickupArray[count].SetSpawnPosition(xPosCoins, yPosCoins);
+            xPosCoins += _pickupArray[count].offsetX;
+            yPosCoins += _pickupArray[count].offsetY;
+
+            AddChild(_pickupArray[count]);
         }
     }
 
