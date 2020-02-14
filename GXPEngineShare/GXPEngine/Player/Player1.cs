@@ -10,6 +10,7 @@ public class Player1 : AnimationSprite
     private float _jumpForce = 18f;
     private float _fallMultiplier = 7.5f;
     private bool _isJumping = false;
+    private int jumpCount = 0;
 
     private bool _standingOnPlatform;
     private bool _stillStandingOnPlatform;
@@ -108,7 +109,6 @@ public class Player1 : AnimationSprite
 
     private void MovePlayer()
     {
-        //These input conditions are temporary, of course! Will be replaced by the actual controller.
         if (Input.GetKey(Key.A))
         {
             handleRunAnimation();
@@ -150,8 +150,9 @@ public class Player1 : AnimationSprite
             speedY = speedY + 1;
         }
 
-        if (Input.GetKeyDown(Key.SPACE))
+        if (Input.GetKeyDown(Key.SPACE) && (jumpCount < 1))
         {
+            jumpCount += 1;
             speedY = -_jumpForce;
             _isJumping = true;
         }
@@ -184,6 +185,7 @@ public class Player1 : AnimationSprite
         {
             if (other is NormalPlatform)
             {
+                jumpCount = 0;
                 _normalPlatform = other as NormalPlatform;
                 if (!_playerIsMoving)
                 {
@@ -201,6 +203,7 @@ public class Player1 : AnimationSprite
         {
             if (other is FallingPlatform)
             {
+                jumpCount = 0;
                 _fallingPlatform = other as FallingPlatform;
                 if (!_playerIsMoving)
                 {
@@ -215,6 +218,7 @@ public class Player1 : AnimationSprite
         }
         if (other is StartPlatform)
         {
+            jumpCount = 0;
             _startPlatform = other as StartPlatform;
             _standingOnStart = true;
             y = _startPlatform.y - _offset;

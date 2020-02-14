@@ -38,6 +38,7 @@ public class Player2 : AnimationSprite
     private bool playerHasMovedOnPlatform;
     private float _movedDistance;
     private float _animationTimer;
+    private int jumpCount;
 
     #endregion
 
@@ -139,8 +140,9 @@ public class Player2 : AnimationSprite
             speedY = speedY + 1;
         }
 
-        if (Input.GetKeyDown(Key.UP))
+        if (Input.GetKeyDown(Key.UP) && (jumpCount < 1))
         {
+            jumpCount += 1;
             speedY = -_jumpForce;
             _isJumping = true;
         }
@@ -173,6 +175,7 @@ public class Player2 : AnimationSprite
         {
             if (other is NormalPlatform)
             {
+                jumpCount = 0;
                 _normalPlatform = other as NormalPlatform;
                 if (!_playerIsMoving)
                 {
@@ -190,6 +193,7 @@ public class Player2 : AnimationSprite
         {
             if (other is FallingPlatform)
             {
+                jumpCount = 0;
                 _fallingPlatform = other as FallingPlatform;
                 if (!_playerIsMoving)
                 {
@@ -204,6 +208,7 @@ public class Player2 : AnimationSprite
         }
         if (other is StartPlatform)
         {
+            jumpCount = 0;
             _startPlatform = other as StartPlatform;
             _standingOnStart = true;
             y = _startPlatform.y - _offset;
