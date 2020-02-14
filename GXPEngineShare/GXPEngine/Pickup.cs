@@ -11,7 +11,7 @@ public class Pickup : Sprite
 		scale = 0.5f;
 		SetOrigin(width / 2, height / 2);
 
-		offsetX = Utils.Random(-300, 600);
+		offsetX = Utils.Random(0, 600);
 		offsetY = Utils.Random(-300, 300);
 	}
 	public void SetSpawnPosition(float xPos, float yPos)

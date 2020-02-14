@@ -35,8 +35,8 @@ public class Level : GameObject
     private float xPosFake = 1200;
     private float yPosFake = 100;
 
-    private float xPosCoins = 600;
-    private float yPosCoins = 100;
+    private float xPosPickups = 600;
+    private float yPosPickups = 100;
 
     //SFX
     private Sound _backgroundMusic;
@@ -141,9 +141,9 @@ public class Level : GameObject
         for (int count = 0; count < _pickupArray.Length; count++)
         {
             _pickupArray[count] = new Pickup();
-            _pickupArray[count].SetSpawnPosition(xPosCoins, yPosCoins);
-            xPosCoins += _pickupArray[count].offsetX;
-            yPosCoins += _pickupArray[count].offsetY;
+            _pickupArray[count].SetSpawnPosition(xPosPickups, yPosPickups);
+            xPosPickups += _pickupArray[count].offsetX;
+            yPosPickups += _pickupArray[count].offsetY;
 
             AddChild(_pickupArray[count]);
         }

@@ -14,6 +14,7 @@ public class Player1 : AnimationSprite
     private int jumpCount = 0;
 
     private bool _standingOnPlatform;
+    private bool playerCanJump;
     private bool _stillStandingOnPlatform;
     private int _offset = 64;
 
@@ -37,6 +38,8 @@ public class Player1 : AnimationSprite
     private float _movedDistance;
     private float _animationTimer;
     private bool _stillStandingOnFallingPlatform;
+    private bool playerHasMovedOnPlatform;
+    private bool _stillStandingOnStart;
 
     #endregion
 
@@ -173,6 +176,10 @@ public class Player1 : AnimationSprite
                 if (!_playerIsMoving)
                 {
                     x = _normalPlatform.x;
+                    if (playerHasMovedOnPlatform)
+                    {
+                        x = _normalPlatform.x + _movedDistance;
+                    }
                 }
                 y = _normalPlatform.y - _offset;
             }
@@ -187,6 +194,10 @@ public class Player1 : AnimationSprite
                 if (!_playerIsMoving)
                 {
                     x = _fallingPlatform.x + 50;
+                    if (playerHasMovedOnPlatform)
+                    {
+                        x = _fallingPlatform.x + _movedDistance;
+                    }
                 }
                 y = _fallingPlatform.y - _offset;
             }
@@ -213,6 +224,7 @@ public class Player1 : AnimationSprite
 
             if (_stillStandingOnPlatform)
             {
+                playerCanJump = true;
                 if (!_isJumping)
                 {
                     x = _normalPlatform.x;
@@ -222,6 +234,7 @@ public class Player1 : AnimationSprite
             else if (!_stillStandingOnPlatform)
             {
                 _standingOnPlatform = false;
+                playerCanJump = false;
             }
         }
 
@@ -231,6 +244,7 @@ public class Player1 : AnimationSprite
 
             if (_stillStandingOnPlatform)
             {
+                playerCanJump = true;
                 if (!_isJumping)
                 {
                     x = _fallingPlatform.x;
@@ -240,6 +254,22 @@ public class Player1 : AnimationSprite
             else if (!_stillStandingOnPlatform)
             {
                 _standingOnPlatform = false;
+                playerCanJump = false;
+            }
+        }
+
+        if (_standingOnStart)
+        {
+            _stillStandingOnStart = HitTest(_startPlatform);
+
+            if (_stillStandingOnStart)
+            {
+                playerCanJump = true;
+            }
+            else if (!_stillStandingOnStart)
+            {
+                _standingOnStart = false;
+                playerCanJump = false;
             }
         }
     }
