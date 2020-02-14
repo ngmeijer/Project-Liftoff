@@ -1,4 +1,5 @@
-﻿using GXPEngine;
+﻿using System;
+using GXPEngine;
 
 public class Level : GameObject
 {
@@ -21,9 +22,9 @@ public class Level : GameObject
     private StartPlatform _startPlatform1;
     private StartPlatform _startPlatform2;
 
-    private NormalPlatform[] _platformArray;
-    private FallingPlatform[] _fallingPlatformArray;
-    private FakePlatform[] _fakePlatformArray;
+    public NormalPlatform[] _platformArray;
+    public FallingPlatform[] _fallingPlatformArray;
+    public FakePlatform[] _fakePlatformArray;
 
     private float xPosNormal = 800;
     private float yPosNormal = 100;
@@ -57,6 +58,11 @@ public class Level : GameObject
 
     #region Draw level
 
+    private void Update()
+    {
+        Console.WriteLine(_platformArray[1].width);
+    }
+
     private void InitializeBackground()
     {
         _background = new Background();
@@ -76,9 +82,6 @@ public class Level : GameObject
         AddChild(_player2);
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     private void InitializePlatforms()
     {
         //Normal platforms

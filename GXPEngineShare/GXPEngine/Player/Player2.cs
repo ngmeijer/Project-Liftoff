@@ -140,7 +140,7 @@ public class Player2 : AnimationSprite
             speedY = speedY + 1;
         }
 
-        if (Input.GetKeyDown(Key.UP) && (jumpCount < 1))
+        if (Input.GetKeyDown(Key.UP) && (jumpCount <= 1))
         {
             jumpCount += 1;
             speedY = -_jumpForce;
@@ -208,7 +208,7 @@ public class Player2 : AnimationSprite
         }
         if (other is StartPlatform)
         {
-            jumpCount = 0;
+            jumpCount = 1;
             _startPlatform = other as StartPlatform;
             _standingOnStart = true;
             y = _startPlatform.y - _offset;
