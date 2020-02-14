@@ -9,20 +9,17 @@ public class NormalPlatform : Sprite
 
     private float _moveSpeedX;
 	private float _moveSpeedY = 1;
+    private float weight = 4;
     private int yDir = 1;
 
     private Timer _timer;
     private int randomFallRatio;
+    private bool playerOnPlatform;
 
     #endregion
 
     public NormalPlatform() : base("Platform.png", true, true)
 	{
-        randomFallRatio = Utils.Random(10, 50);
-        //Don't like large numbers, therefore this multiplication of the fallRatio.
-        randomFallRatio *= 10000;
-
-        _timer = new Timer(randomFallRatio);
         _moveSpeedX = Utils.Random(1, 3);
         _moveSpeedY = Utils.Random(1, 3);
 		scaleY = 0.2f;
@@ -30,7 +27,14 @@ public class NormalPlatform : Sprite
 
 	private void Update()
 	{
-        y += _moveSpeedY * yDir;
+        if (!playerOnPlatform)
+        {
+            y += _moveSpeedY * yDir;
+        }
+        else
+        {
+            y += weight;
+        }
 
         x -= _moveSpeedX;
 
@@ -60,11 +64,11 @@ public class NormalPlatform : Sprite
         }
     }
 
-    //private void OnCollision(GameObject hitInfo)
-    //{
-    //    if((hitInfo is Player1) || (hitInfo is Player2) && Time.time > randomFallRatio)
-    //    {
-    //        LateDestroy();
-    //    }
-    //}
+    private void OnCollision(GameObject hitInfo)
+    {
+        if ((hitInfo is Player1) || (hitInfo is Player2))
+        {
+            playerOnPlatform = true;
+        }
+    }
 }

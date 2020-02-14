@@ -118,7 +118,7 @@ public class Player1 : Sprite
             speedY = speedY + 1;
         }
 
-        if (Input.GetKeyDown(Key.UP) && playerCanJump)
+        if (Input.GetKeyDown(Key.UP))
         {
             speedY = -_jumpForce;
             _isJumping = true;
@@ -154,10 +154,10 @@ public class Player1 : Sprite
             if (!_playerIsMoving)
             {
                 x = _normalPlatform.x;
-                if (playerHasMovedOnPlatform)
-                {
-                    x = _normalPlatform.x + _movedDistance;
-                }
+                //if (playerHasMovedOnPlatform)
+                //{
+                //    x = _normalPlatform.x + _movedDistance;
+                //}
             }
             y = _normalPlatform.y - _offset;
         }
