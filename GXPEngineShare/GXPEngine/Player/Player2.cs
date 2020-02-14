@@ -2,32 +2,31 @@
 using GXPEngine;
 using GXPEngine.Core;
 
-public class Player2 : Sprite
+public class Player2 : AnimationSprite
 {
     #region Variables
 
     private float _moveSpeed = 6f;
-    private float _jumpForce = 20f;
+    private float _jumpForce = 18f;
     private float _fallMultiplier = 7.5f;
     private bool _isJumping = false;
 
-    private NormalPlatform _platform;
     private bool _standingOnPlatform;
     private bool _stillStandingOnPlatform;
     private int _offset = 64;
 
-    private CameraFollow _cameraFollow;
     private StartPlatform _startPlatform;
+    private NormalPlatform _normalPlatform;
     private FallingPlatform _fallingPlatform;
     private bool _standingOnStart;
     private float speedY;
     private bool playerCanJump;
-    private bool playerIsMoving;
     private bool _stillStandingOnStart;
     private const float spawnPointX = 100;
     private const float spawnPointY = 100;
 
-    private int coinPoint = 1;
+    private int coinPoint = 100;
+    private int coinScore;
     private bool playerHasDied;
 
     public int scoreCount { get; private set; }
@@ -36,12 +35,17 @@ public class Player2 : Sprite
 
     private readonly int _animationDrawsBetweenFrames;
     private int _step;
+    private bool _stillStandingOnFallingPlatform;
+    private bool _playerIsMoving;
+    private bool playerHasMovedOnPlatform;
+    private float _movedDistance;
+    private float _animationTimer;
 
     #endregion
 
     #region Constructor & Update
 
-    public Player2(int xPos, int yPos) : base("TestPlayer.png", true, true)
+    public Player2(int xPos, int yPos) : base("PlayerSpritesheet.png", 4, 3)
     {
         scale = 0.75f;
         SetOrigin(this.x / 2, this.y + 65);
@@ -61,21 +65,40 @@ public class Player2 : Sprite
         PlayerJump();
         CheckForPlatformCollision();
         CheckForScreenCollision();
-        playAnimation();
+        TrackScore();
     }
 
     #endregion
 
     #region Functions
-    private void playAnimation()
+    private void handleIdleAnimation()
     {
-        _step += 1;
+        _animationTimer += Time.deltaTime;
+        int frame = (int)(_animationTimer / 350f) % 1;
 
-        if (_step > _animationDrawsBetweenFrames)
-        {
-            //NextFrame();
-            _step = 0;
-        }
+        SetFrame(frame);
+    }
+
+    private void handleRunAnimation()
+    {
+        _animationTimer += Time.deltaTime;
+        int frame = (int)(_animationTimer / 350f) % 3 + 8;
+
+        SetFrame(frame);
+    }
+
+    private void handleJumpAnimation()
+    {
+        _animationTimer += Time.deltaTime;
+        int frame = (int)(_animationTimer / 350f) % 2 + 5;
+
+        SetFrame(frame);
+    }
+
+
+    private void TrackScore()
+    {
+        scoreCount = Time.time / 100 + coinScore;
     }
 
     private void MovePlayer()
@@ -83,14 +106,33 @@ public class Player2 : Sprite
         //These input conditions are temporary, of course! Will be replaced by the actual controller.
         if (Input.GetKey(Key.LEFT))
         {
-            playerIsMoving = true;
+            handleRunAnimation();
+            _playerIsMoving = true;
             Translate(-_moveSpeed, 0);
+            if (_standingOnPlatform)
+            {
+                _movedDistance -= _moveSpeed;
+                playerHasMovedOnPlatform = true;
+            }
         }
-
-        if (Input.GetKey(Key.RIGHT))
+        else if (Input.GetKey(Key.RIGHT))
         {
-            playerIsMoving = true;
+            handleRunAnimation();
+            _playerIsMoving = true;
             Translate(_moveSpeed, 0);
+            if (_standingOnPlatform)
+            {
+                _movedDistance += _moveSpeed;
+                playerHasMovedOnPlatform = true;
+            }
+        }
+        else
+        {
+            _playerIsMoving = false;
+            if (!_isJumping)
+            {
+                handleIdleAnimation();
+            }
         }
     }
 
@@ -103,13 +145,11 @@ public class Player2 : Sprite
             speedY = speedY + 1;
         }
 
-        if (Input.GetKeyDown(Key.UP) && playerCanJump)
+        if (Input.GetKeyDown(Key.UP))
         {
             speedY = -_jumpForce;
             _isJumping = true;
         }
-
-
     }
 
     private void CheckForScreenCollision()
@@ -133,31 +173,51 @@ public class Player2 : Sprite
         }
     }
 
-    private void OnCollision(GameObject hitInfo)
+    private void OnCollision(GameObject other)
     {
-        if (hitInfo is FallingPlatform)
+        if (!_standingOnStart)
         {
-            _fallingPlatform = hitInfo as FallingPlatform;
-            playerCanJump = true;
-            playerIsMoving = true;
-            _standingOnPlatform = true;
-            y = _fallingPlatform.y - _offset;
-            if (!playerIsMoving)
+            if (other is NormalPlatform)
             {
-                x = _fallingPlatform.x;
+                _normalPlatform = other as NormalPlatform;
+                if (!_playerIsMoving)
+                {
+                    x = _normalPlatform.x;
+                    if (playerHasMovedOnPlatform)
+                    {
+                        x = _normalPlatform.x + _movedDistance;
+                    }
+                }
+                y = _normalPlatform.y - _offset;
             }
         }
 
-        if (hitInfo is StartPlatform)
+        if (!_standingOnStart)
         {
-            _startPlatform = hitInfo as StartPlatform;
+            if (other is FallingPlatform)
+            {
+                _fallingPlatform = other as FallingPlatform;
+                if (!_playerIsMoving)
+                {
+                    x = _fallingPlatform.x + 50;
+                    if (playerHasMovedOnPlatform)
+                    {
+                        x = _fallingPlatform.x + _movedDistance;
+                    }
+                }
+                y = _fallingPlatform.y - _offset;
+            }
+        }
+        if (other is StartPlatform)
+        {
+            _startPlatform = other as StartPlatform;
             _standingOnStart = true;
             y = _startPlatform.y - _offset;
         }
 
-        if (hitInfo is Coin)
+        if (other is Pickup)
         {
-            scoreCount += coinPoint;
+            coinScore += coinPoint;
         }
     }
 
@@ -165,11 +225,36 @@ public class Player2 : Sprite
     {
         if (_standingOnPlatform)
         {
-            _stillStandingOnPlatform = HitTest(_platform);
+            _stillStandingOnPlatform = HitTest(_normalPlatform);
 
             if (_stillStandingOnPlatform)
             {
                 playerCanJump = true;
+                if (!_isJumping)
+                {
+                    x = _normalPlatform.x;
+                    y = _normalPlatform.y;
+                }
+            }
+            else if (!_stillStandingOnPlatform)
+            {
+                _standingOnPlatform = false;
+                playerCanJump = false;
+            }
+        }
+
+        if (_standingOnPlatform)
+        {
+            _stillStandingOnFallingPlatform = HitTest(_fallingPlatform);
+
+            if (_stillStandingOnPlatform)
+            {
+                playerCanJump = true;
+                if (!_isJumping)
+                {
+                    x = _fallingPlatform.x;
+                    y = _fallingPlatform.y;
+                }
             }
             else if (!_stillStandingOnPlatform)
             {

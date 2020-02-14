@@ -2,12 +2,12 @@
 using GXPEngine;
 using GXPEngine.Core;
 
-public class Player1 : Sprite
+public class Player1 : AnimationSprite
 {
     #region Variables
 
     private float _moveSpeed = 6f;
-    private float _jumpForce = 20f;
+    private float _jumpForce = 18f;
     private float _fallMultiplier = 7.5f;
     private bool _isJumping = false;
 
@@ -39,12 +39,13 @@ public class Player1 : Sprite
     private bool _playerIsMoving;
     private bool playerHasMovedOnPlatform;
     private float _movedDistance;
+    private float _animationTimer;
 
     #endregion
 
     #region Constructor & Update
 
-    public Player1(int xPos, int yPos) : base("TestPlayer.png", true, true)
+    public Player1(int xPos, int yPos) : base("Spritesheet_Jones.png", 4, 3)
     {
         scale = 0.75f;
         SetOrigin(this.x / 2, this.y + 65);
@@ -64,23 +65,36 @@ public class Player1 : Sprite
         PlayerJump();
         CheckForPlatformCollision();
         CheckForScreenCollision();
-        playAnimation();
         TrackScore();
     }
 
     #endregion
 
     #region Functions
-    private void playAnimation()
+    private void handleIdleAnimation()
     {
-        _step += 1;
+        _animationTimer += Time.deltaTime;
+        int frame = (int)(_animationTimer / 350f) % 1;
 
-        if (_step > _animationDrawsBetweenFrames)
-        {
-            //NextFrame();
-            _step = 0;
-        }
+        SetFrame(frame);
     }
+
+    private void handleRunAnimation()
+    {
+        _animationTimer += Time.deltaTime;
+        int frame = (int)(_animationTimer / 350f) % 3 + 8;
+
+        SetFrame(frame);
+    }
+
+    private void handleJumpAnimation()
+    {
+        _animationTimer += Time.deltaTime;
+        int frame = (int)(_animationTimer / 350f) % 2 + 5;
+
+        SetFrame(frame);
+    }
+
 
     private void TrackScore()
     {
@@ -90,8 +104,9 @@ public class Player1 : Sprite
     private void MovePlayer()
     {
         //These input conditions are temporary, of course! Will be replaced by the actual controller.
-        if (Input.GetKey(Key.LEFT))
+        if (Input.GetKey(Key.A))
         {
+            handleRunAnimation();
             _playerIsMoving = true;
             Translate(-_moveSpeed, 0);
             if (_standingOnPlatform)
@@ -100,8 +115,9 @@ public class Player1 : Sprite
                 playerHasMovedOnPlatform = true;
             }
         }
-        else if (Input.GetKey(Key.RIGHT))
+        else if (Input.GetKey(Key.D))
         {
+            handleRunAnimation();
             _playerIsMoving = true;
             Translate(_moveSpeed, 0);
             if (_standingOnPlatform)
@@ -113,6 +129,10 @@ public class Player1 : Sprite
         else
         {
             _playerIsMoving = false;
+            if (!_isJumping)
+            {
+                handleIdleAnimation();
+            }
         }
     }
 
@@ -125,7 +145,7 @@ public class Player1 : Sprite
             speedY = speedY + 1;
         }
 
-        if (Input.GetKeyDown(Key.UP))
+        if (Input.GetKeyDown(Key.SPACE))
         {
             speedY = -_jumpForce;
             _isJumping = true;
@@ -155,34 +175,39 @@ public class Player1 : Sprite
 
     private void OnCollision(GameObject other)
     {
-        if (other is NormalPlatform)
+        if (!_standingOnStart)
         {
-            _normalPlatform = other as NormalPlatform;
-            if (!_playerIsMoving)
+            if (other is NormalPlatform)
             {
-                x = _normalPlatform.x;
-                //if (playerHasMovedOnPlatform)
-                //{
-                //    x = _normalPlatform.x + _movedDistance;
-                //}
-            }
-            y = _normalPlatform.y - _offset;
-        }
-
-        if (other is FallingPlatform)
-        {
-            _fallingPlatform = other as FallingPlatform;
-            if (!_playerIsMoving)
-            {
-                x = _fallingPlatform.x + 50;
-                if (playerHasMovedOnPlatform)
+                _normalPlatform = other as NormalPlatform;
+                if (!_playerIsMoving)
                 {
-                    x = _fallingPlatform.x + _movedDistance;
+                    x = _normalPlatform.x;
+                    if (playerHasMovedOnPlatform)
+                    {
+                        x = _normalPlatform.x + _movedDistance;
+                    }
                 }
+                y = _normalPlatform.y - _offset;
             }
-            y = _fallingPlatform.y - _offset;
         }
 
+        if (!_standingOnStart)
+        {
+            if (other is FallingPlatform)
+            {
+                _fallingPlatform = other as FallingPlatform;
+                if (!_playerIsMoving)
+                {
+                    x = _fallingPlatform.x + 50;
+                    if (playerHasMovedOnPlatform)
+                    {
+                        x = _fallingPlatform.x + _movedDistance;
+                    }
+                }
+                y = _fallingPlatform.y - _offset;
+            }
+        }
         if (other is StartPlatform)
         {
             _startPlatform = other as StartPlatform;
@@ -190,7 +215,7 @@ public class Player1 : Sprite
             y = _startPlatform.y - _offset;
         }
 
-        if (other is Coin)
+        if (other is Pickup)
         {
             coinScore += coinPoint;
         }

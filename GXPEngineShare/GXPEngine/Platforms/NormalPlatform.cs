@@ -23,8 +23,8 @@ public class NormalPlatform : Sprite
         x = Utils.Random(400, 1800);
         _moveSpeedX = Utils.Random(1, 3);
         _moveSpeedY = Utils.Random(1, 3);
-		scaleY = 0.2f;
-	}
+        scale = 0.2f;
+    }
 
 	private void Update()
 	{

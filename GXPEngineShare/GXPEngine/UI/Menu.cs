@@ -8,7 +8,7 @@ public class Menu : GameObject
     private StartButton _startButton;
 
     private Level _newLevel;
-
+    private SoundChannel _soundManager;
     private Sound _backgroundMusic;
     private Sprite _backgroundImage;
 
@@ -22,15 +22,21 @@ public class Menu : GameObject
     {
         _newLevel = level;
 
+        _backgroundImage = new Sprite("Logo.png");
+        AddChild(_backgroundImage);
+        _backgroundImage.scale = 2;
+        _backgroundImage.x = (game.width - _backgroundImage.width) / 2;
+        _backgroundImage.y = 300;
+
         levelStarted = false;
 
         _startButton = new StartButton();
         AddChild(_startButton);
         _startButton.x = (game.width - _startButton.width) / 2;
-        _startButton.y = (game.height - _startButton.height) / 2;
+        _startButton.y = 800;
 
-        //_backgroundMusic = new Sound("", true, false);
-        //_backgroundMusic.Play(false, 3);
+        _backgroundMusic = new Sound("MenuTheme.mp3", true, true);
+        _backgroundMusic.Play(false);
     }
 
     private void Update()

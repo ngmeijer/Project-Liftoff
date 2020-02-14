@@ -25,16 +25,17 @@ public class HUD : Canvas
 
 		_whiteBrush = Brushes.White;
 		_redBrush = Brushes.Red;
-		_arialFont = new Font("Arial", 30);
+		_arialFont = new Font("GameFont.ttf", 30);
+
 	}
 
 	private void Update()
 	{
 		graphics.Clear(Color.Empty);
 		ShowCountersP1();
-		//ShowCountersP2();
+		ShowCountersP2();
 
-        //DisplayWinner();
+        DisplayWinner();
         RestartGame();
 	}
 

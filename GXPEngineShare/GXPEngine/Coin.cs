@@ -1,9 +1,9 @@
 ﻿using System;
 using GXPEngine;
 
-public class Coin : Sprite 
+public class Pickup : Sprite 
 {
-	public Coin() : base("Coin.png")
+	public Pickup() : base("PickUp.png")
 	{
 		scale = 0.5f;
 		SetOrigin(width / 2, height / 2);

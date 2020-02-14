@@ -43,7 +43,7 @@
     <Compile Include="UI\Background.cs" />
     <Compile Include="CameraFollow.cs" />
     <Compile Include="Coin.cs" />
-    <Compile Include="GroundCollider.cs" />
+    <Compile Include="Platforms\StartPlatform.cs" />
     <Compile Include="UI\HUD.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="UI\Menu.cs" />

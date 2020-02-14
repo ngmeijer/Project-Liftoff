@@ -17,7 +17,7 @@ public class Level : GameObject
     public bool resetGame;
 
     //Pickups
-    private Coin[] _coinArray;
+    private Pickup[] _coinArray;
 
     //Platforms
     private StartPlatform _startPlatform1;
@@ -27,10 +27,16 @@ public class Level : GameObject
     private FallingPlatform[] _fallingPlatformArray;
     private FakePlatform[] _fakePlatformArray;
 
+    //SFX
+    private Sound _backgroundMusic;
+
     #endregion
 
     public Level()
     {
+        _backgroundMusic = new Sound("LevelTheme.mp3", true, true);
+        _backgroundMusic.Play(false);
+
         InitializeBackground();
         InitializePlayers();
         InitializeHUD();
@@ -56,8 +62,8 @@ public class Level : GameObject
         _player1 = new Player1(100, 200);
         AddChild(_player1);
 
-        //_player2 = new Player2(100, 400);
-        //AddChild(_player2);
+        _player2 = new Player2(100, 500);
+        AddChild(_player2);
     }
 
     private void InitializePlatforms()
@@ -116,12 +122,12 @@ public class Level : GameObject
 
     private void InitializeCoins()
     {
-        _coinArray = new Coin[5];
+        _coinArray = new Pickup[5];
         for (int count = 0; count < _coinArray.Length; count++)
         {
             if (_coinArray[count] == null)
             {
-                _coinArray[count] = new Coin
+                _coinArray[count] = new Pickup
                 {
                     x = Utils.Random(0, game.width),
                     y = Utils.Random(100, 800),
