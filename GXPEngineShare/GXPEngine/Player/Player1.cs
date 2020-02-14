@@ -25,7 +25,8 @@ public class Player1 : Sprite
     private const float spawnPointX = 100;
     private const float spawnPointY = 100;
 
-    private int coinPoint = 1;
+    private int coinPoint = 100;
+    private int coinScore;
     private bool playerHasDied;
 
     public int scoreCount { get; private set; }
@@ -64,6 +65,7 @@ public class Player1 : Sprite
         CheckForPlatformCollision();
         CheckForScreenCollision();
         playAnimation();
+        TrackScore();
     }
 
     #endregion
@@ -78,6 +80,11 @@ public class Player1 : Sprite
             //NextFrame();
             _step = 0;
         }
+    }
+
+    private void TrackScore()
+    {
+        scoreCount = Time.time / 100 + coinScore;
     }
 
     private void MovePlayer()
@@ -185,7 +192,7 @@ public class Player1 : Sprite
 
         if (other is Coin)
         {
-            scoreCount += coinPoint;
+            coinScore += coinPoint;
         }
     }
 
