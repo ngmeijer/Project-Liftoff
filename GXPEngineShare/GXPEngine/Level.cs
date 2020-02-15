@@ -6,8 +6,8 @@ public class Level : GameObject
     #region Variables
 
     //Players
-    private Player1 _player1;
-    private Player2 _player2;
+    public Player1 _player1 { get; private set; }
+    public Player2 _player2 { get; private set; }
 
     private Background _background;
     private Background _background2;
@@ -104,8 +104,8 @@ public class Level : GameObject
         {
             _fallingPlatformArray[count] = new FallingPlatform();
             _fallingPlatformArray[count].SetSpawnPosition(xPosFalling, yPosFalling);
-            xPosFalling += 200;
-            yPosFalling += 100;
+            xPosFalling = Utils.Random(600, 1900);
+            yPosFalling += 130;
 
             AddChild(_fallingPlatformArray[count]);
         }

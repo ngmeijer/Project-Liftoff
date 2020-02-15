@@ -34,12 +34,12 @@ public class Player1 : AnimationSprite
 
     private int pickupPoints = 100;
     private int pickupScore;
+    private int scoreAhead;
     public int pickupsCollected { get; private set; }
 
     private bool playerHasDied;
 
     public int scoreCount { get; private set; }
-
     public int lifeCount { get; private set; }
 
     private bool _playerIsMoving;
@@ -49,6 +49,7 @@ public class Player1 : AnimationSprite
     private bool playerHasMovedOnPlatform;
     private bool _stillStandingOnStart;
     private bool _playerCanUseWhip;
+    public int whipUsedCount { get; private set; }
 
     #endregion
 
@@ -109,8 +110,15 @@ public class Player1 : AnimationSprite
         SetFrame(frame);
     }
 
-    private void TrackScore() => scoreCount = Time.time / 150 + pickupScore;
+    private void TrackScore()
+    {
+        scoreCount = Time.time / 400 + pickupScore + scoreAhead;
 
+        if(x > levelScript._player2.x + 100)
+        {
+            scoreAhead += 1;
+        }
+    }
     private void MovePlayer()
     {
         if (Input.GetKey(Key.A))
@@ -210,10 +218,6 @@ public class Player1 : AnimationSprite
                 if (!_playerIsMoving)
                 {
                     x = _normalPlatform.x;
-                    if (playerHasMovedOnPlatform)
-                    {
-                        x = _normalPlatform.x + _movedDistance;
-                    }
                 }
                 y = _normalPlatform.y - _offset;
             }
@@ -228,10 +232,6 @@ public class Player1 : AnimationSprite
                 if (!_playerIsMoving)
                 {
                     x = _fallingPlatform.x + 50;
-                    if (playerHasMovedOnPlatform)
-                    {
-                        x = _fallingPlatform.x + _movedDistance;
-                    }
                 }
                 y = _fallingPlatform.y - _offset;
             }

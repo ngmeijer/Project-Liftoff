@@ -72,7 +72,7 @@ public class HUD : Canvas
 			WhipChargeP1 = 1.0f;
 		}
 
-		if(WhipChargeP1 == 1.0f)
+		if((WhipChargeP1 == 1.0f) && (_player1.whipUsedCount < 1))
 		{
 			_playerCanUseWhip = true;
 		}

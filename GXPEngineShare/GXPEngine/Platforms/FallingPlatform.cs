@@ -29,16 +29,12 @@ public class FallingPlatform : AnimationSprite
         _moveSpeedX = 2.5f;
         _moveSpeedY = Utils.Random(0, 3);
 
-        offsetX = Utils.Random(-300, 500);
-        offsetY = Utils.Random(-300, 300);
+        offsetX = Utils.Random(-600, 500);
+        offsetY = Utils.Random(-600, 300);
     }
 
 	private void Update()
 	{
-        y += _moveSpeedY * yDir;
-
-        x -= _moveSpeedX;
-
         InversePlatforms();
         RespawnPlatforms();
 	}
