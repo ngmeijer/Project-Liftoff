@@ -16,12 +16,29 @@ public class HUD : Canvas
 	private readonly float _xPosCounters = 0;
 	private readonly float _yPosCounters = 50;
 
+	public Sprite _whipChargeP1;
+	public Sprite _whipChargeP2;
+	public bool _playerCanUseWhip { get; private set; }
+
+	public float WhipChargeP1 { get; private set; }
+
 	#endregion
 
 	public HUD(Player1 player1Script, Player2 player2Script) : base(1920, 1080, false)
 	{
 		_player1 = player1Script;
 		_player2 = player2Script;
+
+		_whipChargeP1 = new Sprite("WhipCharge.png");
+		AddChild(_whipChargeP1);
+		_whipChargeP1.y = game.height - 100;
+		_whipChargeP1.scaleX = 0;
+
+		_whipChargeP2 = new Sprite("WhipCharge.png");
+		AddChild(_whipChargeP2);
+		_whipChargeP2.x = game.width - _whipChargeP2.width;
+		_whipChargeP2.y = game.height - 100;
+		_whipChargeP2.scale = 0;
 
 		_whiteBrush = Brushes.White;
 		_redBrush = Brushes.Red;
@@ -35,8 +52,30 @@ public class HUD : Canvas
 		ShowCountersP1();
 		ShowCountersP2();
 
+		ShowWhipCharge();
+
         DisplayWinner();
         RestartGame();
+	}
+
+	private void ShowWhipCharge()
+	{
+		if (_player1.pickupsCollected == 1)
+		{
+			_whipChargeP1.scaleX = 0.5f;
+			WhipChargeP1 = 0.5f;
+		}
+
+		if (_player1.pickupsCollected == 2)
+		{
+			_whipChargeP1.scaleX = 1.0f;
+			WhipChargeP1 = 1.0f;
+		}
+
+		if(WhipChargeP1 == 1.0f)
+		{
+			_playerCanUseWhip = true;
+		}
 	}
 
 	private void ShowCountersP1()
@@ -55,12 +94,12 @@ public class HUD : Canvas
     {
         if(_player1.lifeCount <= 0)
         {
-            graphics.DrawString("Player 1 WON!", _arialFont, _redBrush, game.width / 2, game.height / 2);
+            graphics.DrawString("Player 1 WON!", _arialFont, _redBrush, game.width / 2, game.height / 2 - 100);
         }
 
         if(_player2.lifeCount <= 0)
         {
-            graphics.DrawString("Player 2 WON!", _arialFont, _whiteBrush, game.width / 2, game.height / 2);
+            graphics.DrawString("Player 2 WON!", _arialFont, _whiteBrush, game.width / 2, game.height / 2 - 100);
         }
     }
 

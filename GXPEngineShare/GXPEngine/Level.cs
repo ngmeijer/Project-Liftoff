@@ -12,7 +12,7 @@ public class Level : GameObject
     private Background _background;
     private Background _background2;
 
-    private HUD hud;
+    public HUD hud { get; private set; }
     public bool resetGame;
 
     //Pickups
@@ -75,7 +75,7 @@ public class Level : GameObject
 
     private void InitializePlayers()
     {
-        _player1 = new Player1(100, 200);
+        _player1 = new Player1(100, 200, hud, this);
         AddChild(_player1);
 
         _player2 = new Player2(100, 500);

@@ -21,13 +21,21 @@ public class Player1 : AnimationSprite
     private StartPlatform _startPlatform;
     private NormalPlatform _normalPlatform;
     private FallingPlatform _fallingPlatform;
+
+    private Whip whipSprite;
+
+    private Level levelScript;
+    private HUD hudScript;
+
     private bool _standingOnStart;
     private float speedY;
     private const float spawnPointX = 100;
     private const float spawnPointY = 100;
 
-    private int coinPoint = 100;
-    private int coinScore;
+    private int pickupPoints = 100;
+    private int pickupScore;
+    public int pickupsCollected { get; private set; }
+
     private bool playerHasDied;
 
     public int scoreCount { get; private set; }
@@ -40,13 +48,17 @@ public class Player1 : AnimationSprite
     private bool _stillStandingOnFallingPlatform;
     private bool playerHasMovedOnPlatform;
     private bool _stillStandingOnStart;
+    private bool _playerCanUseWhip;
 
     #endregion
 
     #region Constructor & Update
 
-    public Player1(int xPos, int yPos) : base("Spritesheet_Jones.png", 4, 3)
+    public Player1(int xPos, int yPos, HUD hud, Level level) : base("Spritesheet_Jones.png", 4, 3)
     {
+        levelScript = level;
+        hudScript = hud;
+
         scale = 0.65f;
         SetOrigin(this.x / 2, this.y + 65);
 
@@ -54,12 +66,17 @@ public class Player1 : AnimationSprite
 
         x = xPos;
         y = yPos;
+
+        whipSprite = new Whip();
+        AddChild(whipSprite);
+        whipSprite.visible = false;
     }
 
     private void Update()
     {
         MovePlayer();
         PlayerJump();
+        UseWhip();
         CheckForPlatformCollision();
         CheckForScreenCollision();
         TrackScore();
@@ -92,7 +109,7 @@ public class Player1 : AnimationSprite
         SetFrame(frame);
     }
 
-    private void TrackScore() => scoreCount = Time.time / 150 + coinScore;
+    private void TrackScore() => scoreCount = Time.time / 150 + pickupScore;
 
     private void MovePlayer()
     {
@@ -141,6 +158,23 @@ public class Player1 : AnimationSprite
             speedY = -_jumpForce;
             _isJumping = true;
             HandleJumpAnimation();
+        }
+    }
+
+    private void UseWhip()
+    {
+        if (levelScript.hud._playerCanUseWhip)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                whipSprite.visible = true;
+            }
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                whipSprite.visible = false;
+            }
+
         }
     }
 
@@ -212,7 +246,8 @@ public class Player1 : AnimationSprite
 
         if (other is Pickup)
         {
-            coinScore += coinPoint;
+            pickupsCollected += 1;
+            pickupScore += pickupPoints;
         }
     }
 
