@@ -7,7 +7,7 @@ public class Menu : GameObject
 
     private StartButton _startButton;
 
-    public Level _newLevel { get; private set; }
+    private Level _newLevel;
     private SoundChannel _soundManager;
     private Sound _backgroundMusic;
     private Sprite _backgroundImage;
