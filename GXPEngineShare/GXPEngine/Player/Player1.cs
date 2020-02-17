@@ -18,9 +18,11 @@ public class Player1 : AnimationSprite
     private bool _stillStandingOnPlatform;
     private int _offset = 64;
 
-    private StartPlatform _startPlatform;
+    public StartPlatform _startPlatform { get; set; }
     private NormalPlatform _normalPlatform;
     private FallingPlatform _fallingPlatform;
+
+    private Sprite _collider;
 
     private Whip whipSprite;
 
@@ -55,7 +57,7 @@ public class Player1 : AnimationSprite
 
     #region Constructor & Update
 
-    public Player1(int xPos, int yPos, HUD hud, Level level) : base("Spritesheet_Jones.png", 4, 3)
+    public Player1(int xPos, int yPos, HUD hud, Level level) : base("Spritesheet_Jones.png", 4, 3, 1, true, false)
     {
         levelScript = level;
         hudScript = hud;
@@ -65,8 +67,16 @@ public class Player1 : AnimationSprite
 
         lifeCount = 3;
 
-        x = xPos;
-        y = yPos;
+        _collider = new Sprite("Collider.png", true, true);
+        AddChild(_collider);
+
+        _collider.x = xPos - 85;
+        _collider.y = yPos - 100;
+
+        x = _collider.x;
+        y = _collider.y;
+
+
 
         whipSprite = new Whip();
         AddChild(whipSprite);
@@ -78,7 +88,7 @@ public class Player1 : AnimationSprite
         MovePlayer();
         PlayerJump();
         UseWhip();
-        CheckForPlatformCollision();
+        CheckCollisions();
         CheckForScreenCollision();
         TrackScore();
     }
@@ -207,107 +217,92 @@ public class Player1 : AnimationSprite
         }
     }
 
-    private void OnCollision(GameObject other)
-    {
-        if (!_standingOnStart)
+    private void CheckCollisions() 
+    { 
+        foreach(GameObject g in _collider.GetCollisions())
         {
-            if (other is NormalPlatform)
+            if(g is StartPlatform)
             {
+                _startPlatform = g as StartPlatform;
+                y = _startPlatform.y - 70;
                 jumpCount = 0;
-                _normalPlatform = other as NormalPlatform;
-                if (!_playerIsMoving)
-                {
-                    x = _normalPlatform.x;
-                }
-                y = _normalPlatform.y - _offset;
             }
-        }
 
-        if (!_standingOnStart)
-        {
-            if (other is FallingPlatform)
+            if (g is NormalPlatform)
             {
+                _normalPlatform = g as NormalPlatform;
+                x = _normalPlatform.x;
+                y = _normalPlatform.y - 70;
                 jumpCount = 0;
-                _fallingPlatform = other as FallingPlatform;
-                if (!_playerIsMoving)
-                {
-                    x = _fallingPlatform.x + 50;
-                }
-                y = _fallingPlatform.y - _offset;
             }
-        }
-        if (other is StartPlatform)
-        {
-            jumpCount = 1;
-            _startPlatform = other as StartPlatform;
-            _standingOnStart = true;
-            y = _startPlatform.y - _offset;
-        }
 
-        if (other is Pickup)
-        {
-            pickupsCollected += 1;
-            pickupScore += pickupPoints;
+            if (g is FallingPlatform)
+            {
+                _fallingPlatform = g as FallingPlatform;
+                x = _fallingPlatform.x + 55;
+                y = _fallingPlatform.y - 70;
+                jumpCount = 0;
+            }
         }
     }
 
-    private void CheckForPlatformCollision()
-    {
-        if (_standingOnPlatform)
-        {
-            _stillStandingOnPlatform = HitTest(_normalPlatform);
+    //private void CheckForPlatformCollision()
+    //{
+    //    if (_standingOnPlatform)
+    //    {
+    //        _stillStandingOnPlatform = HitTest(_normalPlatform);
 
-            if (_stillStandingOnPlatform)
-            {
-                playerCanJump = true;
-                if (!_isJumping)
-                {
-                    x = _normalPlatform.x;
-                    y = _normalPlatform.y;
-                }
-            }
-            else if (!_stillStandingOnPlatform)
-            {
-                _standingOnPlatform = false;
-                playerCanJump = false;
-            }
-        }
+    //        if (_stillStandingOnPlatform)
+    //        {
+    //            playerCanJump = true;
+    //            if (!_isJumping)
+    //            {
+    //                x = _normalPlatform.x;
+    //                y = _normalPlatform.y;
+    //            }
+    //        }
+    //        else if (!_stillStandingOnPlatform)
+    //        {
+    //            _standingOnPlatform = false;
+    //            playerCanJump = false;
+    //        }
+    //    }
 
-        if (_standingOnPlatform)
-        {
-            _stillStandingOnFallingPlatform = HitTest(_fallingPlatform);
+    //    if (_standingOnPlatform)
+    //    {
+    //        _stillStandingOnFallingPlatform = HitTest(_fallingPlatform);
 
-            if (_stillStandingOnPlatform)
-            {
-                playerCanJump = true;
-                if (!_isJumping)
-                {
-                    x = _fallingPlatform.x;
-                    y = _fallingPlatform.y;
-                }
-            }
-            else if (!_stillStandingOnPlatform)
-            {
-                _standingOnPlatform = false;
-                playerCanJump = false;
-            }
-        }
+    //        if (_stillStandingOnPlatform)
+    //        {
+    //            playerCanJump = true;
+    //            if (!_isJumping)
+    //            {
+    //                x = _fallingPlatform.x;
+    //                y = _fallingPlatform.y;
+    //            }
+    //        }
+    //        else if (!_stillStandingOnPlatform)
+    //        {
+    //            _standingOnPlatform = false;
+    //            playerCanJump = false;
+    //        }
+    //    }
 
-        if (_standingOnStart)
-        {
-            _stillStandingOnStart = HitTest(_startPlatform);
+    //    if (_standingOnStart)
+    //    {
+    //        _stillStandingOnStart = HitTest(_startPlatform);
 
-            if (_stillStandingOnStart)
-            {
-                playerCanJump = true;
-            }
-            else if (!_stillStandingOnStart)
-            {
-                _standingOnStart = false;
-                playerCanJump = false;
-            }
-        }
-    }
+    //        if (_stillStandingOnStart)
+    //        {
+    //            playerCanJump = true;
+    //        }
+    //        else if (!_stillStandingOnStart)
+    //        {
+    //            _standingOnStart = false;
+    //            playerCanJump = false;
+    //        }
+    //    }
+    //}
 
     private void RespawnPlayer()
     {

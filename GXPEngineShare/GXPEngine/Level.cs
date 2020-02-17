@@ -49,11 +49,11 @@ public class Level : GameObject
         _backgroundMusic.Play(false);
 
         InitializeBackground();
-        InitializePlayers();
-        InitializeHUD();
         InitializePlatforms();
+        InitializePlayers();
         InitializeCoins();
         CheckGameReset();
+        InitializeHUD();
     }
 
     #region Draw level
