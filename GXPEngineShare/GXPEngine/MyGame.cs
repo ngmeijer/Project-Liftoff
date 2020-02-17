@@ -5,7 +5,7 @@ public class MyGame : Game
 {
     #region Variables
 
-    private Menu _menu;
+    public Menu _menu { get; private set; }
     private Level _level;
 
     private Camera camera;

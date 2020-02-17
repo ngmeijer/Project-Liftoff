@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using GXPEngine;
-using GXPEngine.Core;
 
 public class Player1 : AnimationSprite
 {
@@ -10,42 +8,42 @@ public class Player1 : AnimationSprite
     private float _moveSpeed = 6f;
     private float _jumpForce = 18f;
     private float _fallMultiplier = 7.5f;
-    private bool _isJumping = false;
-    private int jumpCount = 0;
+    public bool _isJumping { get; private set; }
+    public int jumpCount { get; set; }
 
-    private bool _standingOnPlatform;
-    private bool playerCanJump;
-    private bool _stillStandingOnPlatform;
-    private int _offset = 64;
+    public bool _standingOnPlatform { get; set; }
+    public bool _stillStandingOnPlatform { get; set; }
+    public int _offset { get; private set; }
 
-    private StartPlatform _startPlatform;
-    private NormalPlatform _normalPlatform;
-    private FallingPlatform _fallingPlatform;
+    public StartPlatform _startPlatform { get; set; }
+    public NormalPlatform _normalPlatform { get; set; }
+    public FallingPlatform _fallingPlatform { get; set; }
 
     private Whip whipSprite;
+    private Sprite _collider;
 
     private Level levelScript;
     private HUD hudScript;
 
-    private bool _standingOnStart;
+    public bool _standingOnStart { get; set; }
     private float speedY;
     private const float spawnPointX = 100;
     private const float spawnPointY = 100;
 
-    private int pickupPoints = 100;
-    private int pickupScore;
+    public int pickupPoints { get; private set; }
+    public int pickupScore { get; set; }
     private int scoreAhead;
-    public int pickupsCollected { get; private set; }
+    public int pickupsCollected { get; set; }
 
     private bool playerHasDied;
 
     public int scoreCount { get; private set; }
     public int lifeCount { get; private set; }
 
-    private bool _playerIsMoving;
+    public bool _playerIsMoving { get; private set; }
     private float _movedDistance;
     private float _animationTimer;
-    private bool _stillStandingOnFallingPlatform;
+    public bool _stillStandingOnFallingPlatform { get; set; }
     private bool playerHasMovedOnPlatform;
     private bool _stillStandingOnStart;
     private bool _playerCanUseWhip;
@@ -55,18 +53,31 @@ public class Player1 : AnimationSprite
 
     #region Constructor & Update
 
-    public Player1(int xPos, int yPos, HUD hud, Level level) : base("Spritesheet_Jones.png", 4, 3)
+    public Player1(int xPos, int yPos, HUD hud, Level level) : base("Spritesheet_Jones.png", 4, 3, 1, true, false)
     {
         levelScript = level;
         hudScript = hud;
 
         scale = 0.65f;
-        SetOrigin(this.x / 2, this.y + 65);
+        SetOrigin(this.x / 2, this.y);
 
         lifeCount = 3;
+        _offset = 64;
+        pickupPoints = 100;
 
         x = xPos;
         y = yPos;
+
+        _collider = new Sprite("Collider.png", true, true);
+        AddChild(_collider);
+
+        x = _collider.x;
+        y = _collider.y;
+
+        _collider.x += 20;
+        _collider.y += 150;
+
+        _startPlatform = level._startPlatform1;
 
         whipSprite = new Whip();
         AddChild(whipSprite);
@@ -78,7 +89,7 @@ public class Player1 : AnimationSprite
         MovePlayer();
         PlayerJump();
         UseWhip();
-        CheckForPlatformCollision();
+        CheckForCollisions();
         CheckForScreenCollision();
         TrackScore();
     }
@@ -186,126 +197,77 @@ public class Player1 : AnimationSprite
         }
     }
 
+    private void CheckForCollisions()
+    {
+        _collider.GetCollisions();
+
+        if (_collider.HitTest(_startPlatform))
+        {
+            y = _startPlatform.y - 100;
+            jumpCount = 0;
+        }
+
+        //if (!_standingOnStart)
+        //{
+        //    if (other is NormalPlatform)
+        //    {
+        //        jumpCount = 0;
+        //        _normalPlatform = other as NormalPlatform;
+        //        if (!player1._playerIsMoving)
+        //        {
+        //            x = player1._normalPlatform.x;
+        //        }
+        //        player1.y = player1._normalPlatform.y - player1._offset;
+        //    }
+        //}
+
+        //if (!player1._standingOnStart)
+        //{
+        //    if (other is FallingPlatform)
+        //    {
+        //        player1.jumpCount = 0;
+        //        player1._fallingPlatform = other as FallingPlatform;
+        //        if (!player1._playerIsMoving)
+        //        {
+        //            x = player1._fallingPlatform.x + 50;
+        //        }
+        //        y = player1._fallingPlatform.y - player1._offset;
+        //    }
+        //}
+        //if (other is StartPlatform)
+        //{
+        //    player1.jumpCount = 0;
+        //    player1._startPlatform = other as StartPlatform;
+        //    player1._standingOnStart = true;
+        //    y = player1._startPlatform.y - player1._offset;
+        //}
+
+        //if (other is Pickup)
+        //{
+        //    player1.pickupsCollected += 1;
+        //    player1.pickupScore += player1.pickupPoints;
+        //}
+
+    }
+
     private void CheckForScreenCollision()
     {
-        if (x >= game.width)
+        if (_collider.x >= game.width)
         {
             playerHasDied = true;
             RespawnPlayer();
         }
 
-        if (x <= 0)
+        if (_collider.x <= 0)
         {
             playerHasDied = true;
             RespawnPlayer();
         }
 
-        if (y > game.height)
+        if (_collider.y > game.height)
         {
             playerHasDied = true;
             RespawnPlayer();
-        }
-    }
-
-    private void OnCollision(GameObject other)
-    {
-        if (!_standingOnStart)
-        {
-            if (other is NormalPlatform)
-            {
-                jumpCount = 0;
-                _normalPlatform = other as NormalPlatform;
-                if (!_playerIsMoving)
-                {
-                    x = _normalPlatform.x;
-                }
-                y = _normalPlatform.y - _offset;
-            }
-        }
-
-        if (!_standingOnStart)
-        {
-            if (other is FallingPlatform)
-            {
-                jumpCount = 0;
-                _fallingPlatform = other as FallingPlatform;
-                if (!_playerIsMoving)
-                {
-                    x = _fallingPlatform.x + 50;
-                }
-                y = _fallingPlatform.y - _offset;
-            }
-        }
-        if (other is StartPlatform)
-        {
-            jumpCount = 1;
-            _startPlatform = other as StartPlatform;
-            _standingOnStart = true;
-            y = _startPlatform.y - _offset;
-        }
-
-        if (other is Pickup)
-        {
-            pickupsCollected += 1;
-            pickupScore += pickupPoints;
-        }
-    }
-
-    private void CheckForPlatformCollision()
-    {
-        if (_standingOnPlatform)
-        {
-            _stillStandingOnPlatform = HitTest(_normalPlatform);
-
-            if (_stillStandingOnPlatform)
-            {
-                playerCanJump = true;
-                if (!_isJumping)
-                {
-                    x = _normalPlatform.x;
-                    y = _normalPlatform.y;
-                }
-            }
-            else if (!_stillStandingOnPlatform)
-            {
-                _standingOnPlatform = false;
-                playerCanJump = false;
-            }
-        }
-
-        if (_standingOnPlatform)
-        {
-            _stillStandingOnFallingPlatform = HitTest(_fallingPlatform);
-
-            if (_stillStandingOnPlatform)
-            {
-                playerCanJump = true;
-                if (!_isJumping)
-                {
-                    x = _fallingPlatform.x;
-                    y = _fallingPlatform.y;
-                }
-            }
-            else if (!_stillStandingOnPlatform)
-            {
-                _standingOnPlatform = false;
-                playerCanJump = false;
-            }
-        }
-
-        if (_standingOnStart)
-        {
-            _stillStandingOnStart = HitTest(_startPlatform);
-
-            if (_stillStandingOnStart)
-            {
-                playerCanJump = true;
-            }
-            else if (!_stillStandingOnStart)
-            {
-                _standingOnStart = false;
-                playerCanJump = false;
-            }
         }
     }
 

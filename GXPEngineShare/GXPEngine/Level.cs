@@ -6,8 +6,8 @@ public class Level : GameObject
     #region Variables
 
     //Players
-    public Player1 _player1 { get; private set; }
-    public Player2 _player2 { get; private set; }
+    public Player1 _player1 { get; set; }
+    public Player2 _player2 { get; set; }
 
     private Background _background;
     private Background _background2;
@@ -19,7 +19,7 @@ public class Level : GameObject
     private Pickup[] _pickupArray;
 
     //Platforms
-    private StartPlatform _startPlatform1;
+    public StartPlatform _startPlatform1 { get; set; }
     private StartPlatform _startPlatform2;
 
     public NormalPlatform[] _platformArray;
@@ -49,19 +49,14 @@ public class Level : GameObject
         _backgroundMusic.Play(false);
 
         InitializeBackground();
-        InitializePlayers();
-        InitializeHUD();
         InitializePlatforms();
+        InitializePlayers();
         InitializeCoins();
+        InitializeHUD();
         CheckGameReset();
     }
 
     #region Draw level
-
-    private void Update()
-    {
-        Console.WriteLine(_platformArray[1].width);
-    }
 
     private void InitializeBackground()
     {
