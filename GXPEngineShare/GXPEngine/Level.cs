@@ -57,12 +57,6 @@ public class Level : GameObject
     }
 
     #region Draw level
-
-    private void Update()
-    {
-        Console.WriteLine(_platformArray[1].width);
-    }
-
     private void InitializeBackground()
     {
         _background = new Background();

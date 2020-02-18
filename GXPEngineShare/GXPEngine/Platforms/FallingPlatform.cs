@@ -11,10 +11,11 @@ public class FallingPlatform : AnimationSprite
 	private float _moveSpeedY = 1;
     public float offsetX;
     public float offsetY;
+    private int newRandomPosX;
     private int yDir = 1;
 
     //Decrease to increase speed
-    private int _animationSpeed = 200;
+    private int _animationSpeed = 50;
 
     private Player1 _player1;
     private Player2 _player2;
@@ -31,6 +32,8 @@ public class FallingPlatform : AnimationSprite
 
         offsetX = Utils.Random(-600, 500);
         offsetY = Utils.Random(-600, 300);
+
+        newRandomPosX = Utils.Random(600, 1800);
     }
 
 	private void Update()
@@ -39,25 +42,16 @@ public class FallingPlatform : AnimationSprite
         RespawnPlatforms();
 	}
 
-    private void handleCrumbleAnimation()
+    public void handleCrumbleAnimation()
     {
         _animationTimer += Time.deltaTime;
         int frame = (int)(_animationTimer / _animationSpeed) % 10 + 5;
 
-        if (_playerOnPlatform)
-        {
-            SetFrame(frame);
+        SetFrame(frame);
 
-            if (frame >= 7)
-            {
-                _animationSpeed *= (int)1.4;
-                LateDestroy();
-            }
-        }
-
-        if((frame >= 2) && (!_playerOnPlatform))
+        if(frame >= 10)
         {
-            LateDestroy();
+            
         }
     }
 
@@ -86,21 +80,6 @@ public class FallingPlatform : AnimationSprite
         {
             x = game.width + 128;
             y = Utils.Random(50, 950);
-        }
-    }
-
-    private void OnCollision(GameObject hitInfo)
-    {
-        if ((hitInfo is Player1) || (hitInfo is Player2))
-        {
-            _player1 = hitInfo as Player1;
-            _player2 = hitInfo as Player2;
-            _playerOnPlatform = true;
-            handleCrumbleAnimation();
-        }
-        else
-        {
-            _playerOnPlatform = false;
         }
     }
 }
