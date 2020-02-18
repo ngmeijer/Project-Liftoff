@@ -22,18 +22,20 @@ public class FallingPlatform : AnimationSprite
     private int _animationTimer;
     private bool _playerOnPlatform;
 
+    private int[] newPosX = { 600, 800, 1000, 1200, 1400, 1600, 1800 };
+
     #endregion
 
     public FallingPlatform() : base("PlatformCrumblingSpritesheet.png", 10, 1)
 	{
-        scale = 0.5f;
+        scale = 0.4f;
         _moveSpeedX = 2.5f;
         _moveSpeedY = Utils.Random(0, 3);
 
         offsetX = Utils.Random(-600, 500);
         offsetY = Utils.Random(-600, 300);
 
-        newRandomPosX = Utils.Random(600, 1800);
+        newRandomPosX = Utils.Random(0, 6);
     }
 
 	private void Update()
@@ -51,7 +53,7 @@ public class FallingPlatform : AnimationSprite
 
         if(frame >= 10)
         {
-            
+            LateDestroy();
         }
     }
 

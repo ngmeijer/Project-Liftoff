@@ -6,14 +6,17 @@ public class Level : GameObject
     #region Variables
 
     //Players
-    public Player1 _player1 { get; private set; }
-    public Player2 _player2 { get; private set; }
+    public Player1 _player1 { get; set; }
+    public Player2 _player2 { get; set; }
 
     private Background _background;
     private Background _background2;
 
     public HUD hud { get; private set; }
+    private Menu menu;
     public bool resetGame;
+
+    public bool duo { get; set; }
 
     //Pickups
     private Pickup[] _pickupArray;
@@ -24,13 +27,19 @@ public class Level : GameObject
 
     public NormalPlatform[] _platformArray;
     public FallingPlatform[] _fallingPlatformArray;
+    private FallingPlatform[] _fallingPlatformArray2;
     public FakePlatform[] _fakePlatformArray;
+
+    private int[] fallingPlatformPosX = { 600, 800, 1000, 1200, 1400, 1600, 1800 };
+    private int[] fallingPlatformPosY = { 150, 300, 450, 600, 750, 800, 950 };
 
     private float xPosNormal = 800;
     private float yPosNormal = 100;
 
-    private float xPosFalling = 1000;
+    private float xPosFalling = 700;
     private float yPosFalling = 100;
+    private float xPosFalling2 = 700;
+    private float yPosFalling2 = 800;
 
     private float xPosFake = 1200;
     private float yPosFake = 100;
@@ -43,8 +52,10 @@ public class Level : GameObject
 
     #endregion
 
-    public Level()
+    public Level(Menu menuScript)
     {
+        menu = menuScript;
+
         _backgroundMusic = new Sound("LevelTheme.mp3", true, true);
         _backgroundMusic.Play(false);
 
@@ -72,50 +83,63 @@ public class Level : GameObject
         _player1 = new Player1(100, 200, hud, this);
         AddChild(_player1);
 
-        _player2 = new Player2(100, 500);
-        AddChild(_player2);
+        if (menu.duoPlayers)
+        {
+            _player2 = new Player2(100, 500);
+            AddChild(_player2);
+        }
     }
 
     private void InitializePlatforms()
     {
         //Normal platforms
-        _platformArray = new NormalPlatform[7];
+        //_platformArray = new NormalPlatform[7];
 
-        for (int count = 0; count < _platformArray.Length; count++)
-        {
-            _platformArray[count] = new NormalPlatform();
-            _platformArray[count].SetSpawnPosition(xPosNormal, yPosNormal);
-            xPosNormal += 200;
-            yPosNormal += 100;
+        //for (int count = 0; count < _platformArray.Length; count++)
+        //{
+        //    _platformArray[count] = new NormalPlatform();
+        //    _platformArray[count].SetSpawnPosition(xPosNormal, yPosNormal);
+        //    xPosNormal += 200;
+        //    yPosNormal += 100;
 
-            AddChild(_platformArray[count]);
-        }
+        //    AddChild(_platformArray[count]);
+        //}
 
         //Falling platforms
-        _fallingPlatformArray = new FallingPlatform[7];
+        _fallingPlatformArray = new FallingPlatform[5];
 
         for (int count = 0; count < _fallingPlatformArray.Length; count++)
         {
             _fallingPlatformArray[count] = new FallingPlatform();
             _fallingPlatformArray[count].SetSpawnPosition(xPosFalling, yPosFalling);
-            xPosFalling = Utils.Random(600, 1900);
-            yPosFalling += 130;
+            xPosFalling += 200;
 
             AddChild(_fallingPlatformArray[count]);
         }
 
-        //Fake platforms
-        _fakePlatformArray = new FakePlatform[7];
+        _fallingPlatformArray2 = new FallingPlatform[5];
 
-        for (int count = 0; count < _fakePlatformArray.Length; count++)
+        for (int count = 0; count < _fallingPlatformArray2.Length; count++)
         {
-            _fakePlatformArray[count] = new FakePlatform();
-            _fakePlatformArray[count].SetSpawnPosition(xPosFake, yPosFake);
-            xPosFake += 200;
-            yPosFake += 100;
+            _fallingPlatformArray2[count] = new FallingPlatform();
+            _fallingPlatformArray2[count].SetSpawnPosition(xPosFalling2, yPosFalling2);
+            xPosFalling2 += 200;
 
-            AddChild(_fakePlatformArray[count]);
+            AddChild(_fallingPlatformArray2[count]);
         }
+
+        //Fake platforms
+        //_fakePlatformArray = new FakePlatform[7];
+
+        //for (int count = 0; count < _fakePlatformArray.Length; count++)
+        //{
+        //    _fakePlatformArray[count] = new FakePlatform();
+        //    _fakePlatformArray[count].SetSpawnPosition(xPosFake, yPosFake);
+        //    xPosFake += 200;
+        //    yPosFake += 100;
+
+        //    AddChild(_fakePlatformArray[count]);
+        //}
 
         //Start platforms. Clean this up.
         _startPlatform1 = new StartPlatform();
@@ -134,7 +158,7 @@ public class Level : GameObject
 
         for (int count = 0; count < _pickupArray.Length; count++)
         {
-            _pickupArray[count] = new Pickup();
+            _pickupArray[count] = new Pickup(this);
             _pickupArray[count].SetSpawnPosition(xPosPickups, yPosPickups);
             xPosPickups += _pickupArray[count].offsetX;
             yPosPickups += _pickupArray[count].offsetY;

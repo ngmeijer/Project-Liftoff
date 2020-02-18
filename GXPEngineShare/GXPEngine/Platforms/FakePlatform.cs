@@ -20,7 +20,7 @@ public class FakePlatform : Sprite
 	{
         _moveSpeedX = 2.5f;
         _moveSpeedY = Utils.Random(1, 2);
-        scale = 0.2f;
+        scale = 0.15f;
 
         offsetX = Utils.Random(-300, 500);
         offsetY = Utils.Random(-300, 300);

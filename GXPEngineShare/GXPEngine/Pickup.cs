@@ -6,8 +6,12 @@ public class Pickup : Sprite
 	public float offsetX;
 	public float offsetY;
 
-	public Pickup() : base("PickUp.png")
+	Level level;
+
+	public Pickup(Level levelScript) : base("PickUp.png")
 	{
+		level = levelScript;
+
 		scale = 0.5f;
 		SetOrigin(width / 2, height / 2);
 
@@ -22,8 +26,10 @@ public class Pickup : Sprite
 
 	private void OnCollision(GameObject hitInfo)
 	{
-		if((hitInfo is Player1) || (hitInfo is Player2))
+		if(hitInfo is Player1)
 		{
+			level._player1 = hitInfo as Player1;
+			level._player1.pickupsCollected++;
 			LateDestroy();
 		}
 	}

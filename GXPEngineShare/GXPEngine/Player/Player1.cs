@@ -39,7 +39,7 @@ public class Player1 : AnimationSprite
     private int pickupPoints = 100;
     private int pickupScore;
     private int scoreAhead;
-    public int pickupsCollected { get; private set; }
+    public int pickupsCollected { get; set; }
 
     private bool playerHasDied;
 
@@ -127,9 +127,12 @@ public class Player1 : AnimationSprite
     {
         scoreCount = Time.time / 400 + pickupScore + scoreAhead;
 
-        if (x > levelScript._player2.x + 100)
+        if (levelScript._player2 != null)
         {
-            scoreAhead += 1;
+            if (x > levelScript._player2.x + 100)
+            {
+                scoreAhead += 1;
+            }
         }
     }
 
@@ -164,7 +167,7 @@ public class Player1 : AnimationSprite
             HandleJumpAnimation();
         }
 
-        if (Input.GetKey(Key.SPACE) && (jumpCount <= 1))
+        if (Input.GetKey(Key.SPACE) && (jumpCount < 2))
         {
             jumpCount += 1;
             speedY = -_jumpForce;
@@ -215,9 +218,9 @@ public class Player1 : AnimationSprite
         {
             if (g is StartPlatform)
             {
+                jumpCount = 0;
                 _startPlatform = g as StartPlatform;
                 y = _startPlatform.y - 70;
-                jumpCount = 0;
             }
 
             if (g is NormalPlatform)
@@ -225,7 +228,6 @@ public class Player1 : AnimationSprite
                 _normalPlatform = g as NormalPlatform;
                 x = _normalPlatform.x;
                 y = _normalPlatform.y - 70;
-                jumpCount = 0;
             }
 
             if (g is FallingPlatform)
@@ -233,7 +235,6 @@ public class Player1 : AnimationSprite
                 _fallingPlatform = g as FallingPlatform;
                 x = _fallingPlatform.x + 55;
                 y = _fallingPlatform.y - 70;
-                jumpCount = 0;
                 _fallingPlatform.handleCrumbleAnimation();
             }
         }

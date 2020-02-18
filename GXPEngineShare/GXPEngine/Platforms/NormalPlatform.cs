@@ -5,10 +5,10 @@ using GXPEngine;
 
 public class NormalPlatform : Sprite
 {
-	#region Variables
+    #region Variables
 
     private float _moveSpeedX;
-	private float _moveSpeedY = 1;
+    private float[] _moveSpeedY = { 0, 1 };
     private float weight = 1;
     private int yDir = 1;
 
@@ -20,8 +20,7 @@ public class NormalPlatform : Sprite
 
     public NormalPlatform() : base("Platform.png", true, true)
 	{
-        _moveSpeedX = 1.5f;
-        _moveSpeedY = Utils.Random(1, 2);
+        _moveSpeedX = 1.3f;
         scale = 0.2f;
 
         offsetX = Utils.Random(0, 500);
@@ -41,7 +40,7 @@ public class NormalPlatform : Sprite
     {
         if (!playerOnPlatform)
         {
-            y += _moveSpeedY * yDir;
+            y += _moveSpeedY[1] * yDir;
         }
         else
         {

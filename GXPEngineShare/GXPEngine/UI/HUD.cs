@@ -34,11 +34,14 @@ public class HUD : Canvas
 		_whipChargeP1.y = game.height - 100;
 		_whipChargeP1.scaleX = 0;
 
-		_whipChargeP2 = new Sprite("WhipCharge.png");
-		AddChild(_whipChargeP2);
-		_whipChargeP2.x = game.width - _whipChargeP2.width;
-		_whipChargeP2.y = game.height - 100;
-		_whipChargeP2.scale = 0;
+		if (_player2 != null)
+		{
+			_whipChargeP2 = new Sprite("WhipCharge.png");
+			AddChild(_whipChargeP2);
+			_whipChargeP2.x = game.width - _whipChargeP2.width;
+			_whipChargeP2.y = game.height - 100;
+			_whipChargeP2.scale = 0;
+		}
 
 		_whiteBrush = Brushes.White;
 		_redBrush = Brushes.Red;
@@ -50,11 +53,14 @@ public class HUD : Canvas
 	{
 		graphics.Clear(Color.Empty);
 		ShowCountersP1();
-		ShowCountersP2();
+
+		if (_player2 != null)
+		{
+			ShowCountersP2();
+            DisplayWinner();
+		}
 
 		ShowWhipCharge();
-
-        DisplayWinner();
         RestartGame();
 	}
 
