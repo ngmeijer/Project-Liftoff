@@ -19,6 +19,7 @@ public class FallingPlatform : AnimationSprite
     public bool platformDestroyed { get; set; }
 
     private int timeCounter = 0;
+    private int movedDistance = 0;
 
     #endregion
 
@@ -38,6 +39,9 @@ public class FallingPlatform : AnimationSprite
         {
             y += 10;
         }
+
+
+
         KillPlatforms();
 	}
 
@@ -48,11 +52,9 @@ public class FallingPlatform : AnimationSprite
 
         SetFrame(frame);
 
-        Console.WriteLine(platformDestroyed);
-
         if(frame >= 10)
         {
-            LateDestroy();
+            LateRemove();
         }
     }
 
@@ -68,10 +70,5 @@ public class FallingPlatform : AnimationSprite
         {
             LateRemove();
         }
-    }
-
-    internal void SetSpawnPosition(object xPosFalling3, float yPosFalling)
-    {
-        throw new NotImplementedException();
     }
 }

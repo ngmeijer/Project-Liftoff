@@ -16,11 +16,19 @@ public class NormalPlatform : Sprite
     public float offsetY;
     private bool playerOnPlatform;
 
+    Level level;
+    Menu menu;
+
+    private Player1 _player1;
+
     #endregion
 
-    public NormalPlatform() : base("Platform.png", true, true)
+    public NormalPlatform(Level levelScript, Menu menuScript) : base("Platform.png", true, true)
 	{
-        _moveSpeedX = 1.3f;
+        level = levelScript;
+        menu = menuScript;
+
+        _moveSpeedX = 2.5f;
         scale = 0.2f;
 
         offsetX = Utils.Random(0, 500);
@@ -29,8 +37,6 @@ public class NormalPlatform : Sprite
 
 	private void Update()
 	{
-        x -= _moveSpeedX;
-
         InversePlatforms();
         HandlePlayerWeight();
         RespawnPlatforms();
@@ -38,6 +44,8 @@ public class NormalPlatform : Sprite
 
     private void HandlePlayerWeight()
     {
+        x -= _moveSpeedX;
+
         if (!playerOnPlatform)
         {
             y += _moveSpeedY[1] * yDir;
@@ -54,12 +62,12 @@ public class NormalPlatform : Sprite
 
 	private void InversePlatforms()
 	{
-		if(y <= 0)
+		if(y <= 150)
 		{
             yDir *= -1;
 		}
 		
-		if(y >= game.height)
+		if(y >= game.height - 150)
 		{
             yDir *= -1;
 		}
@@ -80,11 +88,15 @@ public class NormalPlatform : Sprite
         }
     }
 
-    private void OnCollision(GameObject hitInfo)
+    private void CheckPlayerCollision()
     {
-        if ((hitInfo is Player1) || (hitInfo is Player2))
+        if(level._player1._normalPlatform == this)
         {
             playerOnPlatform = true;
+        }
+        else
+        {
+            playerOnPlatform = false;
         }
     }
 }

@@ -16,6 +16,8 @@ public class Level : GameObject
     private Menu menu;
     public bool resetGame;
 
+    public ScreenBorders borders;
+
     public bool duo { get; set; }
 
     //Pickups
@@ -36,11 +38,11 @@ public class Level : GameObject
     private int fallingCount = 0;
 
     private float xPosNormal = 800;
-    private float yPosNormal = 100;
+    private float yPosNormal = 300;
 
-    private float xPosFalling = 700;
-    private float yPosFalling = 100;
-    private float xPosFalling2 = 700;
+    private float xPosFalling = 500;
+    private float yPosFalling = 200;
+    private float xPosFalling2 = 500;
     private float yPosFalling2 = 800;
     private float xPosFalling3 = 700;
 
@@ -66,16 +68,21 @@ public class Level : GameObject
         _backgroundMusic.Play(false);
 
         InitializeBackground();
+        InitializeFallingPlatforms();
         InitializePlatforms();
         InitializePlayers();
         InitializeCoins();
         InitializeHUD();
+
+        borders = new ScreenBorders();
+        AddChild(borders);
+        borders.x = game.width - 50;
     }
 
     private void Update()
     {
         sceneTime++;
-        SpawnNewFallingPlatforms();
+        //SpawnNewFallingPlatforms();
     }
 
     #region Draw level
@@ -101,25 +108,11 @@ public class Level : GameObject
         }
     }
 
-    private void InitializePlatforms()
+    private void InitializeFallingPlatforms()
     {
-        //Normal platforms
-        //_platformArray = new NormalPlatform[7];
+        _fallingPlatformArray = new FallingPlatform[7];
 
-        //for (int count = 0; count < _platformArray.Length; count++)
-        //{
-        //    _platformArray[count] = new NormalPlatform();
-        //    _platformArray[count].SetSpawnPosition(xPosNormal, yPosNormal);
-        //    xPosNormal += 200;
-        //    yPosNormal += 100;
-
-        //    AddChild(_platformArray[count]);
-        //}
-
-        //Falling platforms
-        _fallingPlatformArray = new FallingPlatform[5];
-
-        for (fallingCount = 0; fallingCount < _fallingPlatformArray.Length; fallingCount ++)
+        for (fallingCount = 0; fallingCount < _fallingPlatformArray.Length; fallingCount++)
         {
             _fallingPlatformArray[fallingCount] = new FallingPlatform();
             _fallingPlatformArray[fallingCount].SetSpawnPosition(xPosFalling, yPosFalling);
@@ -128,7 +121,7 @@ public class Level : GameObject
             AddChild(_fallingPlatformArray[fallingCount]);
         }
 
-        _fallingPlatformArray2 = new FallingPlatform[5];
+        _fallingPlatformArray2 = new FallingPlatform[7];
 
         for (int count = 0; count < _fallingPlatformArray2.Length; count++)
         {
@@ -138,6 +131,24 @@ public class Level : GameObject
 
             AddChild(_fallingPlatformArray2[count]);
         }
+    }
+
+    private void InitializePlatforms()
+    {
+        //Normal platforms
+        _platformArray = new NormalPlatform[7];
+
+        for (int count = 0; count < _platformArray.Length; count++)
+        {
+            _platformArray[count] = new NormalPlatform(this, menu);
+            _platformArray[count].SetSpawnPosition(xPosNormal, yPosNormal);
+            xPosNormal += Utils.Random(150, 250);
+            yPosNormal += Utils.Random(50, 150);
+
+            AddChild(_platformArray[count]);
+        }
+
+        //Falling platforms
 
         //Fake platforms
         //_fakePlatformArray = new FakePlatform[7];
@@ -199,22 +210,21 @@ public class Level : GameObject
         }
     }
 
-    private void SpawnNewFallingPlatforms()
-    {
-        if (sceneTime > 650)
-        {
-            _fallingPlatformArray3 = new FallingPlatform[5];
+    //private void SpawnNewFallingPlatforms()
+    //{
+    //    if (sceneTime > 650)
+    //    {
+    //        _fallingPlatformArray = new FallingPlatform[5];
 
-            for (int count = 0; count < _fallingPlatformArray3.Length; count++)
-            {
-                _fallingPlatformArray3[count] = new FallingPlatform();
-                _fallingPlatformArray3[count].SetSpawnPosition(xPosFalling3, yPosFalling);
-                xPosFalling3 += 200;
+    //        for (int count = 0; count < _fallingPlatformArray.Length; count++)
+    //        {
+    //            _fallingPlatformArray[count] = new FallingPlatform();
+    //            _fallingPlatformArray[count].SetSpawnPosition(xPosFalling3, yPosFalling);
+    //            xPosFalling3 += 200;
 
-                AddChild(_fallingPlatformArray3[count]);
-            }
-        }
-
-
-    }
+    //            AddChild(_fallingPlatformArray[count]);
+    //            sceneTime = 0;
+    //        }
+    //    }
+    //}
 }

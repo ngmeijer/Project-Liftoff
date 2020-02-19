@@ -12,7 +12,9 @@ public class StartPlatform : Sprite
 
 	private void Update()
 	{
-		if(level.sceneTime > 300)
+		x -= 2;
+
+		if(x < 0 - width)
 		{
 			LateDestroy();
 		}

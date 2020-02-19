@@ -38,11 +38,11 @@
   <ItemGroup>
     <Compile Include="Platforms\FakePlatform.cs" />
     <Compile Include="Platforms\FallingPlatform.cs" />
+    <Compile Include="ScreenBorders.cs" />
     <Compile Include="Player\PlayerGroundCheck.cs" />
     <Compile Include="Player\Whip.cs" />
     <Compile Include="UI\Cutscene.cs" />
     <Compile Include="UI\Background.cs" />
-    <Compile Include="CameraFollow.cs" />
     <Compile Include="Pickup.cs" />
     <Compile Include="Platforms\StartPlatform.cs" />
     <Compile Include="UI\HUD.cs" />

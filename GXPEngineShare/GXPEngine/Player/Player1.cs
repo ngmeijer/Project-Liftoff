@@ -13,25 +13,17 @@ public class Player1 : AnimationSprite
     private bool _isJumping = false;
     private int jumpCount = 0;
 
-    private int frameCount = 1;
-
-    private bool _standingOnPlatform;
-    private bool playerCanJump;
-    private bool _stillStandingOnPlatform;
-    private int _offset = 64;
-
     public StartPlatform _startPlatform { get; set; }
-    private NormalPlatform _normalPlatform;
+    public NormalPlatform _normalPlatform { get; private set; }
     private FallingPlatform _fallingPlatform;
 
     private Sprite _collider;
 
-    private Whip whipSprite;
+    public Whip whipSprite { get; private set; }
 
     private Level levelScript;
     private HUD hudScript;
 
-    private bool _standingOnStart;
     private float speedY;
     private const float spawnPointX = 100;
     private const float spawnPointY = 100;
@@ -49,6 +41,10 @@ public class Player1 : AnimationSprite
     private bool _playerIsMoving;
     private float _animationTimer;
     private float _animationSpeed;
+    private bool usingWhip;
+
+    public bool flyToBorder { get; set; }
+
     public int whipUsedCount { get; private set; }
 
     #endregion
@@ -61,12 +57,12 @@ public class Player1 : AnimationSprite
         hudScript = hud;
 
         scale = 0.65f;
-        SetOrigin(this.x / 2, this.y + 65);
+        SetOrigin(x / 2, y + 65);
 
         _collider = new Sprite("Collider.png", true, true);
         AddChild(_collider);
 
-        whipSprite = new Whip();
+        whipSprite = new Whip(level);
         AddChild(whipSprite);
         whipSprite.visible = false;
 
@@ -74,10 +70,12 @@ public class Player1 : AnimationSprite
         _animationSpeed = 150f;
 
         _collider.x = xPos - 85;
-        _collider.y = yPos - 100;
+        _collider.y = yPos - 95;
 
         x = _collider.x;
         y = _collider.y;
+
+        _collider.y -= 15;
     }
 
     private void Update()
@@ -88,6 +86,11 @@ public class Player1 : AnimationSprite
         CheckCollisions();
         CheckForScreenCollision();
         TrackScore();
+
+        if (flyToBorder)
+        {
+            x += 20;
+        }
     }
 
     #endregion
@@ -140,12 +143,15 @@ public class Player1 : AnimationSprite
     {
         if (Input.GetKey(Key.A))
         {
+            scaleX = -0.65f;
             _playerIsMoving = true;
             HandleRunAnimation();
             Translate(-_moveSpeed, 0);
         }
         else if (Input.GetKey(Key.D))
         {
+            //Consider taking out scaleX since it causes a bit of buggy movement. Rotates around x = 0 instead of pivot point. Preferably stay at same position.
+            scaleX = 0.65f;
             _playerIsMoving = true;
             HandleRunAnimation();
             Translate(_moveSpeed, 0);
@@ -177,15 +183,19 @@ public class Player1 : AnimationSprite
 
     private void UseWhip()
     {
+        float tempPosY = y;
         if (levelScript.hud._playerCanUseWhip)
         {
             if (Input.GetMouseButtonDown(0))
             {
+                y = tempPosY;
+                usingWhip = true; 
                 whipSprite.visible = true;
             }
 
             if (Input.GetMouseButtonUp(0))
             {
+                usingWhip = false;
                 whipSprite.visible = false;
             }
         }
@@ -193,19 +203,19 @@ public class Player1 : AnimationSprite
 
     private void CheckForScreenCollision()
     {
-        if (x >= game.width)
+        if (x >= game.width + 50)
         {
             playerHasDied = true;
             RespawnPlayer();
         }
 
-        if (x <= 0)
+        if (x <= -50)
         {
             playerHasDied = true;
             RespawnPlayer();
         }
 
-        if (y > game.height)
+        if (y > game.height + 50)
         {
             playerHasDied = true;
             RespawnPlayer();
@@ -214,30 +224,31 @@ public class Player1 : AnimationSprite
 
     private void CheckCollisions()
     {
-        foreach (GameObject g in _collider.GetCollisions())
+        if (!usingWhip)
         {
-            if (g is StartPlatform)
+            foreach (GameObject g in _collider.GetCollisions())
             {
-                jumpCount = 0;
-                _startPlatform = g as StartPlatform;
-                y = _startPlatform.y - 70;
-            }
+                if (g is StartPlatform)
+                {
+                    jumpCount = 0;
+                    _startPlatform = g as StartPlatform;
+                    y = _startPlatform.y - 55;
+                }
 
-            if (g is NormalPlatform)
-            {
-                _normalPlatform = g as NormalPlatform;
-                jumpCount = 0;
-                x = _normalPlatform.x;
-                y = _normalPlatform.y - 70;
-            }
+                if (g is NormalPlatform)
+                {
+                    _normalPlatform = g as NormalPlatform;
+                    jumpCount = 0;
+                    y = _normalPlatform.y - 65;
+                }
 
-            if (g is FallingPlatform)
-            {
-                _fallingPlatform = g as FallingPlatform;
-                jumpCount = 0;
-                x = _fallingPlatform.x + 55;
-                y = _fallingPlatform.y - 70;
-                _fallingPlatform.handleCrumbleAnimation();
+                if (g is FallingPlatform)
+                {
+                    _fallingPlatform = g as FallingPlatform;
+                    jumpCount = 0;
+                    y = _fallingPlatform.y - 60;
+                    _fallingPlatform.handleCrumbleAnimation();
+                }
             }
         }
     }

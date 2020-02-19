@@ -15,6 +15,14 @@ public class MyGame : Game
     {
         _menu = new Menu(_level, _cutscene);
         AddChild(_menu);
+
+        if (_menu.levelStarted)
+        {
+            _level = new Level(_menu);
+            AddChild(_level);
+            _menu.levelStarted = false;
+            RemoveChild(_menu);
+        }
     }
 
     static void Main()
