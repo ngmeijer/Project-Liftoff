@@ -33,6 +33,8 @@ public class Level : GameObject
     private int[] fallingPlatformPosX = { 600, 800, 1000, 1200, 1400, 1600, 1800 };
     private int[] fallingPlatformPosY = { 150, 300, 450, 600, 750, 800, 950 };
 
+    private int fallingCount = 0;
+
     private float xPosNormal = 800;
     private float yPosNormal = 100;
 
@@ -40,6 +42,7 @@ public class Level : GameObject
     private float yPosFalling = 100;
     private float xPosFalling2 = 700;
     private float yPosFalling2 = 800;
+    private float xPosFalling3 = 700;
 
     private float xPosFake = 1200;
     private float yPosFake = 100;
@@ -49,6 +52,9 @@ public class Level : GameObject
 
     //SFX
     private Sound _backgroundMusic;
+    private FallingPlatform[] _fallingPlatformArray3;
+
+    public int sceneTime { get; set; }
 
     #endregion
 
@@ -63,8 +69,13 @@ public class Level : GameObject
         InitializePlatforms();
         InitializePlayers();
         InitializeCoins();
-        CheckGameReset();
         InitializeHUD();
+    }
+
+    private void Update()
+    {
+        sceneTime++;
+        SpawnNewFallingPlatforms();
     }
 
     #region Draw level
@@ -108,13 +119,13 @@ public class Level : GameObject
         //Falling platforms
         _fallingPlatformArray = new FallingPlatform[5];
 
-        for (int count = 0; count < _fallingPlatformArray.Length; count++)
+        for (fallingCount = 0; fallingCount < _fallingPlatformArray.Length; fallingCount ++)
         {
-            _fallingPlatformArray[count] = new FallingPlatform();
-            _fallingPlatformArray[count].SetSpawnPosition(xPosFalling, yPosFalling);
+            _fallingPlatformArray[fallingCount] = new FallingPlatform();
+            _fallingPlatformArray[fallingCount].SetSpawnPosition(xPosFalling, yPosFalling);
             xPosFalling += 200;
 
-            AddChild(_fallingPlatformArray[count]);
+            AddChild(_fallingPlatformArray[fallingCount]);
         }
 
         _fallingPlatformArray2 = new FallingPlatform[5];
@@ -142,12 +153,11 @@ public class Level : GameObject
         //}
 
         //Start platforms. Clean this up.
-        _startPlatform1 = new StartPlatform();
+        _startPlatform1 = new StartPlatform(this);
         AddChild(_startPlatform1);
-
         _startPlatform1.y = 300;
 
-        _startPlatform2 = new StartPlatform();
+        _startPlatform2 = new StartPlatform(this);
         AddChild(_startPlatform2);
         _startPlatform2.y = 700;
     }
@@ -187,5 +197,24 @@ public class Level : GameObject
         {
             resetGame = false;
         }
+    }
+
+    private void SpawnNewFallingPlatforms()
+    {
+        if (sceneTime > 650)
+        {
+            _fallingPlatformArray3 = new FallingPlatform[5];
+
+            for (int count = 0; count < _fallingPlatformArray3.Length; count++)
+            {
+                _fallingPlatformArray3[count] = new FallingPlatform();
+                _fallingPlatformArray3[count].SetSpawnPosition(xPosFalling3, yPosFalling);
+                xPosFalling3 += 200;
+
+                AddChild(_fallingPlatformArray3[count]);
+            }
+        }
+
+
     }
 }

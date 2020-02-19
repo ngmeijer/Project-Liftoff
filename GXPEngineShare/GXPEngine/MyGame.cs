@@ -7,14 +7,13 @@ public class MyGame : Game
 
     public Menu _menu { get; private set; }
     private Level _level;
-
-    private Camera camera;
+    private Cutscene _cutscene;
 
     #endregion
 
     public MyGame() : base(1920, 1080, false, true)
     {
-        _menu = new Menu(_level);
+        _menu = new Menu(_level, _cutscene);
         AddChild(_menu);
     }
 

@@ -8,6 +8,7 @@ public class Menu : GameObject
     private StartButton _startButton;
 
     private Level _newLevel;
+    private Cutscene _cutscene;
     private SoundChannel _soundManager;
     private Sound _backgroundMusic;
     private Sprite _backgroundImage;
@@ -23,8 +24,9 @@ public class Menu : GameObject
 
     #region Constructor & Update method
 
-    public Menu(Level level) : base()
+    public Menu(Level level, Cutscene cutscene) : base()
     {
+        _cutscene = cutscene;
         _newLevel = level;
 
         levelStarted = false;
@@ -92,8 +94,11 @@ public class Menu : GameObject
 
             AddChild(_newLevel);
             levelStarted = true;
-
+            _cutscene = null;
         }
+
+        //_cutscene = new Cutscene();
+        //AddChild(_cutscene);
     }
 
     //Checks if the start button has been pressed.

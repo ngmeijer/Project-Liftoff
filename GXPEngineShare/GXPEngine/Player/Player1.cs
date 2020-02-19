@@ -226,6 +226,7 @@ public class Player1 : AnimationSprite
             if (g is NormalPlatform)
             {
                 _normalPlatform = g as NormalPlatform;
+                jumpCount = 0;
                 x = _normalPlatform.x;
                 y = _normalPlatform.y - 70;
             }
@@ -233,6 +234,7 @@ public class Player1 : AnimationSprite
             if (g is FallingPlatform)
             {
                 _fallingPlatform = g as FallingPlatform;
+                jumpCount = 0;
                 x = _fallingPlatform.x + 55;
                 y = _fallingPlatform.y - 70;
                 _fallingPlatform.handleCrumbleAnimation();

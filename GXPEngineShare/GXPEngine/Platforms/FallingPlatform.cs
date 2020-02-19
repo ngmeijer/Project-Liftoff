@@ -7,41 +7,38 @@ public class FallingPlatform : AnimationSprite
 {
 	#region Variables
 
-    private float _moveSpeedX;
-	private float _moveSpeedY = 1;
     public float offsetX;
     public float offsetY;
-    private int newRandomPosX;
-    private int yDir = 1;
 
     //Decrease to increase speed
     private int _animationSpeed = 50;
 
-    private Player1 _player1;
-    private Player2 _player2;
     private int _animationTimer;
-    private bool _playerOnPlatform;
 
     private int[] newPosX = { 600, 800, 1000, 1200, 1400, 1600, 1800 };
+    public bool platformDestroyed { get; set; }
+
+    private int timeCounter = 0;
 
     #endregion
 
     public FallingPlatform() : base("PlatformCrumblingSpritesheet.png", 10, 1)
 	{
         scale = 0.4f;
-        _moveSpeedX = 2.5f;
-        _moveSpeedY = Utils.Random(0, 3);
 
         offsetX = Utils.Random(-600, 500);
         offsetY = Utils.Random(-600, 300);
-
-        newRandomPosX = Utils.Random(0, 6);
     }
 
 	private void Update()
 	{
-        InversePlatforms();
-        RespawnPlatforms();
+        timeCounter++;
+
+        if(timeCounter > 600)
+        {
+            y += 10;
+        }
+        KillPlatforms();
 	}
 
     public void handleCrumbleAnimation()
@@ -50,6 +47,8 @@ public class FallingPlatform : AnimationSprite
         int frame = (int)(_animationTimer / _animationSpeed) % 10 + 5;
 
         SetFrame(frame);
+
+        Console.WriteLine(platformDestroyed);
 
         if(frame >= 10)
         {
@@ -63,25 +62,16 @@ public class FallingPlatform : AnimationSprite
         y = yPos;
     }
 
-    private void InversePlatforms()
-	{
-		if(y <= 0)
-		{
-            yDir *= -1;
-		}
-		
-		if(y >= 1080)
-		{
-            yDir *= -1;
-		}
-	}
-
-    private void RespawnPlatforms()
+    private void KillPlatforms()
     {
-        if(x <= -64)
+        if(y > game.height)
         {
-            x = game.width + 128;
-            y = Utils.Random(50, 950);
+            LateRemove();
         }
+    }
+
+    internal void SetSpawnPosition(object xPosFalling3, float yPosFalling)
+    {
+        throw new NotImplementedException();
     }
 }

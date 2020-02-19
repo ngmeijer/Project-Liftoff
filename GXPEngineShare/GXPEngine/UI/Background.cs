@@ -13,7 +13,6 @@ public class Background : Sprite
     {
         x -= moveSpeed;
 
-        //Deez nutz
         //moveSpeed *= 1.00f;
 
         ReuseBackgrounds();
