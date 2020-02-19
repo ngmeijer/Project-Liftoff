@@ -67,7 +67,7 @@ public class NormalPlatform : Sprite
             yDir *= -1;
 		}
 		
-		if(y >= game.height - 150)
+		if(y >= game.height - 200)
 		{
             yDir *= -1;
 		}

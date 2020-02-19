@@ -18,6 +18,7 @@ public class Player1 : AnimationSprite
     private FallingPlatform _fallingPlatform;
 
     private Sprite _collider;
+    private Spears _spears;
 
     public Whip whipSprite { get; private set; }
 
@@ -248,6 +249,13 @@ public class Player1 : AnimationSprite
                     jumpCount = 0;
                     y = _fallingPlatform.y - 60;
                     _fallingPlatform.handleCrumbleAnimation();
+                }
+
+                if(g is Spears)
+                {
+                    _spears = g as Spears;
+                    playerHasDied = true;
+                    RespawnPlayer();
                 }
             }
         }

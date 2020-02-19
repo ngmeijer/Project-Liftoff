@@ -17,6 +17,7 @@ public class Level : GameObject
     public bool resetGame;
 
     public ScreenBorders borders;
+    private Spears spears;
 
     public bool duo { get; set; }
 
@@ -77,6 +78,10 @@ public class Level : GameObject
         borders = new ScreenBorders();
         AddChild(borders);
         borders.x = game.width - 50;
+
+        spears = new Spears();
+        AddChild(spears);
+        spears.y = 920;
     }
 
     private void Update()
