@@ -22,8 +22,8 @@ public class Pickup : Sprite
         scale = 0.5f;
         SetOrigin(width / 2, height / 2);
 
-        offsetX = Utils.Random(0, 400);
-        offsetY = Utils.Random(0, 250);
+        offsetX = Utils.Random(200, 500);
+        offsetY = Utils.Random(150, 400);
     }
 
     public void SetSpawnPosition(float xPos, float yPos)
@@ -34,24 +34,28 @@ public class Pickup : Sprite
 
     private void Update()
     {
-        MakeInvisible();
+        timer++;
+
+        Console.WriteLine(timer);
+
+        if (hidden)
+        {
+            timer++;
+            MakeInvisible();
+        }
     }
 
     private void MakeInvisible()
     {
-        timer++;
-
         if (hidden)
         {
             this.visible = false;
-            if (timer >= maxTimeHidden)
-            {
-                this.visible = true;
-            }
         }
-        else if (!hidden)
+        if (timer >= maxTimeHidden)
         {
+            hidden = false;
             this.visible = true;
+            timer = 0;
         }
     }
 
@@ -91,6 +95,8 @@ public class Pickup : Sprite
                 level._player1 = hitInfo as Player1;
                 level._player1.pickupsCollected++;
                 relocate = true;
+                hidden = true;
+                MakeInvisible();
                 ChangePosition();
                 relocate = false;
             }
