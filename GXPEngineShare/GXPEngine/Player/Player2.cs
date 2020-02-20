@@ -40,6 +40,7 @@ public class Player2 : AnimationSprite
     private float _animationTimer;
     private float _animationSpeed;
     private bool usingWhip;
+    private bool stunned;
 
     public bool flyToBorder { get; set; }
 
@@ -60,18 +61,21 @@ public class Player2 : AnimationSprite
         _collider2 = new Sprite("TestPlayerCollider.png", true, true);
         AddChild(_collider2);
 
-        _collider2.x = xPos - 85;
-        _collider2.y = x + 95;
-        
+        x = xPos;
+        y = yPos;
+
+        //DON'T TOUCH THIS S#!&
+        _collider2.x = x - 85;
+        _collider2.y = y - 410;
+        //Will mess up spawning & collider positions. Idk why it doesn't work the same way as Player1. Literally copied the script,
+        // and changed the spawn positions.
+
         whipSprite = new Whip(level);
         AddChild(whipSprite);
         whipSprite.visible = false;
 
         lifeCount = 3;
         _animationSpeed = 150f;
-
-        //x = _collider2.x;
-        //y = _collider2.y;
     }
 
     private void Update()
@@ -83,10 +87,6 @@ public class Player2 : AnimationSprite
         CheckForScreenCollision();
         TrackScore();
 
-        if (flyToBorder)
-        {
-            x += 20;
-        }
     }
 
     #endregion
@@ -137,25 +137,28 @@ public class Player2 : AnimationSprite
 
     private void MovePlayer()
     {
-        if (Input.GetKey(Key.LEFT))
+        if (!stunned)
         {
-            scaleX = -0.65f;
-            _playerIsMoving = true;
-            HandleRunAnimation();
-            Translate(-_moveSpeed, 0);
-        }
-        else if (Input.GetKey(Key.RIGHT))
-        {
-            //Consider taking out scaleX since it causes a bit of buggy movement. Rotates around x = 0 instead of pivot point. Preferably stay at same position.
-            scaleX = 0.65f;
-            _playerIsMoving = true;
-            HandleRunAnimation();
-            Translate(_moveSpeed, 0);
-        }
-        else
-        {
-            _playerIsMoving = false;
-            HandleIdleAnimation();
+            if (Input.GetKey(Key.LEFT))
+            {
+                scaleX = -0.65f;
+                _playerIsMoving = true;
+                HandleRunAnimation();
+                Translate(-_moveSpeed, 0);
+            }
+            else if (Input.GetKey(Key.RIGHT))
+            {
+                //Consider taking out scaleX since it causes a bit of buggy movement. Rotates around x = 0 instead of pivot point. Preferably stay at same position.
+                scaleX = 0.65f;
+                _playerIsMoving = true;
+                HandleRunAnimation();
+                Translate(_moveSpeed, 0);
+            }
+            else
+            {
+                _playerIsMoving = false;
+                HandleIdleAnimation();
+            }
         }
     }
 
@@ -169,16 +172,24 @@ public class Player2 : AnimationSprite
             HandleJumpAnimation();
         }
 
-        if (Input.GetKey(Key.UP) && (jumpCount < 2))
+        if (!stunned)
         {
-            jumpCount += 1;
-            speedY = -_jumpForce;
-            HandleJumpAnimation();
+            if (Input.GetKey(Key.UP) && (jumpCount < 2))
+            {
+                jumpCount += 1;
+                speedY = -_jumpForce;
+                HandleJumpAnimation();
+            }
         }
     }
 
     private void UseWhip()
     {
+        if (flyToBorder)
+        {
+            x += 20;
+        }
+
         float tempPosY = y;
         if (levelScript.hud._playerCanUseWhip)
         {
@@ -246,12 +257,12 @@ public class Player2 : AnimationSprite
                     _fallingPlatform.handleCrumbleAnimation();
                 }
 
-                //if (g is Spears)
-                //{
-                //    _spears = g as Spears;
-                //    playerHasDied = true;
-                //    RespawnPlayer2();
-                //}
+                if (g is Spears)
+                {
+                    _spears = g as Spears;
+                    playerHasDied = true;
+                    RespawnPlayer2();
+                }
             }
         }
     }

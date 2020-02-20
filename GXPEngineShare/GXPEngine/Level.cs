@@ -78,7 +78,7 @@ public class Level : GameObject
         InitializeFallingPlatforms();
         InitializePlatforms();
         InitializePlayers();
-        InitializeCoins();
+        InitializePickups();
         InitializeHUD();
 
         borders = new ScreenBorders();
@@ -184,17 +184,22 @@ public class Level : GameObject
         _startPlatform2.y = 700;
     }
 
-    private void InitializeCoins()
+    private void InitializePickups()
     {
-        _pickupArray = new Pickup[5];
+        _pickupArray = new Pickup[4];
 
         for (int count = 0; count < _pickupArray.Length; count++)
         {
-            _pickupArray[count] = new Pickup(this);
-            _pickupArray[count].SetSpawnPosition(xPosPickups, yPosPickups);
-            xPosPickups += _pickupArray[count].offsetX;
-            yPosPickups += _pickupArray[count].offsetY;
+            int indexX = 0;
+            int indexY = 0;
 
+            int randomFirstPositionX = Utils.Random(600, 1800);
+            int randomFirstPositionY = Utils.Random(200, 900);
+
+            _pickupArray[count] = new Pickup(this);
+            _pickupArray[count].SetSpawnPosition(randomFirstPositionX, randomFirstPositionY);
+            Console.WriteLine("X position = " + _pickupArray[count].firstSpawnsX[indexX]);
+            Console.WriteLine("Y position = " + _pickupArray[count].firstSpawnsY[indexY]);
             AddChild(_pickupArray[count]);
         }
     }
