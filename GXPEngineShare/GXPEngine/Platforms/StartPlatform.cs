@@ -12,7 +12,7 @@ public class StartPlatform : Sprite
 
 	private void Update()
 	{
-		x -= 2;
+		//x -= 2;
 
 		if(x < 0 - width)
 		{

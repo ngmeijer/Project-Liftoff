@@ -17,7 +17,7 @@ public class Player1 : AnimationSprite
     public NormalPlatform _normalPlatform { get; private set; }
     private FallingPlatform _fallingPlatform;
 
-    private Sprite _collider;
+    private Sprite _collider1;
     private Spears _spears;
 
     public Whip whipSprite { get; private set; }
@@ -60,8 +60,8 @@ public class Player1 : AnimationSprite
         scale = 0.65f;
         SetOrigin(x / 2, y + 65);
 
-        _collider = new Sprite("Collider.png", true, true);
-        AddChild(_collider);
+        _collider1 = new Sprite("TestPlayerCollider.png", true, true);
+        AddChild(_collider1);
 
         whipSprite = new Whip(level);
         AddChild(whipSprite);
@@ -70,13 +70,11 @@ public class Player1 : AnimationSprite
         lifeCount = 3;
         _animationSpeed = 150f;
 
-        _collider.x = xPos - 85;
-        _collider.y = yPos - 95;
+        _collider1.x = xPos - 85;
+        _collider1.y = yPos - 110;
 
-        x = _collider.x;
-        y = _collider.y;
-
-        _collider.y -= 15;
+        x = _collider1.x;
+        y = _collider1.y;
     }
 
     private void Update()
@@ -207,19 +205,19 @@ public class Player1 : AnimationSprite
         if (x >= game.width + 50)
         {
             playerHasDied = true;
-            RespawnPlayer();
+            RespawnPlayer1();
         }
 
         if (x <= -50)
         {
             playerHasDied = true;
-            RespawnPlayer();
+            RespawnPlayer1();
         }
 
         if (y > game.height + 50)
         {
             playerHasDied = true;
-            RespawnPlayer();
+            RespawnPlayer1();
         }
     }
 
@@ -227,7 +225,7 @@ public class Player1 : AnimationSprite
     {
         if (!usingWhip)
         {
-            foreach (GameObject g in _collider.GetCollisions())
+            foreach (GameObject g in _collider1.GetCollisions())
             {
                 if (g is StartPlatform)
                 {
@@ -255,13 +253,13 @@ public class Player1 : AnimationSprite
                 {
                     _spears = g as Spears;
                     playerHasDied = true;
-                    RespawnPlayer();
+                    RespawnPlayer1();
                 }
             }
         }
     }
 
-    private void RespawnPlayer()
+    private void RespawnPlayer1()
     {
         x = spawnPointX;
         y = spawnPointY;

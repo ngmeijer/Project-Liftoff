@@ -56,6 +56,7 @@ public class Level : GameObject
     //SFX
     private Sound _backgroundMusic;
     private FallingPlatform[] _fallingPlatformArray3;
+    private Sprite _hudBackground;
 
     public int sceneTime { get; set; }
 
@@ -69,6 +70,11 @@ public class Level : GameObject
         _backgroundMusic.Play(false);
 
         InitializeBackground();
+
+        _hudBackground = new Sprite("HUDBackground.png");
+        AddChild(_hudBackground);
+        _hudBackground.y = 0;
+
         InitializeFallingPlatforms();
         InitializePlatforms();
         InitializePlayers();
@@ -108,7 +114,7 @@ public class Level : GameObject
 
         if (menu.duoPlayers)
         {
-            _player2 = new Player2(100, 500);
+            _player2 = new Player2(100, 500, hud, this);
             AddChild(_player2);
         }
     }

@@ -14,13 +14,14 @@ public class HUD : Canvas
 	private readonly Font _arialFont;
 
 	private readonly float _xPosCounters = 0;
-	private readonly float _yPosCounters = 50;
+	private readonly float _yPosCounters = 0;
 
 	public Sprite _whipChargeP1;
 	public Sprite _whipChargeP2;
 	public bool _playerCanUseWhip { get; private set; }
 
 	public float WhipChargeP1 { get; private set; }
+	public float WhipChargeP2 { get; private set; }
 
 	#endregion
 
@@ -31,8 +32,9 @@ public class HUD : Canvas
 
 		_whipChargeP1 = new Sprite("WhipCharge.png");
 		AddChild(_whipChargeP1);
-		_whipChargeP1.y = game.height - 100;
+		_whipChargeP1.y = 50;
 		_whipChargeP1.scaleX = 0;
+		_whipChargeP1.scaleY = 0.5f;
 
 		if (_player2 != null)
 		{
@@ -46,7 +48,6 @@ public class HUD : Canvas
 		_whiteBrush = Brushes.White;
 		_redBrush = Brushes.Red;
 		_arialFont = new Font("GameFont.ttf", 30);
-
 	}
 
 	private void Update()
@@ -58,13 +59,14 @@ public class HUD : Canvas
 		{
 			ShowCountersP2();
             DisplayWinner();
+			ShowWhipChargeP2();
 		}
 
-		ShowWhipCharge();
+		ShowWhipChargeP1();
         RestartGame();
 	}
 
-	private void ShowWhipCharge()
+	private void ShowWhipChargeP1()
 	{
 		if (_player1.pickupsCollected == 1)
 		{
@@ -79,6 +81,26 @@ public class HUD : Canvas
 		}
 
 		if((WhipChargeP1 == 1.0f) && (_player1.whipUsedCount < 1))
+		{
+			_playerCanUseWhip = true;
+		}
+	}
+
+	private void ShowWhipChargeP2()
+	{
+		if (_player2.pickupsCollected == 1)
+		{
+			_whipChargeP1.scaleX = 0.5f;
+			WhipChargeP1 = 0.5f;
+		}
+
+		if (_player2.pickupsCollected == 2)
+		{
+			_whipChargeP1.scaleX = 1.0f;
+			WhipChargeP1 = 1.0f;
+		}
+
+		if ((WhipChargeP2 == 1.0f) && (_player2.whipUsedCount < 1))
 		{
 			_playerCanUseWhip = true;
 		}

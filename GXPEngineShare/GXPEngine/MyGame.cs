@@ -11,7 +11,7 @@ public class MyGame : Game
 
     #endregion
 
-    public MyGame() : base(1920, 1080, true, true)
+    public MyGame() : base(1920, 1080, false, true)
     {
         _menu = new Menu(_level, _cutscene);
         AddChild(_menu);

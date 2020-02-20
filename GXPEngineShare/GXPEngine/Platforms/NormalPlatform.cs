@@ -87,16 +87,4 @@ public class NormalPlatform : Sprite
             y = Utils.Random(50, 950);
         }
     }
-
-    private void CheckPlayerCollision()
-    {
-        if(level._player1._normalPlatform == this)
-        {
-            playerOnPlatform = true;
-        }
-        else
-        {
-            playerOnPlatform = false;
-        }
-    }
 }

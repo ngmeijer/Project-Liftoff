@@ -1,6 +1,4 @@
-﻿using System;
-using GXPEngine;
-using GXPEngine.Core;
+﻿using GXPEngine;
 
 public class Player2 : AnimationSprite
 {
@@ -10,124 +8,154 @@ public class Player2 : AnimationSprite
     private float _jumpForce = 18f;
     private float _fallMultiplier = 7.5f;
     private bool _isJumping = false;
+    private int jumpCount = 0;
 
-    private bool _standingOnPlatform;
-    private bool _stillStandingOnPlatform;
-    private int _offset = 64;
-
-    private StartPlatform _startPlatform;
-    private NormalPlatform _normalPlatform;
+    public StartPlatform _startPlatform { get; set; }
+    public NormalPlatform _normalPlatform { get; private set; }
     private FallingPlatform _fallingPlatform;
-    private bool _standingOnStart;
-    private float speedY;
-    private bool playerCanJump;
-    private bool _stillStandingOnStart;
-    private const float spawnPointX = 100;
-    private const float spawnPointY = 100;
 
-    private int coinPoint = 100;
-    private int coinScore;
+    private Sprite _collider2;
+    private Spears _spears;
+
+    public Whip whipSprite { get; private set; }
+
+    private Level levelScript;
+    private HUD hudScript;
+
+    private float speedY;
+    private const float spawnPointX = 100;
+    private const float spawnPointY = 500;
+
+    private int pickupPoints = 100;
+    private int pickupScore;
+    private int scoreAhead;
+    public int pickupsCollected { get; set; }
+
     private bool playerHasDied;
 
     public int scoreCount { get; private set; }
-
     public int lifeCount { get; private set; }
 
-    private bool _stillStandingOnFallingPlatform;
     private bool _playerIsMoving;
-    private bool playerHasMovedOnPlatform;
-    private float _movedDistance;
     private float _animationTimer;
-    private int jumpCount;
+    private float _animationSpeed;
+    private bool usingWhip;
+
+    public bool flyToBorder { get; set; }
+
+    public int whipUsedCount { get; private set; }
 
     #endregion
 
     #region Constructor & Update
 
-    public Player2(int xPos, int yPos) : base("PlayerSpritesheet.png", 4, 3)
+    public Player2(int xPos, int yPos, HUD hud, Level level) : base("Spritesheet_Inka.png", 4, 3)
     {
+        levelScript = level;
+        hudScript = hud;
+
         scale = 0.65f;
-        SetOrigin(this.x / 2, this.y + 65);
+        SetOrigin(x / 2, y + 65);
+
+        _collider2 = new Sprite("TestPlayerCollider.png", true, true);
+        AddChild(_collider2);
+
+        _collider2.x = xPos - 85;
+        _collider2.y = x + 95;
+        
+        whipSprite = new Whip(level);
+        AddChild(whipSprite);
+        whipSprite.visible = false;
 
         lifeCount = 3;
+        _animationSpeed = 150f;
 
-        x = xPos;
-        y = yPos;
+        //x = _collider2.x;
+        //y = _collider2.y;
     }
 
     private void Update()
     {
         MovePlayer();
         PlayerJump();
-        CheckForPlatformCollision();
+        UseWhip();
+        CheckCollisions();
         CheckForScreenCollision();
         TrackScore();
+
+        if (flyToBorder)
+        {
+            x += 20;
+        }
     }
 
     #endregion
 
     #region Functions
-    private void handleIdleAnimation()
+    private void HandleIdleAnimation()
     {
-        _animationTimer += Time.deltaTime;
-        int frame = (int)(_animationTimer / 350f) % 1;
+        if (!_playerIsMoving)
+        {
+            _animationTimer += Time.deltaTime;
+            int frame = (int)(_animationTimer / 350f) % 2;
 
-        SetFrame(frame);
+            SetFrame(frame);
+        }
     }
 
-    private void handleRunAnimation()
+    private void HandleRunAnimation()
     {
-        _animationTimer += Time.deltaTime;
-        int frame = (int)(_animationTimer / 350f) % 3 + 8;
+        if (_playerIsMoving)
+        {
+            _animationTimer += Time.deltaTime;
+            int frame = (int)(_animationTimer / _animationSpeed) % 4 + 9;
 
-        SetFrame(frame);
+            SetFrame(frame);
+        }
     }
 
-    private void handleJumpAnimation()
+    private void HandleJumpAnimation()
     {
         _animationTimer += Time.deltaTime;
-        int frame = (int)(_animationTimer / 350f) % 2 + 5;
+        int frame = (int)(_animationTimer / 100f) % 1 + 4;
 
-        SetFrame(frame);
+        SetFrame(4);
     }
-
 
     private void TrackScore()
     {
-        scoreCount = Time.time / 100 + coinScore;
+        scoreCount = Time.time / 400 + pickupScore + scoreAhead;
+
+        if (levelScript._player2 != null)
+        {
+            if (x > levelScript._player2.x + 100)
+            {
+                scoreAhead += 1;
+            }
+        }
     }
 
     private void MovePlayer()
     {
         if (Input.GetKey(Key.LEFT))
         {
-            handleRunAnimation();
+            scaleX = -0.65f;
             _playerIsMoving = true;
+            HandleRunAnimation();
             Translate(-_moveSpeed, 0);
-            if (_standingOnPlatform)
-            {
-                _movedDistance -= _moveSpeed;
-                playerHasMovedOnPlatform = true;
-            }
         }
         else if (Input.GetKey(Key.RIGHT))
         {
-            handleRunAnimation();
+            //Consider taking out scaleX since it causes a bit of buggy movement. Rotates around x = 0 instead of pivot point. Preferably stay at same position.
+            scaleX = 0.65f;
             _playerIsMoving = true;
+            HandleRunAnimation();
             Translate(_moveSpeed, 0);
-            if (_standingOnPlatform)
-            {
-                _movedDistance += _moveSpeed;
-                playerHasMovedOnPlatform = true;
-            }
         }
         else
         {
             _playerIsMoving = false;
-            if (!_isJumping)
-            {
-                handleIdleAnimation();
-            }
+            HandleIdleAnimation();
         }
     }
 
@@ -138,147 +166,97 @@ public class Player2 : AnimationSprite
         if (speedY <= _fallMultiplier)
         {
             speedY = speedY + 1;
+            HandleJumpAnimation();
         }
 
-        if (Input.GetKeyDown(Key.UP) && (jumpCount <= 1))
+        if (Input.GetKey(Key.UP) && (jumpCount < 2))
         {
             jumpCount += 1;
             speedY = -_jumpForce;
-            _isJumping = true;
+            HandleJumpAnimation();
+        }
+    }
+
+    private void UseWhip()
+    {
+        float tempPosY = y;
+        if (levelScript.hud._playerCanUseWhip)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                y = tempPosY;
+                usingWhip = true;
+                whipSprite.visible = true;
+            }
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                usingWhip = false;
+                whipSprite.visible = false;
+            }
         }
     }
 
     private void CheckForScreenCollision()
     {
-        if (x >= game.width)
+        if (x >= game.width + 50)
         {
             playerHasDied = true;
-            RespawnPlayer();
+            RespawnPlayer2();
         }
 
-        if (x <= 0)
+        if (x <= -50)
         {
             playerHasDied = true;
-            RespawnPlayer();
+            RespawnPlayer2();
         }
 
-        if (y > game.height)
+        if (y > game.height + 50)
         {
             playerHasDied = true;
-            RespawnPlayer();
+            RespawnPlayer2();
         }
     }
 
-    private void OnCollision(GameObject other)
+    private void CheckCollisions()
     {
-        if (!_standingOnStart)
+        if (!usingWhip)
         {
-            if (other is NormalPlatform)
+            foreach (GameObject g in _collider2.GetCollisions())
             {
-                jumpCount = 0;
-                _normalPlatform = other as NormalPlatform;
-                if (!_playerIsMoving)
+                if (g is StartPlatform)
                 {
-                    x = _normalPlatform.x;
-                    if (playerHasMovedOnPlatform)
-                    {
-                        x = _normalPlatform.x + _movedDistance;
-                    }
+                    jumpCount = 0;
+                    _startPlatform = g as StartPlatform;
+                    y = _startPlatform.y - 55;
                 }
-                y = _normalPlatform.y - _offset;
-            }
-        }
 
-        if (!_standingOnStart)
-        {
-            if (other is FallingPlatform)
-            {
-                jumpCount = 0;
-                _fallingPlatform = other as FallingPlatform;
-                if (!_playerIsMoving)
+                if (g is NormalPlatform)
                 {
-                    x = _fallingPlatform.x + 50;
-                    if (playerHasMovedOnPlatform)
-                    {
-                        x = _fallingPlatform.x + _movedDistance;
-                    }
+                    _normalPlatform = g as NormalPlatform;
+                    jumpCount = 0;
+                    y = _normalPlatform.y - 65;
                 }
-                y = _fallingPlatform.y - _offset;
-            }
-        }
-        if (other is StartPlatform)
-        {
-            jumpCount = 1;
-            _startPlatform = other as StartPlatform;
-            _standingOnStart = true;
-            y = _startPlatform.y - _offset;
-        }
 
-        if (other is Pickup)
-        {
-            coinScore += coinPoint;
-        }
-    }
-
-    private void CheckForPlatformCollision()
-    {
-        if (_standingOnPlatform)
-        {
-            _stillStandingOnPlatform = HitTest(_normalPlatform);
-
-            if (_stillStandingOnPlatform)
-            {
-                playerCanJump = true;
-                if (!_isJumping)
+                if (g is FallingPlatform)
                 {
-                    x = _normalPlatform.x;
-                    y = _normalPlatform.y;
+                    _fallingPlatform = g as FallingPlatform;
+                    jumpCount = 0;
+                    y = _fallingPlatform.y - 60;
+                    _fallingPlatform.handleCrumbleAnimation();
                 }
-            }
-            else if (!_stillStandingOnPlatform)
-            {
-                _standingOnPlatform = false;
-                playerCanJump = false;
-            }
-        }
 
-        if (_standingOnPlatform)
-        {
-            _stillStandingOnFallingPlatform = HitTest(_fallingPlatform);
-
-            if (_stillStandingOnPlatform)
-            {
-                playerCanJump = true;
-                if (!_isJumping)
-                {
-                    x = _fallingPlatform.x;
-                    y = _fallingPlatform.y;
-                }
-            }
-            else if (!_stillStandingOnPlatform)
-            {
-                _standingOnPlatform = false;
-                playerCanJump = false;
-            }
-        }
-
-        if (_standingOnStart)
-        {
-            _stillStandingOnStart = HitTest(_startPlatform);
-
-            if (_stillStandingOnStart)
-            {
-                playerCanJump = true;
-            }
-            else if (!_stillStandingOnStart)
-            {
-                _standingOnStart = false;
-                playerCanJump = false;
+                //if (g is Spears)
+                //{
+                //    _spears = g as Spears;
+                //    playerHasDied = true;
+                //    RespawnPlayer2();
+                //}
             }
         }
     }
 
-    private void RespawnPlayer()
+    private void RespawnPlayer2()
     {
         x = spawnPointX;
         y = spawnPointY;
@@ -291,7 +269,7 @@ public class Player2 : AnimationSprite
 
         if (lifeCount <= 0)
         {
-            Destroy();
+            LateDestroy();
         }
     }
 
