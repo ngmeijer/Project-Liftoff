@@ -7,7 +7,7 @@ public class MyGame : Game
 
     public Menu _menu { get; private set; }
     private Level _level;
-    private Cutscene _cutscene;
+    private CutscenePart1 _cutscene;
 
     #endregion
 

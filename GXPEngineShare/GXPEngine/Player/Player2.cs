@@ -193,14 +193,14 @@ public class Player2 : AnimationSprite
         float tempPosY = y;
         if (levelScript.hud._playerCanUseWhip)
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetKeyDown(Key.PLUS))
             {
                 y = tempPosY;
                 usingWhip = true;
                 whipSprite.visible = true;
             }
 
-            if (Input.GetMouseButtonUp(0))
+            if (Input.GetKeyUp(Key.PLUS))
             {
                 usingWhip = false;
                 whipSprite.visible = false;

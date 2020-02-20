@@ -40,8 +40,8 @@ public class HUD : Canvas
 		{
 			_whipChargeP2 = new Sprite("WhipCharge.png");
 			AddChild(_whipChargeP2);
-			_whipChargeP2.x = game.width - _whipChargeP2.width;
-			_whipChargeP2.y = game.height - 100;
+			_whipChargeP2.x = 500;
+			_whipChargeP2.y = 50;
 			_whipChargeP2.scale = 0;
 		}
 
@@ -58,8 +58,8 @@ public class HUD : Canvas
 		if (_player2 != null)
 		{
 			ShowCountersP2();
-            DisplayWinner();
 			ShowWhipChargeP2();
+            DisplayWinner();
 		}
 
 		ShowWhipChargeP1();
@@ -90,14 +90,14 @@ public class HUD : Canvas
 	{
 		if (_player2.pickupsCollected == 1)
 		{
-			_whipChargeP1.scaleX = 0.5f;
-			WhipChargeP1 = 0.5f;
+			_whipChargeP2.scaleX = 0.5f;
+			WhipChargeP2 = 0.5f;
 		}
 
 		if (_player2.pickupsCollected == 2)
 		{
-			_whipChargeP1.scaleX = 1.0f;
-			WhipChargeP1 = 1.0f;
+			_whipChargeP2.scaleX = 1.0f;
+			WhipChargeP2 = 1.0f;
 		}
 
 		if ((WhipChargeP2 == 1.0f) && (_player2.whipUsedCount < 1))

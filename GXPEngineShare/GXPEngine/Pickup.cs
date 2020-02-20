@@ -36,8 +36,6 @@ public class Pickup : Sprite
     {
         timer++;
 
-        Console.WriteLine(timer);
-
         if (hidden)
         {
             timer++;
@@ -93,7 +91,10 @@ public class Pickup : Sprite
             {
                 timer = 0;
                 level._player1 = hitInfo as Player1;
-                level._player1.pickupsCollected++;
+                if (level._player1.pickupsCollected <= 2)
+                {
+                    level._player1.pickupsCollected++;
+                }
                 relocate = true;
                 hidden = true;
                 MakeInvisible();
@@ -105,7 +106,10 @@ public class Pickup : Sprite
             {
                 timer = 0;
                 level._player2 = hitInfo as Player2;
-                level._player2.pickupsCollected++;
+                if (level._player2.pickupsCollected <= 2)
+                {
+                    level._player2.pickupsCollected++;
+                }
                 hidden = true;
                 relocate = true;
             }

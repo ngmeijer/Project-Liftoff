@@ -8,7 +8,8 @@ public class Menu : GameObject
     private StartButton _startButton;
 
     private Level _newLevel;
-    private Cutscene _cutscene;
+    private CutscenePart1 _cutscene1;
+    private CutscenePart2 _cutscene2;
     private SoundChannel _soundManager;
     private Sound _backgroundMusic;
     private Sprite _backgroundImage;
@@ -17,6 +18,7 @@ public class Menu : GameObject
     private Sprite duo;
 
     public bool levelStarted;
+
     public bool soloPlayer { get; private set; }
     public bool duoPlayers { get; private set; }
 
@@ -24,9 +26,9 @@ public class Menu : GameObject
 
     #region Constructor & Update method
 
-    public Menu(Level level, Cutscene cutscene) : base()
+    public Menu(Level level, CutscenePart1 cutscene) : base()
     {
-        _cutscene = cutscene;
+        _cutscene1 = cutscene;
         _newLevel = level;
 
         levelStarted = false;
@@ -83,22 +85,29 @@ public class Menu : GameObject
     //Start the game by adding an instance of the Level class. 
     private void startGame()
     {
-        if (!levelStarted)
+        //if (!levelStarted)
+        //{
+        //    _newLevel = new Level(this);
+
+        //    if (duoPlayers)
+        //    {
+        //        _newLevel.duo = true;
+        //    }
+
+        //    AddChild(_newLevel);
+        //    levelStarted = true;
+        //    _cutscene = null;
+        //}
+
+        _cutscene1 = new CutscenePart1();
+        AddChild(_cutscene1);
+
+        if (_cutscene1.cutsceneFinished)
         {
-            _newLevel = new Level(this);
-
-            if (duoPlayers)
-            {
-                _newLevel.duo = true;
-            }
-
-            AddChild(_newLevel);
-            levelStarted = true;
-            _cutscene = null;
+            _cutscene2 = new CutscenePart2();
+            AddChild(_cutscene2);
+            RemoveChild(_cutscene1);
         }
-
-        //_cutscene = new Cutscene();
-        //AddChild(_cutscene);
     }
 
     //Checks if the start button has been pressed.
