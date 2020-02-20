@@ -29,7 +29,7 @@ public class CutscenePart1 : AnimationSprite
 
         SetFrame(frame);
 
-        if(frame >= frameAmount)
+        if(frame >= frameAmount - 1)
         {
             cutsceneFinished = true;
         }

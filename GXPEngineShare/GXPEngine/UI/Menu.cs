@@ -65,6 +65,15 @@ public class Menu : GameObject
     {
         CheckStartInput();
         CheckLevelReset();
+
+        //Check if the first cutscene has ended.
+        if (_cutscene1 != null)
+        {
+            if (_cutscene1.cutsceneFinished)
+            {
+                StartSecondCutscene();
+            }
+        }
     }
 
     #endregion
@@ -101,13 +110,13 @@ public class Menu : GameObject
 
         _cutscene1 = new CutscenePart1();
         AddChild(_cutscene1);
+    }
 
-        if (_cutscene1.cutsceneFinished)
-        {
-            _cutscene2 = new CutscenePart2();
-            AddChild(_cutscene2);
-            RemoveChild(_cutscene1);
-        }
+    private void StartSecondCutscene()
+    {
+        _cutscene2 = new CutscenePart2();
+        AddChild(_cutscene2);
+        //RemoveChild(_cutscene1);
     }
 
     //Checks if the start button has been pressed.
