@@ -15,7 +15,8 @@ public class Player1 : AnimationSprite
 
     public StartPlatform _startPlatform { get; set; }
     public NormalPlatform _normalPlatform { get; private set; }
-    private FallingPlatform _fallingPlatform;
+    private MovingPlatform _movingPlatform;
+    private CrumblingPlatform _crumblingPlatform;
 
     private Sprite _collider1;
     private Spears _spears;
@@ -120,9 +121,9 @@ public class Player1 : AnimationSprite
     private void HandleJumpAnimation()
     {
         _animationTimer += Time.deltaTime;
-        int frame = (int)(_animationTimer / 100f) % 1 + 4;
+        int frame = (int)(_animationTimer / 1000f) % 4 + 4;
 
-        SetFrame(4);
+        SetFrame(frame);
     }
 
     private void TrackScore()
@@ -187,7 +188,7 @@ public class Player1 : AnimationSprite
         {
             if (Input.GetMouseButtonDown(0))
             {
-                y = tempPosY;
+                _fallMultiplier = 0;
                 usingWhip = true; 
                 whipSprite.visible = true;
             }
@@ -229,8 +230,8 @@ public class Player1 : AnimationSprite
             {
                 if (g is StartPlatform)
                 {
-                    jumpCount = 0;
                     _startPlatform = g as StartPlatform;
+                    jumpCount = 0;
                     y = _startPlatform.y - 55;
                 }
 
@@ -238,18 +239,25 @@ public class Player1 : AnimationSprite
                 {
                     _normalPlatform = g as NormalPlatform;
                     jumpCount = 0;
-                    y = _normalPlatform.y - 65;
+                    y = _normalPlatform.y - 55;
                 }
 
-                if (g is FallingPlatform)
+                if (g is MovingPlatform)
                 {
-                    _fallingPlatform = g as FallingPlatform;
+                    _movingPlatform = g as MovingPlatform;
                     jumpCount = 0;
-                    y = _fallingPlatform.y - 60;
-                    _fallingPlatform.handleCrumbleAnimation();
+                    y = _movingPlatform.y - 65;
                 }
 
-                if(g is Spears)
+                if (g is CrumblingPlatform)
+                {
+                    _crumblingPlatform = g as CrumblingPlatform;
+                    jumpCount = 0;
+                    y = _crumblingPlatform.y - 60;
+                    _crumblingPlatform.handleCrumbleAnimation();
+                }
+
+                if (g is Spears)
                 {
                     _spears = g as Spears;
                     playerHasDied = true;

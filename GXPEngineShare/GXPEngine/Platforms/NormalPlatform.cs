@@ -5,69 +5,45 @@ using GXPEngine;
 
 public class NormalPlatform : Sprite
 {
-    #region Variables
+	#region Variables
 
     private float _moveSpeedX;
-    private float[] _moveSpeedY = { 0, 1 };
-    private float weight = 1;
+	private float _moveSpeedY = 1;
     private int yDir = 1;
 
     public float offsetX;
     public float offsetY;
-    private bool playerOnPlatform;
-
-    Level level;
-    Menu menu;
-
-    private Player1 _player1;
 
     #endregion
 
-    public NormalPlatform(Level levelScript, Menu menuScript) : base("Platform.png", true, true)
+    public NormalPlatform() : base("Platform.png", true, true)
 	{
-        level = levelScript;
-        menu = menuScript;
-
         _moveSpeedX = 2.5f;
-        scale = 0.2f;
+        _moveSpeedY = Utils.Random(1, 2);
+        scale = 0.15f;
 
-        offsetX = Utils.Random(0, 500);
-        offsetY = Utils.Random(0, 500);
+        offsetX = Utils.Random(-300, 500);
+        offsetY = Utils.Random(-300, 300);
     }
 
 	private void Update()
 	{
+        y += _moveSpeedY * yDir;
+
+        x -= _moveSpeedX;
+
         InversePlatforms();
-        HandlePlayerWeight();
         RespawnPlatforms();
 	}
 
-    private void HandlePlayerWeight()
-    {
-        x -= _moveSpeedX;
-
-        if (!playerOnPlatform)
-        {
-            y += _moveSpeedY[1] * yDir;
-        }
-        else
-        {
-            y += weight;
-            if (weight <= 5)
-            {
-                weight *= 1.02f;
-            }
-        }
-    }
-
 	private void InversePlatforms()
 	{
-		if(y <= 150)
+		if(y <= 50)
 		{
             yDir *= -1;
 		}
 		
-		if(y >= game.height - 200)
+		if(y >= 900)
 		{
             yDir *= -1;
 		}

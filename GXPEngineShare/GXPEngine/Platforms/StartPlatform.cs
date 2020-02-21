@@ -12,9 +12,9 @@ public class StartPlatform : Sprite
 
 	private void Update()
 	{
-		//x -= 2;
+		x -= 1;
 
-		if(x < 0 - width)
+		if (x < 0 - width)
 		{
 			LateDestroy();
 		}

@@ -28,34 +28,34 @@ public class Level : GameObject
     private StartPlatform _startPlatform1;
     private StartPlatform _startPlatform2;
 
-    public NormalPlatform[] _platformArray;
-    public FallingPlatform[] _fallingPlatformArray;
-    private FallingPlatform[] _fallingPlatformArray2;
-    public FakePlatform[] _fakePlatformArray;
+    public MovingPlatform[] _movingPlatformArray;
+    public CrumblingPlatform[] _crumblingPlatformArray;
+    private CrumblingPlatform[] _fallingPlatformArray2;
+    public NormalPlatform[] _normalPlatformArray;
 
     private int[] fallingPlatformPosX = { 600, 800, 1000, 1200, 1400, 1600, 1800 };
     private int[] fallingPlatformPosY = { 150, 300, 450, 600, 750, 800, 950 };
 
     private int fallingCount = 0;
 
-    private float xPosNormal = 800;
-    private float yPosNormal = 300;
+    private int xPosNormal = 800;
+    private int yPosNormal = 300;
 
-    private float xPosFalling = 500;
-    private float yPosFalling = 200;
-    private float xPosFalling2 = 500;
-    private float yPosFalling2 = 800;
-    private float xPosFalling3 = 700;
+    private int xPosFalling = 500;
+    private int yPosFalling = 200;
+    private int xPosFalling2 = 500;
+    private int yPosFalling2 = 800;
+    private int xPosFalling3 = 700;
 
-    private float xPosFake = 1200;
-    private float yPosFake = 100;
+    private int xPosFake = 1200;
+    private int yPosFake = 100;
 
-    private float xPosPickups = 600;
-    private float yPosPickups = 100;
+    private int xPosPickups = 600;
+    private int yPosPickups = 100;
 
     //SFX
     private Sound _backgroundMusic;
-    private FallingPlatform[] _fallingPlatformArray3;
+    private CrumblingPlatform[] _fallingPlatformArray3;
     private Sprite _hudBackground;
 
     public int sceneTime { get; set; }
@@ -93,7 +93,7 @@ public class Level : GameObject
     private void Update()
     {
         sceneTime++;
-        //SpawnNewFallingPlatforms();
+        SpawnNewFallingPlatforms();
     }
 
     #region Draw level
@@ -121,24 +121,24 @@ public class Level : GameObject
 
     private void InitializeFallingPlatforms()
     {
-        _fallingPlatformArray = new FallingPlatform[7];
+        _crumblingPlatformArray = new CrumblingPlatform[5];
 
-        for (fallingCount = 0; fallingCount < _fallingPlatformArray.Length; fallingCount++)
+        for (fallingCount = 0; fallingCount < _crumblingPlatformArray.Length; fallingCount++)
         {
-            _fallingPlatformArray[fallingCount] = new FallingPlatform();
-            _fallingPlatformArray[fallingCount].SetSpawnPosition(xPosFalling, yPosFalling);
-            xPosFalling += 200;
+            _crumblingPlatformArray[fallingCount] = new CrumblingPlatform();
+            _crumblingPlatformArray[fallingCount].SetSpawnPosition(xPosFalling, yPosFalling);
+            xPosFalling += 310;
 
-            AddChild(_fallingPlatformArray[fallingCount]);
+            AddChild(_crumblingPlatformArray[fallingCount]);
         }
 
-        _fallingPlatformArray2 = new FallingPlatform[7];
+        _fallingPlatformArray2 = new CrumblingPlatform[5];
 
         for (int count = 0; count < _fallingPlatformArray2.Length; count++)
         {
-            _fallingPlatformArray2[count] = new FallingPlatform();
+            _fallingPlatformArray2[count] = new CrumblingPlatform();
             _fallingPlatformArray2[count].SetSpawnPosition(xPosFalling2, yPosFalling2);
-            xPosFalling2 += 200;
+            xPosFalling2 += 310;
 
             AddChild(_fallingPlatformArray2[count]);
         }
@@ -147,32 +147,30 @@ public class Level : GameObject
     private void InitializePlatforms()
     {
         //Normal platforms
-        _platformArray = new NormalPlatform[7];
+        _movingPlatformArray = new MovingPlatform[7];
 
-        for (int count = 0; count < _platformArray.Length; count++)
+        for (int count = 0; count < _movingPlatformArray.Length; count++)
         {
-            _platformArray[count] = new NormalPlatform(this, menu);
-            _platformArray[count].SetSpawnPosition(xPosNormal, yPosNormal);
+            _movingPlatformArray[count] = new MovingPlatform(this, menu);
+            _movingPlatformArray[count].SetSpawnPosition(xPosNormal, yPosNormal);
             xPosNormal += Utils.Random(150, 250);
             yPosNormal += Utils.Random(50, 150);
 
-            AddChild(_platformArray[count]);
+            AddChild(_movingPlatformArray[count]);
         }
 
-        //Falling platforms
-
         //Fake platforms
-        //_fakePlatformArray = new FakePlatform[7];
+        _normalPlatformArray = new NormalPlatform[7];
 
-        //for (int count = 0; count < _fakePlatformArray.Length; count++)
-        //{
-        //    _fakePlatformArray[count] = new FakePlatform();
-        //    _fakePlatformArray[count].SetSpawnPosition(xPosFake, yPosFake);
-        //    xPosFake += 200;
-        //    yPosFake += 100;
+        for (int count = 0; count < _normalPlatformArray.Length; count++)
+        {
+            _normalPlatformArray[count] = new NormalPlatform();
+            _normalPlatformArray[count].SetSpawnPosition(xPosFake, yPosFake);
+            xPosFake += 200;
+            yPosFake += 100;
 
-        //    AddChild(_fakePlatformArray[count]);
-        //}
+            AddChild(_normalPlatformArray[count]);
+        }
 
         //Start platforms. Clean this up.
         _startPlatform1 = new StartPlatform(this);
@@ -221,21 +219,21 @@ public class Level : GameObject
         }
     }
 
-    //private void SpawnNewFallingPlatforms()
-    //{
-    //    if (sceneTime > 650)
-    //    {
-    //        _fallingPlatformArray = new FallingPlatform[5];
+    private void SpawnNewFallingPlatforms()
+    {
+        if (sceneTime > 650)
+        {
+            _crumblingPlatformArray = new CrumblingPlatform[5];
 
-    //        for (int count = 0; count < _fallingPlatformArray.Length; count++)
-    //        {
-    //            _fallingPlatformArray[count] = new FallingPlatform();
-    //            _fallingPlatformArray[count].SetSpawnPosition(xPosFalling3, yPosFalling);
-    //            xPosFalling3 += 200;
+            for (int count = 0; count < _crumblingPlatformArray.Length; count++)
+            {
+                _crumblingPlatformArray[count] = new CrumblingPlatform();
+                _crumblingPlatformArray[count].SetSpawnPosition(xPosFalling3, yPosFalling);
+                xPosFalling3 += 200;
 
-    //            AddChild(_fallingPlatformArray[count]);
-    //            sceneTime = 0;
-    //        }
-    //    }
-    //}
+                AddChild(_crumblingPlatformArray[count]);
+                sceneTime = 0;
+            }
+        }
+    }
 }

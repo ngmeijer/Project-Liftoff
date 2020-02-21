@@ -11,8 +11,8 @@ public class Player2 : AnimationSprite
     private int jumpCount = 0;
 
     public StartPlatform _startPlatform { get; set; }
-    public NormalPlatform _normalPlatform { get; private set; }
-    private FallingPlatform _fallingPlatform;
+    public MovingPlatform _normalPlatform { get; private set; }
+    private CrumblingPlatform _fallingPlatform;
 
     private Sprite _collider2;
     private Spears _spears;
@@ -117,9 +117,9 @@ public class Player2 : AnimationSprite
     private void HandleJumpAnimation()
     {
         _animationTimer += Time.deltaTime;
-        int frame = (int)(_animationTimer / 100f) % 1 + 4;
+        int frame = (int)(_animationTimer / 1000f) % 4 + 4;
 
-        SetFrame(4);
+        SetFrame(frame);
     }
 
     private void TrackScore()
@@ -242,16 +242,16 @@ public class Player2 : AnimationSprite
                     y = _startPlatform.y - 55;
                 }
 
-                if (g is NormalPlatform)
+                if (g is MovingPlatform)
                 {
-                    _normalPlatform = g as NormalPlatform;
+                    _normalPlatform = g as MovingPlatform;
                     jumpCount = 0;
                     y = _normalPlatform.y - 65;
                 }
 
-                if (g is FallingPlatform)
+                if (g is CrumblingPlatform)
                 {
-                    _fallingPlatform = g as FallingPlatform;
+                    _fallingPlatform = g as CrumblingPlatform;
                     jumpCount = 0;
                     y = _fallingPlatform.y - 60;
                     _fallingPlatform.handleCrumbleAnimation();

@@ -3,12 +3,12 @@ using GXPEngine;
 
 public class PlayerGroundCheck : GameObject
 {
-    private NormalPlatform _normalPlatform;
+    private MovingPlatform _normalPlatform;
     private bool _playerIsMoving;
     private bool playerHasMovedOnPlatform;
     private float _movedDistance;
     private float _offset;
-    private FallingPlatform _fallingPlatform;
+    private CrumblingPlatform _fallingPlatform;
     private StartPlatform _startPlatform;
     private bool _standingOnStart;
 
@@ -19,9 +19,9 @@ public class PlayerGroundCheck : GameObject
 
     private void OnCollision(GameObject other)
     {
-        if (other is NormalPlatform)
+        if (other is MovingPlatform)
         {
-            _normalPlatform = other as NormalPlatform;
+            _normalPlatform = other as MovingPlatform;
             if (!_playerIsMoving)
             {
                 x = _normalPlatform.x;
@@ -33,9 +33,9 @@ public class PlayerGroundCheck : GameObject
             y = _normalPlatform.y - _offset;
         }
 
-        if (other is FallingPlatform)
+        if (other is CrumblingPlatform)
         {
-            _fallingPlatform = other as FallingPlatform;
+            _fallingPlatform = other as CrumblingPlatform;
             if (!_playerIsMoving)
             {
                 x = _fallingPlatform.x + 50;
