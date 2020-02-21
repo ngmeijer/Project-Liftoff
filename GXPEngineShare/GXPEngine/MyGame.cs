@@ -6,23 +6,16 @@ public class MyGame : Game
     #region Variables
 
     public Menu _menu { get; private set; }
-    private Level _level;
-    private CutscenePart1 _cutscene;
+    public Cutscene _cutscene { get; private set; }
+
+    private SceneManager sceneManager;
 
     #endregion
 
     public MyGame() : base(1920, 1080, false, true)
     {
-        _menu = new Menu(_level, _cutscene);
-        AddChild(_menu);
-
-        if (_menu.levelStarted)
-        {
-            _level = new Level(_menu);
-            AddChild(_level);
-            _menu.levelStarted = false;
-            RemoveChild(_menu);
-        }
+        sceneManager = new SceneManager(_menu, _cutscene);
+        AddChild(sceneManager);
     }
 
     static void Main()

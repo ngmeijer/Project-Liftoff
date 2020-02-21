@@ -42,8 +42,7 @@
     <Compile Include="ScreenBorders.cs" />
     <Compile Include="Player\PlayerGroundCheck.cs" />
     <Compile Include="Player\Whip.cs" />
-    <Compile Include="UI\CutscenePart2.cs" />
-    <Compile Include="UI\CutscenePart1.cs" />
+    <Compile Include="UI\Cutscene.cs" />
     <Compile Include="UI\Background.cs" />
     <Compile Include="Pickup.cs" />
     <Compile Include="Platforms\StartPlatform.cs" />
@@ -92,6 +91,7 @@
     <Compile Include="GXPEngine\SoLoud\Soloud.cs" />
     <Compile Include="GXPEngine\SoLoud\SoloudSoundSystem.cs" />
     <Compile Include="Player\Player2.cs" />
+    <Compile Include="UI\SceneManager.cs" />
     <Compile Include="UI\StartButton.cs" />
   </ItemGroup>
   <ItemGroup />

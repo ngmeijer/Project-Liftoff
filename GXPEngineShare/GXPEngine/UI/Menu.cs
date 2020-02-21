@@ -8,8 +8,7 @@ public class Menu : GameObject
     private StartButton _startButton;
 
     private Level _newLevel;
-    private CutscenePart1 _cutscene1;
-    private CutscenePart2 _cutscene2;
+    private Cutscene _cutscene1;
     private SoundChannel _soundManager;
     private Sound _backgroundMusic;
     private Sprite _backgroundImage;
@@ -17,7 +16,10 @@ public class Menu : GameObject
     private Sprite solo;
     private Sprite duo;
 
+    private MyGame gameInstance;
+
     public bool levelStarted;
+    public bool startCutscene { get; set; }
 
     public bool soloPlayer { get; private set; }
     public bool duoPlayers { get; private set; }
@@ -26,7 +28,7 @@ public class Menu : GameObject
 
     #region Constructor & Update method
 
-    public Menu(Level level, CutscenePart1 cutscene) : base()
+    public Menu(Level level, Cutscene cutscene) : base()
     {
         _cutscene1 = cutscene;
         _newLevel = level;
@@ -64,67 +66,15 @@ public class Menu : GameObject
     private void Update()
     {
         CheckStartInput();
-        CheckLevelReset();
-
-        //Check if the first cutscene has ended.
-        if (_cutscene1 != null)
-        {
-            if (_cutscene1.cutsceneFinished)
-            {
-                StartSecondCutscene();
-            }
-        }
     }
 
     #endregion
-
-    private void CheckLevelReset()
-    {
-        if (_newLevel != null)
-        {
-            if (_newLevel.resetGame)
-            {
-                _newLevel = null;
-                levelStarted = false;
-                hideShowMenu();
-            }
-        }
-    }
-
-    //Start the game by adding an instance of the Level class. 
-    private void startGame()
-    {
-        //if (!levelStarted)
-        //{
-        //    _newLevel = new Level(this);
-
-        //    if (duoPlayers)
-        //    {
-        //        _newLevel.duo = true;
-        //    }
-
-        //    AddChild(_newLevel);
-        //    levelStarted = true;
-        //    _cutscene = null;
-        //}
-
-        _cutscene1 = new CutscenePart1();
-        AddChild(_cutscene1);
-    }
-
-    private void StartSecondCutscene()
-    {
-        _cutscene2 = new CutscenePart2();
-        AddChild(_cutscene2);
-        //RemoveChild(_cutscene1);
-    }
 
     //Checks if the start button has been pressed.
     private void CheckStartInput()
     {
         if (Input.GetMouseButtonDown(0))
         {
-
             if (solo.HitTestPoint(Input.mouseX, Input.mouseY))
             {
                 soloPlayer = true;
@@ -139,7 +89,7 @@ public class Menu : GameObject
 
             if (_startButton.HitTestPoint(Input.mouseX, Input.mouseY))
             {
-                startGame();
+                startCutscene = true;
                 hideShowMenu();
             }
         }
