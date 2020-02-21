@@ -7,16 +7,13 @@ public class Menu : GameObject
 
     private StartButton _startButton;
 
-    private Level _newLevel;
-    private Cutscene _cutscene1;
-    private SoundChannel _soundManager;
+    private SceneManager _sceneManager;
+    private Cutscene _cutscene;
     private Sound _backgroundMusic;
     private Sprite _backgroundImage;
 
     private Sprite solo;
     private Sprite duo;
-
-    private MyGame gameInstance;
 
     public bool levelStarted;
     public bool startCutscene { get; set; }
@@ -28,10 +25,10 @@ public class Menu : GameObject
 
     #region Constructor & Update method
 
-    public Menu(Level level, Cutscene cutscene) : base()
+    public Menu(SceneManager sceneManager, Cutscene cutscene) : base()
     {
-        _cutscene1 = cutscene;
-        _newLevel = level;
+        _sceneManager = sceneManager;
+        _cutscene = cutscene;
 
         levelStarted = false;
 
@@ -87,10 +84,16 @@ public class Menu : GameObject
                 duoPlayers = true;
             }
 
-            if (_startButton.HitTestPoint(Input.mouseX, Input.mouseY))
+            if (!startCutscene)
             {
-                startCutscene = true;
-                hideShowMenu();
+                if (!levelStarted)
+                {
+                    if (_startButton.HitTestPoint(Input.mouseX, Input.mouseY))
+                    {
+                        startCutscene = true;
+                        hideShowMenu();
+                    }
+                }
             }
         }
     }

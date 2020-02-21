@@ -12,7 +12,7 @@ public class Cutscene : GameObject
     private int frameAmountP2 = 27;
     private int frameAmountP3 = 27;
 
-    public bool playingCutscene { get; set; }
+    public bool playingCutscene { get; private set; }
 
     public bool part1Finished { get; set; }
     public bool part2Finished { get; set; }
@@ -25,6 +25,8 @@ public class Cutscene : GameObject
 
     public Cutscene()
     {
+        playingCutscene = true;
+
         part1 = new AnimationSprite("CutsceneP1.png", 9, 3);
         AddChild(part1);
 
@@ -52,11 +54,6 @@ public class Cutscene : GameObject
         if (part2Finished)
         {
             playPart3();
-        }
-
-        if (part3Finished)
-        {
-            continueToGame = true;
         }
     }
 
@@ -86,7 +83,6 @@ public class Cutscene : GameObject
         if (frame >= frameAmountP2 - 1)
         {
             part2Finished = true;
-            Console.WriteLine("continue to part 3");
         }
     }
 
@@ -101,7 +97,8 @@ public class Cutscene : GameObject
 
         if (frame >= frameAmountP3 - 1)
         {
-            part3Finished = true;
+            continueToGame = true;
+            LateRemove();
         }
     }
 }

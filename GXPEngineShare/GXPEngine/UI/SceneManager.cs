@@ -3,13 +3,14 @@ using GXPEngine;
 
 public class SceneManager : GameObject
 {
-	Menu menu;
-	Cutscene cutscene;
+	public Menu menu { get; private set; }
+	public Cutscene cutscene { get; private set; }
+
 	Level level;
 
 	public SceneManager(Menu menuScript, Cutscene cutsceneScript)
 	{
-		menu = new Menu(level, cutscene);
+		menu = new Menu(this, cutscene);
 		AddChild(menu);
 	}
 
@@ -26,7 +27,7 @@ public class SceneManager : GameObject
 			cutscene = new Cutscene();
 			AddChild(cutscene);
 			menu.startCutscene = false;
-			
+			RemoveChild(menu);
 		}
 	}
 
@@ -39,6 +40,7 @@ public class SceneManager : GameObject
 				level = new Level(menu);
 				AddChild(level);
 				RemoveChild(cutscene);
+				cutscene.continueToGame = false;
 			}
 		}
 	}
