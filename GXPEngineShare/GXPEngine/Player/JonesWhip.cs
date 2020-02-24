@@ -1,6 +1,6 @@
 ﻿using System;
 using GXPEngine;
-public class Whip : Sprite
+public class JonesWhip : Sprite
 {
     private Level level;
     private bool hittingScreenBorder;
@@ -8,11 +8,11 @@ public class Whip : Sprite
     private ScreenBorders _screenBorder;
     
 
-    public Whip(Level levelScript) : base("WhipPlaceholder.png", true, true)
+    public JonesWhip(Level levelScript) : base("jones_whip.png", true, true)
     {
         level = levelScript;
 
-        scale = 2.5f;
+        scaleX = 10f;
     }
 
     private void Update()

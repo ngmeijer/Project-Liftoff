@@ -46,9 +46,9 @@ public class Level : GameObject
     private float xPosNormal2;
     private float yPosNormal2;
 
-    private int xPosFalling = 200;
+    private int xPosFalling = 500;
     private int yPosFalling = 250;
-    private int xPosFalling2 = 200;
+    private int xPosFalling2 = 500;
     private int yPosFalling2 = 800;
 
     private int xPosPickups = 600;
@@ -85,7 +85,7 @@ public class Level : GameObject
         spears.y = 920;
 
         SpawnNewFallingPlatforms();
-        ///*InitializeFallingPlatforms*/();
+        InitializeCrumblingPlatforms();
         InitializePlatforms();
         InitializePlayers();
         InitializePickups();
@@ -232,30 +232,34 @@ public class Level : GameObject
     private void SpawnNewFallingPlatforms()
     {
         sceneTime++;
-        _crumblingPlatformArray = new CrumblingPlatform[5];
 
-        xPosFalling = 200;
-
-        for (int count = 0; count < _crumblingPlatformArray.Length; count++)
+        if (sceneTime > 300)
         {
-            _crumblingPlatformArray[count] = new CrumblingPlatform();
-            _crumblingPlatformArray[count].SetSpawnPosition(xPosFalling, yPosFalling);
-            xPosFalling += 200;
+            _crumblingPlatformArray = new CrumblingPlatform[6];
 
-            AddChild(_crumblingPlatformArray[count]);
-        }
+            xPosFalling = 200;
 
-        xPosFalling2 = 200;
+            for (int count = 0; count < _crumblingPlatformArray.Length; count++)
+            {
+                _crumblingPlatformArray[count] = new CrumblingPlatform();
+                _crumblingPlatformArray[count].SetSpawnPosition(xPosFalling, yPosFalling);
+                xPosFalling += 310;
 
-        _crumblingPlatformArray2 = new CrumblingPlatform[5];
+                AddChild(_crumblingPlatformArray[count]);
+            }
 
-        for (int count = 0; count < _crumblingPlatformArray2.Length; count++)
-        {
-            _crumblingPlatformArray2[count] = new CrumblingPlatform();
-            _crumblingPlatformArray2[count].SetSpawnPosition(xPosFalling2, yPosFalling2);
-            xPosFalling2 += 200;
+            xPosFalling2 = 200;
 
-            AddChild(_crumblingPlatformArray2[count]);
+            _crumblingPlatformArray2 = new CrumblingPlatform[6];
+
+            for (int count = 0; count < _crumblingPlatformArray2.Length; count++)
+            {
+                _crumblingPlatformArray2[count] = new CrumblingPlatform();
+                _crumblingPlatformArray2[count].SetSpawnPosition(xPosFalling2, yPosFalling2);
+                xPosFalling2 += 310;
+
+                AddChild(_crumblingPlatformArray2[count]);
+            }
         }
     }
 }

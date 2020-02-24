@@ -68,6 +68,12 @@ public class HUD : Canvas
 
 	private void ShowWhipChargeP1()
 	{
+		if (_player1.pickupsCollected == 0)
+		{
+			_whipChargeP1.scaleX = 0f;
+			WhipChargeP1 = 0f;
+		}
+
 		if (_player1.pickupsCollected == 1)
 		{
 			_whipChargeP1.scaleX = 0.5f;
@@ -88,6 +94,12 @@ public class HUD : Canvas
 
 	private void ShowWhipChargeP2()
 	{
+		if (_player2.pickupsCollected == 0)
+		{
+			_whipChargeP2.scaleX = 0f;
+			WhipChargeP2 = 0f;
+		}
+
 		if (_player2.pickupsCollected == 1)
 		{
 			_whipChargeP2.scaleX = 0.5f;

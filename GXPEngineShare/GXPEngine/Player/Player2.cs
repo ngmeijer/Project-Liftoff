@@ -7,6 +7,9 @@ public class Player2 : AnimationSprite
     private float _moveSpeed = 6f;
     private float _jumpForce = 18f;
     private float _fallMultiplier = 7.5f;
+    private float _gravity;
+    private float _defaultGravity = 7.5f;
+    private float _whipGravity = 0f;
     private bool _isJumping = false;
     private int jumpCount = 0;
 
@@ -17,7 +20,7 @@ public class Player2 : AnimationSprite
     private Sprite _collider2;
     private Spears _spears;
 
-    public Whip whipSprite { get; private set; }
+    public InkaWhip whipSprite { get; private set; }
 
     private Level levelScript;
     private HUD hudScript;
@@ -70,7 +73,7 @@ public class Player2 : AnimationSprite
         //Will mess up spawning & collider positions. Idk why it doesn't work the same way as Player1. Literally copied the script,
         // and changed the spawn positions.
 
-        whipSprite = new Whip(level);
+        whipSprite = new InkaWhip(level);
         AddChild(whipSprite);
         whipSprite.visible = false;
 
@@ -191,19 +194,24 @@ public class Player2 : AnimationSprite
         }
 
         float tempPosY = y;
+
+        _whipGravity = _gravity;
+
         if (levelScript.hud._playerCanUseWhip)
         {
             if (Input.GetKeyDown(Key.PLUS))
             {
-                y = tempPosY;
+                _gravity = _whipGravity;
                 usingWhip = true;
                 whipSprite.visible = true;
             }
 
             if (Input.GetKeyUp(Key.PLUS))
             {
+                _gravity = _defaultGravity;
                 usingWhip = false;
                 whipSprite.visible = false;
+                pickupsCollected = 0;
             }
         }
     }

@@ -38,10 +38,11 @@
   <ItemGroup>
     <Compile Include="Platforms\NormalPlatform.cs" />
     <Compile Include="Platforms\CrumblingPlatform.cs" />
+    <Compile Include="Player\InkaWhip.cs" />
     <Compile Include="Spears.cs" />
     <Compile Include="ScreenBorders.cs" />
     <Compile Include="Player\PlayerGroundCheck.cs" />
-    <Compile Include="Player\Whip.cs" />
+    <Compile Include="Player\JonesWhip.cs" />
     <Compile Include="UI\Cutscene.cs" />
     <Compile Include="UI\Background.cs" />
     <Compile Include="Pickup.cs" />

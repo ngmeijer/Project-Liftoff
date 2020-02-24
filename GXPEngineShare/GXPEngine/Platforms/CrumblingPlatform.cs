@@ -13,17 +13,16 @@ public class CrumblingPlatform : AnimationSprite
     //Decrease to increase speed
     private int _animationSpeed = 50;
     private int _animationTimer;
-
     public bool platformDestroyed { get; set; }
 
     internal bool playerOnPlatform;
 
     public bool changePosition { get; private set; }
 
-    private Level level;
-
     private int sceneTime;
     private int timeBeforeRespawn = 600;
+
+    private int movedDistance = 0;
 
     #endregion
 
@@ -33,6 +32,19 @@ public class CrumblingPlatform : AnimationSprite
 
         offsetX = Utils.Random(-200, 400);
         offsetY = Utils.Random(-200, 400);
+    }
+    private void Update()
+    {
+        DestroyPlatform();
+
+        int moveSpeed = 1;
+        int maxMovedDistance = 200;
+        movedDistance += moveSpeed;
+
+        if (movedDistance < maxMovedDistance)
+        {
+            x -= moveSpeed;
+        }
     }
 
     public void handleCrumbleAnimation()
@@ -48,11 +60,11 @@ public class CrumblingPlatform : AnimationSprite
         }
     }
 
-    private void Update()
+    private void DestroyPlatform()
     {
         sceneTime++;
 
-        if(sceneTime > timeBeforeRespawn)
+        if (sceneTime > timeBeforeRespawn)
         {
             LateDestroy();
         }

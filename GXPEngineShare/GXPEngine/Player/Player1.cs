@@ -23,7 +23,7 @@ public class Player1 : AnimationSprite
     private Sprite _collider1;
     private Spears _spears;
 
-    public Whip whipSprite { get; private set; }
+    public JonesWhip whipSprite { get; private set; }
 
     private Level levelScript;
     private HUD hudScript;
@@ -66,7 +66,7 @@ public class Player1 : AnimationSprite
         _collider1 = new Sprite("TestPlayerCollider.png", true, true);
         AddChild(_collider1);
 
-        whipSprite = new Whip(level);
+        whipSprite = new JonesWhip(level);
         AddChild(whipSprite);
         whipSprite.visible = false;
 
@@ -205,6 +205,7 @@ public class Player1 : AnimationSprite
                 _gravity = _defaultGravity;
                 usingWhip = false;
                 whipSprite.visible = false;
+                pickupsCollected = 0;
             }
         }
     }
