@@ -9,7 +9,9 @@ public class Player1 : AnimationSprite
 
     private float _moveSpeed = 6f;
     private float _jumpForce = 18f;
-    private float _fallMultiplier = 7.5f;
+    private float _gravity;
+    private float _defaultGravity = 7.5f;
+    private float _whipGravity = 0f;
     private bool _isJumping = false;
     private int jumpCount = 0;
 
@@ -76,6 +78,8 @@ public class Player1 : AnimationSprite
 
         x = _collider1.x;
         y = _collider1.y;
+
+        _gravity = _defaultGravity;
     }
 
     private void Update()
@@ -86,11 +90,6 @@ public class Player1 : AnimationSprite
         CheckCollisions();
         CheckForScreenCollision();
         TrackScore();
-
-        if (flyToBorder)
-        {
-            x += 20;
-        }
     }
 
     #endregion
@@ -167,7 +166,7 @@ public class Player1 : AnimationSprite
     {
         y = y + speedY;
 
-        if (speedY <= _fallMultiplier)
+        if (speedY <= _gravity)
         {
             speedY = speedY + 1;
             HandleJumpAnimation();
@@ -183,18 +182,27 @@ public class Player1 : AnimationSprite
 
     private void UseWhip()
     {
+        if (flyToBorder)
+        {
+            x += 20;
+        }
+
         float tempPosY = y;
+
+        _whipGravity = _gravity;
+
         if (levelScript.hud._playerCanUseWhip)
         {
             if (Input.GetMouseButtonDown(0))
             {
-                _fallMultiplier = 0;
+                _gravity = _whipGravity;
                 usingWhip = true; 
                 whipSprite.visible = true;
             }
 
             if (Input.GetMouseButtonUp(0))
             {
+                _gravity = _defaultGravity;
                 usingWhip = false;
                 whipSprite.visible = false;
             }
@@ -252,9 +260,13 @@ public class Player1 : AnimationSprite
                 if (g is CrumblingPlatform)
                 {
                     _crumblingPlatform = g as CrumblingPlatform;
-                    jumpCount = 0;
-                    y = _crumblingPlatform.y - 60;
-                    _crumblingPlatform.handleCrumbleAnimation();
+                    if (_crumblingPlatform.visible)
+                    {
+                        jumpCount = 0;
+                        y = _crumblingPlatform.y - 60;
+                        _crumblingPlatform.playerOnPlatform = true;
+                        _crumblingPlatform.handleCrumbleAnimation();
+                    }
                 }
 
                 if (g is Spears)

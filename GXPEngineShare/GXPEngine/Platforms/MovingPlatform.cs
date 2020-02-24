@@ -67,7 +67,7 @@ public class MovingPlatform : Sprite
             yDir *= -1;
 		}
 		
-		if(y >= game.height - 200)
+		if(y >= game.height - 300)
 		{
             yDir *= -1;
 		}
