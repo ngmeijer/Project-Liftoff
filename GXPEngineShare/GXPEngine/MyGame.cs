@@ -12,8 +12,10 @@ public class MyGame : Game
 
     #endregion
 
-    public MyGame() : base(1920, 1080, false, true)
+    public MyGame() : base(1920, 1080, false, false)
     {
+        targetFps = 60;
+
         sceneManager = new SceneManager(_menu, _cutscene);
         AddChild(sceneManager);
     }

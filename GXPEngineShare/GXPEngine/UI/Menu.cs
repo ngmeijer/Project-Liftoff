@@ -40,21 +40,20 @@ public class Menu : GameObject
 
         _startButton = new StartButton();
         AddChild(_startButton);
-        _startButton.x = (game.width - _startButton.width) / 2;
+        _startButton.x = (game.width / 2) - (_startButton.width / 2);
         _startButton.y = 800;
 
-        solo = new Sprite("GroundCollider.png");
+        solo = new Sprite("OnePlayerButton.png");
         AddChild(solo);
-        solo.scale = 2;
-        solo.x = 600;
-        solo.y = game.height / 2;
+        solo.scale = 0.75f;
+        solo.x = game.width / 2 - (solo.width + 200);
+        solo.y = 630;
 
-        duo = new Sprite("GroundCollider.png");
+        duo = new Sprite("TwoPlayerButton.png");
         AddChild(duo);
-        duo.color = 255;
-        duo.scale = 2;
-        duo.x = 1400;
-        duo.y = game.height / 2;
+        duo.scale = 0.75f;
+        duo.x = game.width / 2 + 100;
+        duo.y = 630;
 
         _backgroundMusic = new Sound("MenuTheme.mp3", true, true);
         _backgroundMusic.Play(false);

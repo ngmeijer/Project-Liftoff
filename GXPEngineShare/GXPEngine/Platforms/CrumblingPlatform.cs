@@ -27,8 +27,8 @@ public class CrumblingPlatform : AnimationSprite
     #endregion
 
     public CrumblingPlatform() : base("Platform_Crumbling_Spritesheet.png", 10, 1)
-    { 
-        scale = 0.4f;
+    {
+        SetScaleXY(0.5f, 0.5f);
 
         offsetX = Utils.Random(-200, 400);
         offsetY = Utils.Random(-200, 400);
@@ -38,7 +38,7 @@ public class CrumblingPlatform : AnimationSprite
         DestroyPlatform();
 
         int moveSpeed = 1;
-        int maxMovedDistance = 200;
+        int maxMovedDistance = 600;
         movedDistance += moveSpeed;
 
         if (movedDistance < maxMovedDistance)

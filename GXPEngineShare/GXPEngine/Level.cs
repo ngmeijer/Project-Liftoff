@@ -5,68 +5,59 @@ public class Level : GameObject
 {
     #region Variables
 
-    //Players
+    //Class references
+    private Powerup[] _pickupArray;
+    private Heart[] _heartArray;
+
+    private StartPlatform _startPlatform1;
+    private StartPlatform _startPlatform2;
+    private MovingPlatform[] _movingPlatformArray;
+    private CrumblingPlatform[] _crumblingPlatformArray;
+    private CrumblingPlatform[] _crumblingPlatformArray2;
+    private MovingPlatform[] _movingPlatformArray2;
+
     public Player1 _player1 { get; set; }
     public Player2 _player2 { get; set; }
-
     private Background _background;
     private Background _background2;
-    private Sprite _hudBackground;
     public HUD hud { get; private set; }
     private Menu menu;
-    public bool resetGame;
-
     public ScreenBorders borders;
     private Spears spears;
 
+
+    //Bools
+    public bool resetGame;
     public bool playingDuo { get; set; }
 
-    //Pickups
-    private Pickup[] _pickupArray;
-
-    //Platforms
-    private StartPlatform _startPlatform1;
-    private StartPlatform _startPlatform2;
-
-    private MovingPlatform[] _movingPlatformArray;
-
-    private CrumblingPlatform[] _crumblingPlatformArray;
-    private CrumblingPlatform[] _crumblingPlatformArray2;
-
-    private NormalPlatform[] _normalPlatformArray;
-    private MovingPlatform[] _movingPlatformArray2;
-
-    private int[] fallingPlatformPosX = { 600, 800, 1000, 1200, 1400, 1600, 1800 };
-    private int[] fallingPlatformPosY = { 150, 300, 450, 600, 750, 800, 950 };
-
+    //Integers
+    public int sceneTime { get; set; }
     private int fallingCount = 0;
 
-    private int xPosNormal = 800;
-    private int yPosNormal = 300;
-    private float xPosNormal2;
-    private float yPosNormal2;
+    private int xPosNormal = 700;
+    private int yPosNormal = 310;
+    private int xPosNormal2 = 800;
+    private int yPosNormal2 = 910;
 
-    private int xPosFalling = 500;
+    private int xPosFalling = 800;
     private int yPosFalling = 250;
-    private int xPosFalling2 = 500;
+    private int xPosFalling2 = 800;
     private int yPosFalling2 = 800;
 
-    private int xPosPickups = 600;
-    private int yPosPickups = 100;
+    private int xPositionHeart = 600;
+    private int yPositionHeart = 800;
 
-    //SFX
-    private Sound _backgroundMusic;
+    private int xPositionPowerup = 600;
+    private int yPositionPowerup = 300;
 
-    public int sceneTime { get; set; }
+    private Sprite _background1;
+    private Sprite _hudBackground;
 
     #endregion
 
     public Level(Menu menuScript)
     {
         menu = menuScript;
-
-        _backgroundMusic = new Sound("LevelTheme.mp3", true, true);
-        _backgroundMusic.Play(false);
 
         InitializeBackground();
 
@@ -76,17 +67,17 @@ public class Level : GameObject
 
         borders = new ScreenBorders();
         AddChild(borders);
-        borders.x = game.width - 50;
+        borders.y = 50;
+        borders.x = 0;
 
         spears = new Spears();
         AddChild(spears);
         spears.y = 920;
 
         SpawnNewFallingPlatforms();
-        InitializeCrumblingPlatforms();
         InitializePlatforms();
         InitializePlayers();
-        InitializePickups();
+        InitializePickupsAndHearts();
         InitializeHUD();
     }
 
@@ -94,7 +85,7 @@ public class Level : GameObject
     {
         sceneTime++;
 
-        if (sceneTime > 650)
+        if (sceneTime > 1000)
         {
             SpawnNewFallingPlatforms();
             sceneTime = 0;
@@ -107,9 +98,6 @@ public class Level : GameObject
         _background = new Background();
         _background2 = new Background();
         AddChild(_background);
-        AddChild(_background2);
-
-        _background2.x = game.width;
     }
 
     private void InitializePlayers()
@@ -124,58 +112,29 @@ public class Level : GameObject
         }
     }
 
-    private void InitializeCrumblingPlatforms()
-    {
-        _crumblingPlatformArray = new CrumblingPlatform[5];
-
-        for (fallingCount = 0; fallingCount < _crumblingPlatformArray.Length; fallingCount++)
-        {
-            _crumblingPlatformArray[fallingCount] = new CrumblingPlatform();
-            _crumblingPlatformArray[fallingCount].SetSpawnPosition(xPosFalling, yPosFalling);
-            xPosFalling += 310;
-
-            AddChild(_crumblingPlatformArray[fallingCount]);
-        }
-
-        xPosFalling = 500;
-
-        _crumblingPlatformArray2 = new CrumblingPlatform[5];
-
-        for (int count = 0; count < _crumblingPlatformArray2.Length; count++)
-        {
-            _crumblingPlatformArray2[count] = new CrumblingPlatform();
-            _crumblingPlatformArray2[count].SetSpawnPosition(xPosFalling2, yPosFalling2);
-            xPosFalling2 += 310;
-
-            AddChild(_crumblingPlatformArray2[count]);
-        }
-
-        xPosFalling2 = 200;
-    }
-
     private void InitializePlatforms()
     {
         //Normal platforms
-        _movingPlatformArray = new MovingPlatform[7];
+        _movingPlatformArray = new MovingPlatform[4];
 
         for (int count = 0; count < _movingPlatformArray.Length; count++)
         {
             _movingPlatformArray[count] = new MovingPlatform(this, menu);
             _movingPlatformArray[count].SetSpawnPosition(xPosNormal, yPosNormal);
-            xPosNormal += Utils.Random(150, 250);
-            yPosNormal += 200;
+            xPosNormal += 400;
+            yPosNormal += 160;
 
             AddChild(_movingPlatformArray[count]);
         }
 
-        _movingPlatformArray2 = new MovingPlatform[7];
+        _movingPlatformArray2 = new MovingPlatform[5];
 
         for (int count = 0; count < _movingPlatformArray2.Length; count++)
         {
             _movingPlatformArray2[count] = new MovingPlatform(this, menu);
             _movingPlatformArray2[count].SetSpawnPosition(xPosNormal2, yPosNormal2);
-            xPosNormal2 += Utils.Random(150, 250);
-            yPosNormal2 += Utils.Random(50, 150);
+            xPosNormal2 += 300;
+            yPosNormal2 -= 150;
 
             AddChild(_movingPlatformArray2[count]);
         }
@@ -190,24 +149,34 @@ public class Level : GameObject
         _startPlatform2.y = 700;
     }
 
-    private void InitializePickups()
+    private void InitializePickupsAndHearts()
     {
-        _pickupArray = new Pickup[4];
+        _pickupArray = new Powerup[2];
 
         for (int count = 0; count < _pickupArray.Length; count++)
         {
-            int randomFirstPositionX = Utils.Random(600, 1800);
-            int randomFirstPositionY = Utils.Random(200, 900);
-
-            _pickupArray[count] = new Pickup(this);
-            _pickupArray[count].SetSpawnPosition(randomFirstPositionX, randomFirstPositionY);
+            _pickupArray[count] = new Powerup(this);
+            _pickupArray[count].SetSpawnPosition(xPositionPowerup, yPositionPowerup);
+            xPositionPowerup += 800;
+            yPositionPowerup += 500;
             AddChild(_pickupArray[count]);
+        }
+
+        _heartArray = new Heart[2];
+
+        for (int count = 0; count < _heartArray.Length; count++)
+        {
+            _heartArray[count] = new Heart(this);
+            _heartArray[count].SetSpawnPosition(xPositionHeart, yPositionHeart);
+            xPositionHeart += 800;
+            yPositionHeart -= 500;
+            AddChild(_heartArray[count]);
         }
     }
 
     private void InitializeHUD()
     {
-        hud = new HUD(_player1, _player2);
+        hud = new HUD(_player1, _player2, menu);
         AddChild(hud);
     }
 
@@ -229,35 +198,30 @@ public class Level : GameObject
 
     private void SpawnNewFallingPlatforms()
     {
-        sceneTime++;
+        _crumblingPlatformArray = new CrumblingPlatform[7];
 
-        if (sceneTime > 800)
+        xPosFalling = 600;
+
+        for (int count = 0; count < _crumblingPlatformArray.Length; count++)
         {
-            _crumblingPlatformArray = new CrumblingPlatform[6];
+            _crumblingPlatformArray[count] = new CrumblingPlatform();
+            _crumblingPlatformArray[count].SetSpawnPosition(xPosFalling, yPosFalling);
+            xPosFalling += 310;
 
-            xPosFalling = 200;
+            AddChild(_crumblingPlatformArray[count]);
+        }
 
-            for (int count = 0; count < _crumblingPlatformArray.Length; count++)
-            {
-                _crumblingPlatformArray[count] = new CrumblingPlatform();
-                _crumblingPlatformArray[count].SetSpawnPosition(xPosFalling, yPosFalling);
-                xPosFalling += 310;
+        xPosFalling2 = 600;
 
-                AddChild(_crumblingPlatformArray[count]);
-            }
+        _crumblingPlatformArray2 = new CrumblingPlatform[7];
 
-            xPosFalling2 = 200;
+        for (int count = 0; count < _crumblingPlatformArray2.Length; count++)
+        {
+            _crumblingPlatformArray2[count] = new CrumblingPlatform();
+            _crumblingPlatformArray2[count].SetSpawnPosition(xPosFalling2, yPosFalling2);
+            xPosFalling2 += 310;
 
-            _crumblingPlatformArray2 = new CrumblingPlatform[6];
-
-            for (int count = 0; count < _crumblingPlatformArray2.Length; count++)
-            {
-                _crumblingPlatformArray2[count] = new CrumblingPlatform();
-                _crumblingPlatformArray2[count].SetSpawnPosition(xPosFalling2, yPosFalling2);
-                xPosFalling2 += 310;
-
-                AddChild(_crumblingPlatformArray2[count]);
-            }
+            AddChild(_crumblingPlatformArray2[count]);
         }
     }
 }

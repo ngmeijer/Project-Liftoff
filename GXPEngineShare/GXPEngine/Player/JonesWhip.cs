@@ -21,7 +21,6 @@ public class JonesWhip : Sprite
         {
             if (hittingScreenBorder)
             {
-                Console.WriteLine("true");
                 level._player1.flyToBorder = true;
             }
         }

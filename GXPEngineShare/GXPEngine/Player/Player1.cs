@@ -1,4 +1,5 @@
 ﻿using GXPEngine;
+using System;
 
 public class Player1 : AnimationSprite
 {
@@ -19,7 +20,7 @@ public class Player1 : AnimationSprite
     //Player gameplay properties
     private float _moveSpeed = 6f;
     private float _jumpForce = 18f;
-    private float _defaultGravity = 4f;
+    private float _defaultGravity = 7.5f;
     private float _gravity;
     private float _whipGravity = 0f;
     private int jumpCount = 0;
@@ -29,21 +30,25 @@ public class Player1 : AnimationSprite
 
     //Bools
     private bool _isJumping = false;
-    public int pickupsCollected { get; set; }
     public bool flyToBorder { get; set; }
     public bool _stillStandingOnCrumblingPlatform { get; private set; }
     private bool usingWhip;
     private bool playerCanMove = true;
     private bool playerHasDied;
     private bool _playerIsMoving;
+    private bool throwingUp;
+    private bool swinging;
 
     //Integers
+    public int pickupsCollected { get; set; }
+    public bool heartCollected { get; set; }
     public int scoreCount { get; private set; }
     public int lifeCount { get; private set; }
     public int whipUsedCount { get; private set; }
     private int stunnedTimer;
     private int pickupScore;
     private int scoreAhead;
+    private int rotationValue = 60;
 
     //Floats
     private float speedY;
@@ -94,7 +99,7 @@ public class Player1 : AnimationSprite
         UseWhip();
         CheckCollisions();
         CheckForScreenCollision();
-        TrackScore();
+        TrackScoreAndLives();
     }
 
     #endregion
@@ -130,7 +135,7 @@ public class Player1 : AnimationSprite
         SetFrame(frame);
     }
 
-    private void TrackScore()
+    private void TrackScoreAndLives()
     {
         scoreCount = Time.time / 400 + pickupScore + scoreAhead;
 
@@ -140,6 +145,12 @@ public class Player1 : AnimationSprite
             {
                 scoreAhead += 1;
             }
+        }
+
+        if (heartCollected)
+        {
+            lifeCount++;
+            heartCollected = false;
         }
     }
 
@@ -206,25 +217,57 @@ public class Player1 : AnimationSprite
             x += 20;
         }
 
+        if (swinging)
+        {
+            if(whipSprite.rotation < 360f)
+            {
+                whipSprite.rotation -= 5f;
+            }
+            Console.WriteLine(whipSprite.rotation);
+        } else if (!swinging)
+        {
+            whipSprite.rotation = 0;
+        }
+
         float tempPosY = y;
 
         _whipGravity = _gravity;
 
-        if (levelScript.hud._playerCanUseWhip)
+        if (levelScript.hud._playerCanSwing)
         {
             if (Input.GetMouseButtonDown(0))
             {
                 _gravity = _whipGravity;
-                usingWhip = true; 
+                swinging = true;
+                whipSprite.rotation -= rotationValue;
                 whipSprite.visible = true;
             }
 
             if (Input.GetMouseButtonUp(0))
             {
                 _gravity = _defaultGravity;
-                usingWhip = false;
+                swinging = false;
                 whipSprite.visible = false;
                 pickupsCollected = 0;
+                whipUsedCount = 1;
+            }
+        }
+
+        if (levelScript.hud._playerCanThrowUp)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                throwingUp = true;
+                whipSprite.rotation = 0;
+                whipSprite.visible = true;
+            }
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                throwingUp = false;
+                whipSprite.visible = false;
+                pickupsCollected = 0;
+                whipUsedCount = 1;
             }
         }
     }
@@ -252,7 +295,7 @@ public class Player1 : AnimationSprite
 
     private void CheckCollisions()
     {
-        if (!usingWhip)
+        if ((!swinging) && (!throwingUp))
         {
             foreach (GameObject g in _collider1.GetCollisions())
             {

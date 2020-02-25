@@ -30,7 +30,8 @@ public class MovingPlatform : Sprite
 
         _moveSpeedX = 1f;
         _moveSpeedY = 1f;
-        scale = 0.2f;
+
+        SetScaleXY(0.3f, 0.3f);
 
         offsetX = Utils.Random(0, 500);
         offsetY = Utils.Random(0, 500);
@@ -49,16 +50,16 @@ public class MovingPlatform : Sprite
 
         if (!playerOnPlatform)
         {
-            y += _moveSpeedY * yDir;
+            //y += _moveSpeedY * yDir;
         }
-        else
-        {
-            y += weight;
-            if (weight <= 5)
-            {
-                weight *= 1.02f;
-            }
-        }
+        //else if(playerOnPlatform)
+        //{
+        //    y += weight;
+        //    if (weight <= 5)
+        //    {
+        //        weight *= 1.02f;
+        //    }
+        //}
     }
 
 	private void InversePlatforms()
@@ -68,7 +69,7 @@ public class MovingPlatform : Sprite
             yDir *= -1;
 		}
 		
-		if(y >= game.height - 300)
+		if(y >= game.height - 100)
 		{
             yDir *= -1;
 		}

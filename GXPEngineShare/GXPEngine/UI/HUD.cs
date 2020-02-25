@@ -8,6 +8,7 @@ public class HUD : Canvas
 
 	private readonly Player1 _player1;
 	private readonly Player2 _player2;
+	private readonly Menu _menu;
 
 	private readonly Brush _whiteBrush;
 	private readonly Brush _redBrush;
@@ -18,17 +19,20 @@ public class HUD : Canvas
 
 	public Sprite _whipChargeP1;
 	public Sprite _whipChargeP2;
-	public bool _playerCanUseWhip { get; private set; }
+	public bool _playerCanSwing { get; private set; }
+	public bool _playerCanThrowUp { get; private set; }
 
 	public float WhipChargeP1 { get; private set; }
 	public float WhipChargeP2 { get; private set; }
 
 	#endregion
 
-	public HUD(Player1 player1Script, Player2 player2Script) : base(1920, 1080, false)
+	public HUD(Player1 player1Script, Player2 player2Script, Menu menuScript) : base(1920, 1080, false)
 	{
 		_player1 = player1Script;
 		_player2 = player2Script;
+
+		_menu = menuScript;
 
 		_whipChargeP1 = new Sprite("WhipCharge.png");
 		AddChild(_whipChargeP1);
@@ -36,13 +40,14 @@ public class HUD : Canvas
 		_whipChargeP1.scaleX = 0;
 		_whipChargeP1.scaleY = 0.5f;
 
-		if (_player2 != null)
+		if (_menu.duoPlayers)
 		{
 			_whipChargeP2 = new Sprite("WhipCharge.png");
 			AddChild(_whipChargeP2);
-			_whipChargeP2.x = 500;
 			_whipChargeP2.y = 50;
-			_whipChargeP2.scale = 0;
+			_whipChargeP2.x = 1300;
+			_whipChargeP2.scaleX = 1;
+			_whipChargeP2.scaleY = 0.5f;
 		}
 
 		_whiteBrush = Brushes.White;
@@ -88,7 +93,14 @@ public class HUD : Canvas
 
 		if((WhipChargeP1 == 1.0f) && (_player1.whipUsedCount < 1))
 		{
-			_playerCanUseWhip = true;
+			_playerCanSwing = false;
+			_playerCanThrowUp = true;
+		}
+
+		if ((WhipChargeP1 == 0.5f) && (_player1.whipUsedCount < 1))
+		{
+			_playerCanThrowUp = false;
+			_playerCanSwing = true;
 		}
 	}
 
@@ -114,7 +126,7 @@ public class HUD : Canvas
 
 		if ((WhipChargeP2 == 1.0f) && (_player2.whipUsedCount < 1))
 		{
-			_playerCanUseWhip = true;
+			_playerCanSwing = true;
 		}
 	}
 

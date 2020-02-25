@@ -1,7 +1,7 @@
 ﻿using System;
 using GXPEngine;
 
-public class Pickup : Sprite
+public class Powerup : Sprite
 {
     public float offsetX;
     public float offsetY;
@@ -11,17 +11,15 @@ public class Pickup : Sprite
     private int timer = 0;
     private int maxTimeHidden = 150;
 
-    public int[] firstSpawnsX = { 500, 800, 1200, 1600 };
-    public int[] firstSpawnsY = { 200, 450, 600, 800 };
     private bool relocate;
 
     private Sound _pickupSound;
 
-    public Pickup(Level levelScript) : base("PickUp.png")
+    public Powerup(Level levelScript) : base("PickUp.png")
     {
         level = levelScript;
 
-        scale = 0.5f;
+        scale = 0.75f;
         SetOrigin(width / 2, height / 2);
 
         offsetX = Utils.Random(200, 500);
@@ -109,14 +107,18 @@ public class Pickup : Sprite
 
             if (hitInfo is Player2)
             {
+                _pickupSound.Play();
                 timer = 0;
                 level._player2 = hitInfo as Player2;
                 if (level._player2.pickupsCollected <= 2)
                 {
                     level._player2.pickupsCollected++;
                 }
-                hidden = true;
                 relocate = true;
+                hidden = true;
+                MakeInvisible();
+                ChangePosition();
+                relocate = false;
             }
         }
     }

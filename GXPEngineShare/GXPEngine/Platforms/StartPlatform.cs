@@ -4,7 +4,7 @@ using GXPEngine;
 public class StartPlatform : Sprite
 {
 	Level level;
-	public StartPlatform(Level levelScript) : base("Start_Platform 2.png", false, true)
+	public StartPlatform(Level levelScript) : base("Start_Platform.png", false, true)
 	{
 		scaleY = 0.65f;
 		level = levelScript;

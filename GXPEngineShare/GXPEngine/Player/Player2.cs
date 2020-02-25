@@ -30,6 +30,7 @@ public class Player2 : AnimationSprite
     //Bools
     private bool _isJumping = false;
     public int pickupsCollected { get; set; }
+    public bool heartCollected { get; set; }
     public bool flyToBorder { get; set; }
     public bool _stillStandingOnCrumblingPlatform { get; private set; }
     private bool usingWhip;
@@ -92,7 +93,7 @@ public class Player2 : AnimationSprite
         UseWhip();
         CheckCollisions();
         CheckForScreenCollision();
-        TrackScore();
+        TrackScoreAndLives();
     }
 
     #endregion
@@ -128,7 +129,7 @@ public class Player2 : AnimationSprite
         SetFrame(frame);
     }
 
-    private void TrackScore()
+    private void TrackScoreAndLives()
     {
         scoreCount = Time.time / 400 + pickupScore + scoreAhead;
 
@@ -138,6 +139,12 @@ public class Player2 : AnimationSprite
             {
                 scoreAhead += 1;
             }
+        }
+
+        if (heartCollected)
+        {
+            lifeCount++;
+            heartCollected = false;
         }
     }
 
@@ -206,7 +213,7 @@ public class Player2 : AnimationSprite
 
         _whipGravity = _gravity;
 
-        if (levelScript.hud._playerCanUseWhip)
+        if (levelScript.hud._playerCanSwing)
         {
             if (Input.GetKeyDown(Key.PLUS))
             {
