@@ -8,7 +8,7 @@ public class MovingPlatform : Sprite
     #region Variables
 
     private float _moveSpeedX;
-    private float[] _moveSpeedY = { 0, 1 };
+    private float _moveSpeedY;
     private float weight = 1;
     private int yDir = 1;
 
@@ -28,7 +28,8 @@ public class MovingPlatform : Sprite
         level = levelScript;
         menu = menuScript;
 
-        _moveSpeedX = 2.5f;
+        _moveSpeedX = 1f;
+        _moveSpeedY = 1f;
         scale = 0.2f;
 
         offsetX = Utils.Random(0, 500);
@@ -48,7 +49,7 @@ public class MovingPlatform : Sprite
 
         if (!playerOnPlatform)
         {
-            y += _moveSpeedY[1] * yDir;
+            y += _moveSpeedY * yDir;
         }
         else
         {

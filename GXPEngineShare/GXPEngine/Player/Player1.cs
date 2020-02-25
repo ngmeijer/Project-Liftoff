@@ -51,6 +51,9 @@ public class Player1 : AnimationSprite
     private const float spawnPointY = 200;
     private float _animationTimer;
 
+    //SFX
+    private Sound _jumpSound;
+
     #endregion
 
     #region Constructor & Update
@@ -69,6 +72,8 @@ public class Player1 : AnimationSprite
         whipSprite = new JonesWhip(level);
         AddChild(whipSprite);
         whipSprite.visible = false;
+
+        _jumpSound = new Sound("JumpSFX.wav", false, true);
 
         lifeCount = 3;
         _animationSpeed = 150f;
@@ -189,6 +194,7 @@ public class Player1 : AnimationSprite
         {
             jumpCount += 1;
             speedY = -_jumpForce;
+            _jumpSound.Play();
             HandleJumpAnimation();
         }
     }

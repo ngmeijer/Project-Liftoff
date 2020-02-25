@@ -5,8 +5,9 @@ public class Background : Sprite
 {
     private float moveSpeed = 1;
 
-	public Background() : base("PlaceholderBackground.png")
-	{   
+	public Background() : base("LevelBackground.png")
+	{
+        y -= 60;
 	}
 
     private void Update()

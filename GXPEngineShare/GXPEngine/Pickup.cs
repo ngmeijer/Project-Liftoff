@@ -15,6 +15,8 @@ public class Pickup : Sprite
     public int[] firstSpawnsY = { 200, 450, 600, 800 };
     private bool relocate;
 
+    private Sound _pickupSound;
+
     public Pickup(Level levelScript) : base("PickUp.png")
     {
         level = levelScript;
@@ -24,6 +26,8 @@ public class Pickup : Sprite
 
         offsetX = Utils.Random(200, 500);
         offsetY = Utils.Random(150, 400);
+
+        _pickupSound = new Sound("PickupSFX.wav", false, true);
     }
 
     public void SetSpawnPosition(float xPos, float yPos)
@@ -89,6 +93,7 @@ public class Pickup : Sprite
         {
             if (hitInfo is Player1)
             {
+                _pickupSound.Play();
                 timer = 0;
                 level._player1 = hitInfo as Player1;
                 if (level._player1.pickupsCollected <= 2)
