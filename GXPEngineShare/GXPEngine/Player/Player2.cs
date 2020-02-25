@@ -76,6 +76,8 @@ public class Player2 : AnimationSprite
         //Will mess up spawning & collider positions. Idk why it doesn't work the same way as Player1. Literally copied the script,
         // and changed the spawn positions.
 
+        _collider2.visible = false;
+
         whipSprite = new InkaWhip(level);
         AddChild(whipSprite);
         whipSprite.visible = false;

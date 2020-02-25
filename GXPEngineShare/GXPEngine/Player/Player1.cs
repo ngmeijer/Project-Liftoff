@@ -89,6 +89,8 @@ public class Player1 : AnimationSprite
         x = _collider1.x;
         y = _collider1.y;
 
+        _collider1.visible = false;
+
         _gravity = _defaultGravity;
     }
 
@@ -219,17 +221,15 @@ public class Player1 : AnimationSprite
 
         if (swinging)
         {
-            if(whipSprite.rotation < 360f)
+            if((whipSprite.rotation > 10f) && (whipSprite.rotation < 240f))
             {
-                whipSprite.rotation -= 5f;
+                whipSprite.rotation -= 1f;
             }
             Console.WriteLine(whipSprite.rotation);
         } else if (!swinging)
         {
-            whipSprite.rotation = 0;
+            whipSprite.rotation = 120f;
         }
-
-        float tempPosY = y;
 
         _whipGravity = _gravity;
 
