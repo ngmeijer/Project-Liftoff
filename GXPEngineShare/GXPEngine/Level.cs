@@ -11,7 +11,7 @@ public class Level : GameObject
 
     private Background _background;
     private Background _background2;
-
+    private Sprite _hudBackground;
     public HUD hud { get; private set; }
     private Menu menu;
     public bool resetGame;
@@ -19,7 +19,7 @@ public class Level : GameObject
     public ScreenBorders borders;
     private Spears spears;
 
-    public bool duo { get; set; }
+    public bool playingDuo { get; set; }
 
     //Pickups
     private Pickup[] _pickupArray;
@@ -56,8 +56,6 @@ public class Level : GameObject
 
     //SFX
     private Sound _backgroundMusic;
-    private CrumblingPlatform[] _fallingPlatformArray3;
-    private Sprite _hudBackground;
 
     public int sceneTime { get; set; }
 
@@ -165,7 +163,7 @@ public class Level : GameObject
             _movingPlatformArray[count] = new MovingPlatform(this, menu);
             _movingPlatformArray[count].SetSpawnPosition(xPosNormal, yPosNormal);
             xPosNormal += Utils.Random(150, 250);
-            yPosNormal += Utils.Random(50, 150);
+            yPosNormal += 200;
 
             AddChild(_movingPlatformArray[count]);
         }
@@ -233,7 +231,7 @@ public class Level : GameObject
     {
         sceneTime++;
 
-        if (sceneTime > 300)
+        if (sceneTime > 800)
         {
             _crumblingPlatformArray = new CrumblingPlatform[6];
 

@@ -1,55 +1,55 @@
-﻿using System;
-using System.Collections.Generic;
-using GXPEngine;
-using GXPEngine.Core;
+﻿using GXPEngine;
 
 public class Player1 : AnimationSprite
 {
     #region Variables
 
-    private float _moveSpeed = 6f;
-    private float _jumpForce = 18f;
-    private float _gravity;
-    private float _defaultGravity = 7.5f;
-    private float _whipGravity = 0f;
-    private bool _isJumping = false;
-    private int jumpCount = 0;
-
+    //All class references
+    private NormalPlatform _normalPlatform;
     public StartPlatform _startPlatform { get; set; }
-    public NormalPlatform _normalPlatform { get; private set; }
-    private MovingPlatform _movingPlatform;
+    public MovingPlatform _movingPlatform { get; private set; }
     private CrumblingPlatform _crumblingPlatform;
-
     private Sprite _collider1;
     private Spears _spears;
-
-    public JonesWhip whipSprite { get; private set; }
-
     private Level levelScript;
     private HUD hudScript;
+    public JonesWhip whipSprite { get; private set; }
+    private InkaWhip _inkaWhip;
 
-    private float speedY;
-    private const float spawnPointX = 100;
-    private const float spawnPointY = 100;
-
+    //Player gameplay properties
+    private float _moveSpeed = 6f;
+    private float _jumpForce = 18f;
+    private float _defaultGravity = 4f;
+    private float _gravity;
+    private float _whipGravity = 0f;
+    private int jumpCount = 0;
     private int pickupPoints = 100;
-    private int pickupScore;
-    private int scoreAhead;
+    private int stunnedDuration = 100;
+    private float _animationSpeed;
+
+    //Bools
+    private bool _isJumping = false;
     public int pickupsCollected { get; set; }
-
+    public bool flyToBorder { get; set; }
+    public bool _stillStandingOnCrumblingPlatform { get; private set; }
+    private bool usingWhip;
+    private bool playerCanMove = true;
     private bool playerHasDied;
+    private bool _playerIsMoving;
 
+    //Integers
     public int scoreCount { get; private set; }
     public int lifeCount { get; private set; }
-
-    private bool _playerIsMoving;
-    private float _animationTimer;
-    private float _animationSpeed;
-    private bool usingWhip;
-
-    public bool flyToBorder { get; set; }
-
     public int whipUsedCount { get; private set; }
+    private int stunnedTimer;
+    private int pickupScore;
+    private int scoreAhead;
+
+    //Floats
+    private float speedY;
+    private const float spawnPointX = 100;
+    private const float spawnPointY = 200;
+    private float _animationTimer;
 
     #endregion
 
@@ -140,25 +140,38 @@ public class Player1 : AnimationSprite
 
     private void MovePlayer()
     {
-        if (Input.GetKey(Key.A))
+        if (!playerCanMove)
         {
-            scaleX = -0.65f;
-            _playerIsMoving = true;
-            HandleRunAnimation();
-            Translate(-_moveSpeed, 0);
+            stunnedTimer++;
+
+            if(stunnedTimer >= stunnedDuration)
+            {
+                playerCanMove = true;
+                stunnedTimer = 0;
+            }
         }
-        else if (Input.GetKey(Key.D))
+        if (playerCanMove)
         {
-            //Consider taking out scaleX since it causes a bit of buggy movement. Rotates around x = 0 instead of pivot point. Preferably stay at same position.
-            scaleX = 0.65f;
-            _playerIsMoving = true;
-            HandleRunAnimation();
-            Translate(_moveSpeed, 0);
-        }
-        else
-        {
-            _playerIsMoving = false;
-            HandleIdleAnimation();
+            if (Input.GetKey(Key.A))
+            {
+                scaleX = -0.65f;
+                _playerIsMoving = true;
+                HandleRunAnimation();
+                Translate(-_moveSpeed, 0);
+            }
+            else if (Input.GetKey(Key.D))
+            {
+                //Consider taking out scaleX since it causes a bit of buggy movement. Rotates around x = 0 instead of pivot point. Preferably stay at same position.
+                scaleX = 0.65f;
+                _playerIsMoving = true;
+                HandleRunAnimation();
+                Translate(_moveSpeed, 0);
+            }
+            else
+            {
+                _playerIsMoving = false;
+                HandleIdleAnimation();
+            }
         }
     }
 
@@ -268,6 +281,11 @@ public class Player1 : AnimationSprite
                         _crumblingPlatform.playerOnPlatform = true;
                         _crumblingPlatform.handleCrumbleAnimation();
                     }
+
+                    if (HitTest(_crumblingPlatform))
+                    {
+                        _stillStandingOnCrumblingPlatform = true;
+                    }
                 }
 
                 if (g is Spears)
@@ -275,6 +293,12 @@ public class Player1 : AnimationSprite
                     _spears = g as Spears;
                     playerHasDied = true;
                     RespawnPlayer1();
+                }
+
+                if(g is InkaWhip)
+                {
+                    _inkaWhip = g as InkaWhip;
+                    playerCanMove = false;
                 }
             }
         }

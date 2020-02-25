@@ -21,9 +21,6 @@ public class NormalPlatform : Sprite
         _moveSpeedX = 2.5f;
         _moveSpeedY = Utils.Random(1, 2);
         scale = 0.15f;
-
-        offsetX = Utils.Random(-300, 500);
-        offsetY = Utils.Random(-300, 300);
     }
 
 	private void Update()
@@ -43,7 +40,7 @@ public class NormalPlatform : Sprite
             yDir *= -1;
 		}
 		
-		if(y >= 900)
+		if(y >= 800)
 		{
             yDir *= -1;
 		}

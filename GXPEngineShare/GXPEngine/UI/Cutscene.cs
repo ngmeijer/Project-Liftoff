@@ -41,6 +41,16 @@ public class Cutscene : GameObject
 
     private void Update()
     {
+        partTransition();
+    }
+
+    private void partTransition()
+    {
+        if (Input.GetKeyDown(Key.SPACE))
+        {
+            continueToGame = true;
+        }
+
         if (!part1Finished)
         {
             playPart1();

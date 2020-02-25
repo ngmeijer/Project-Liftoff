@@ -20,7 +20,7 @@ public class CrumblingPlatform : AnimationSprite
     public bool changePosition { get; private set; }
 
     private int sceneTime;
-    private int timeBeforeRespawn = 600;
+    private int timeBeforeRespawn = 1000;
 
     private int movedDistance = 0;
 

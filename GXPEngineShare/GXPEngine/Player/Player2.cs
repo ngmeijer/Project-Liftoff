@@ -4,50 +4,52 @@ public class Player2 : AnimationSprite
 {
     #region Variables
 
-    private float _moveSpeed = 6f;
-    private float _jumpForce = 18f;
-    private float _fallMultiplier = 7.5f;
-    private float _gravity;
-    private float _defaultGravity = 7.5f;
-    private float _whipGravity = 0f;
-    private bool _isJumping = false;
-    private int jumpCount = 0;
-
+    //All class references
+    private NormalPlatform _normalPlatform;
     public StartPlatform _startPlatform { get; set; }
-    public MovingPlatform _normalPlatform { get; private set; }
-    private CrumblingPlatform _fallingPlatform;
-
+    public MovingPlatform _movingPlatform { get; private set; }
+    private CrumblingPlatform _crumblingPlatform;
     private Sprite _collider2;
     private Spears _spears;
-
-    public InkaWhip whipSprite { get; private set; }
-
     private Level levelScript;
     private HUD hudScript;
+    public InkaWhip whipSprite { get; private set; }
+    private JonesWhip _jonesWhip;
 
+    //Player gameplay properties
+    private float _moveSpeed = 6f;
+    private float _jumpForce = 18f;
+    private float _defaultGravity = 4f;
+    private float _gravity;
+    private float _whipGravity = 0f;
+    private int jumpCount = 0;
+    private int pickupPoints = 100;
+    private int stunnedDuration = 100;
+    private float _animationSpeed;
+
+    //Bools
+    private bool _isJumping = false;
+    public int pickupsCollected { get; set; }
+    public bool flyToBorder { get; set; }
+    public bool _stillStandingOnCrumblingPlatform { get; private set; }
+    private bool usingWhip;
+    private bool playerCanMove = true;
+    private bool playerHasDied;
+    private bool _playerIsMoving;
+
+    //Integers
+    public int scoreCount { get; private set; }
+    public int lifeCount { get; private set; }
+    public int whipUsedCount { get; private set; }
+    private int stunnedTimer;
+    private int pickupScore;
+    private int scoreAhead;
+
+    //Floats
     private float speedY;
     private const float spawnPointX = 100;
     private const float spawnPointY = 500;
-
-    private int pickupPoints = 100;
-    private int pickupScore;
-    private int scoreAhead;
-    public int pickupsCollected { get; set; }
-
-    private bool playerHasDied;
-
-    public int scoreCount { get; private set; }
-    public int lifeCount { get; private set; }
-
-    private bool _playerIsMoving;
     private float _animationTimer;
-    private float _animationSpeed;
-    private bool usingWhip;
-    private bool stunned;
-
-    public bool flyToBorder { get; set; }
-
-    public int whipUsedCount { get; private set; }
 
     #endregion
 
@@ -79,6 +81,8 @@ public class Player2 : AnimationSprite
 
         lifeCount = 3;
         _animationSpeed = 150f;
+
+        _gravity = _defaultGravity;
     }
 
     private void Update()
@@ -89,7 +93,6 @@ public class Player2 : AnimationSprite
         CheckCollisions();
         CheckForScreenCollision();
         TrackScore();
-
     }
 
     #endregion
@@ -140,7 +143,17 @@ public class Player2 : AnimationSprite
 
     private void MovePlayer()
     {
-        if (!stunned)
+        if (!playerCanMove)
+        {
+            stunnedTimer++;
+
+            if (stunnedTimer >= stunnedDuration)
+            {
+                playerCanMove = true;
+                stunnedTimer = 0;
+            }
+        }
+        if (playerCanMove)
         {
             if (Input.GetKey(Key.LEFT))
             {
@@ -169,20 +182,16 @@ public class Player2 : AnimationSprite
     {
         y = y + speedY;
 
-        if (speedY <= _fallMultiplier)
+        if (speedY <= _gravity)
         {
             speedY = speedY + 1;
             HandleJumpAnimation();
         }
-
-        if (!stunned)
+        if (Input.GetKey(Key.UP) && (jumpCount < 2))
         {
-            if (Input.GetKey(Key.UP) && (jumpCount < 2))
-            {
-                jumpCount += 1;
-                speedY = -_jumpForce;
-                HandleJumpAnimation();
-            }
+            jumpCount += 1;
+            speedY = -_jumpForce;
+            HandleJumpAnimation();
         }
     }
 
@@ -250,19 +259,34 @@ public class Player2 : AnimationSprite
                     y = _startPlatform.y - 55;
                 }
 
+                if (g is NormalPlatform)
+                {
+                    _normalPlatform = g as NormalPlatform;
+                    jumpCount = 0;
+                    y = _normalPlatform.y - 55;
+                }
                 if (g is MovingPlatform)
                 {
-                    _normalPlatform = g as MovingPlatform;
+                    _movingPlatform = g as MovingPlatform;
                     jumpCount = 0;
-                    y = _normalPlatform.y - 65;
+                    y = _movingPlatform.y - 65;
                 }
 
                 if (g is CrumblingPlatform)
                 {
-                    _fallingPlatform = g as CrumblingPlatform;
-                    jumpCount = 0;
-                    y = _fallingPlatform.y - 60;
-                    _fallingPlatform.handleCrumbleAnimation();
+                    _crumblingPlatform = g as CrumblingPlatform;
+                    if (_crumblingPlatform.visible)
+                    {
+                        jumpCount = 0;
+                        y = _crumblingPlatform.y - 60;
+                        _crumblingPlatform.playerOnPlatform = true;
+                        _crumblingPlatform.handleCrumbleAnimation();
+                    }
+
+                    if (HitTest(_crumblingPlatform))
+                    {
+                        _stillStandingOnCrumblingPlatform = true;
+                    }
                 }
 
                 if (g is Spears)
@@ -270,6 +294,12 @@ public class Player2 : AnimationSprite
                     _spears = g as Spears;
                     playerHasDied = true;
                     RespawnPlayer2();
+                }
+
+                if (g is JonesWhip)
+                {
+                    _jonesWhip = g as JonesWhip;
+                    playerCanMove = false;
                 }
             }
         }
