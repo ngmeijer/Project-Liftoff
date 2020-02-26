@@ -21,6 +21,7 @@ public class Player1 : AnimationSprite
     private float _moveSpeed = 6f;
     private float _jumpForce = 18f;
     private float _defaultGravity = 7.5f;
+    private float _defaultFallingSpeed = 1;
     private float _gravity;
     private float _whipGravity = 0f;
     private int jumpCount = 0;
@@ -48,7 +49,7 @@ public class Player1 : AnimationSprite
     private int stunnedTimer;
     private int pickupScore;
     private int scoreAhead;
-    private int rotationValue = 60;
+    private int distanceFallen;
 
     //Floats
     private float speedY;
@@ -58,6 +59,7 @@ public class Player1 : AnimationSprite
 
     //SFX
     private Sound _jumpSound;
+    private Sound _gameOverSound;
 
     #endregion
 
@@ -79,6 +81,7 @@ public class Player1 : AnimationSprite
         whipSprite.visible = false;
 
         _jumpSound = new Sound("JumpSFX.wav", false, true);
+        _gameOverSound = new Sound("GameOverSFX.wav", false, true);
 
         lifeCount = 3;
         _animationSpeed = 150f;
@@ -217,18 +220,6 @@ public class Player1 : AnimationSprite
             x += 20;
         }
 
-        if (swinging)
-        {
-            if(whipSprite.rotation < 360f)
-            {
-                whipSprite.rotation -= 5f;
-            }
-            Console.WriteLine(whipSprite.rotation);
-        } else if (!swinging)
-        {
-            whipSprite.rotation = 0;
-        }
-
         float tempPosY = y;
 
         _whipGravity = _gravity;
@@ -239,7 +230,7 @@ public class Player1 : AnimationSprite
             {
                 _gravity = _whipGravity;
                 swinging = true;
-                whipSprite.rotation -= rotationValue;
+                whipSprite.rotation = -55f;
                 whipSprite.visible = true;
             }
 
@@ -366,6 +357,7 @@ public class Player1 : AnimationSprite
 
         if (lifeCount <= 0)
         {
+            _gameOverSound.Play();
             LateDestroy();
         }
     }

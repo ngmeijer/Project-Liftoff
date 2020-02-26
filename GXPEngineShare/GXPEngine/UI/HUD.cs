@@ -27,7 +27,7 @@ public class HUD : Canvas
 
 	#endregion
 
-	public HUD(Player1 player1Script, Player2 player2Script, Menu menuScript) : base(1920, 1080, false)
+	public HUD(Player1 player1Script, Player2 player2Script, Menu menuScript) : base(1920, 120, false)
 	{
 		_player1 = player1Script;
 		_player2 = player2Script;
