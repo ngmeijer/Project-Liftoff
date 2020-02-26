@@ -20,6 +20,11 @@ public class MyGame : Game
         AddChild(sceneManager);
     }
 
+    private void Update()
+    {
+        Console.WriteLine(currentFps);
+    }
+
     static void Main()
     {
         new MyGame().Start();

@@ -98,23 +98,9 @@ public class Menu : GameObject
                     if (_startButton.HitTestPoint(Input.mouseX, Input.mouseY))
                     {
                         startCutscene = true;
-                        hideShowMenu();
                     }
                 }
             }
-        }
-    }
-
-    //This method hides the start button once clicked and makes it unclickable.
-    private void hideShowMenu()
-    {
-        if (levelStarted)
-        {
-            _startButton.visible = false;
-        }
-        if (!levelStarted)
-        {
-            _startButton.visible = true;
         }
     }
 }

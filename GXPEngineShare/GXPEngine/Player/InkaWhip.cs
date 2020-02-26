@@ -21,7 +21,6 @@ public class InkaWhip : Sprite
         {
             if (hittingScreenBorder)
             {
-                Console.WriteLine("true");
                 level._player2.flyToBorder = true;
             }
         }

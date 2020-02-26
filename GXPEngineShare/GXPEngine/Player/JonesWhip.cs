@@ -12,7 +12,7 @@ public class JonesWhip : Sprite
     {
         level = levelScript;
 
-        scaleX = 10f;
+        scaleX = 15f;
     }
 
     private void Update()

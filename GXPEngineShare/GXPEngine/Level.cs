@@ -182,20 +182,6 @@ public class Level : GameObject
 
     #endregion
 
-    private void CheckGameReset()
-    {
-        if (_player1.lifeCount <= 0)
-        {
-            resetGame = true;
-            _player1 = null;
-            Destroy();
-        }
-        else
-        {
-            resetGame = false;
-        }
-    }
-
     private void SpawnNewFallingPlatforms()
     {
         _crumblingPlatformArray = new CrumblingPlatform[7];

@@ -19,7 +19,7 @@ public class Player2 : AnimationSprite
     //Player gameplay properties
     private float _moveSpeed = 6f;
     private float _jumpForce = 18f;
-    private float _defaultGravity = 4f;
+    private float _defaultGravity = 7.5f;
     private float _gravity;
     private float _whipGravity = 0f;
     private int jumpCount = 0;
@@ -37,6 +37,7 @@ public class Player2 : AnimationSprite
     private bool playerCanMove = true;
     private bool playerHasDied;
     private bool _playerIsMoving;
+    private bool swinging;
 
     //Integers
     public int scoreCount { get; private set; }
@@ -51,7 +52,8 @@ public class Player2 : AnimationSprite
     private const float spawnPointX = 100;
     private const float spawnPointY = 500;
     private float _animationTimer;
-
+    private Sound _jumpSound;
+    private bool gameOver;
     #endregion
 
     #region Constructor & Update
@@ -80,6 +82,7 @@ public class Player2 : AnimationSprite
         AddChild(whipSprite);
         whipSprite.visible = false;
 
+        _jumpSound = new Sound("JumpSFX.wav", false, true);
         lifeCount = 3;
         _animationSpeed = 150f;
 
@@ -99,6 +102,8 @@ public class Player2 : AnimationSprite
     #endregion
 
     #region Functions
+
+    #region Animations
     private void HandleIdleAnimation()
     {
         if (!_playerIsMoving)
@@ -124,11 +129,20 @@ public class Player2 : AnimationSprite
     private void HandleJumpAnimation()
     {
         _animationTimer += Time.deltaTime;
-        int frame = (int)(_animationTimer / 1000f) % 4 + 4;
+        int frame = (int)(_animationTimer / 1000f) % 3 + 4;
 
         SetFrame(frame);
     }
 
+    private void HandleStunnedAnimation()
+    {
+        _animationTimer += Time.deltaTime;
+        int frame = (int)(_animationTimer / 750f) % 1 + 7;
+
+        SetFrame(frame);
+    }
+
+    #endregion
     private void TrackScoreAndLives()
     {
         scoreCount = Time.time / 400 + pickupScore + scoreAhead;
@@ -140,7 +154,10 @@ public class Player2 : AnimationSprite
                 scoreAhead += 1;
             }
         }
-
+        if (gameOver)
+        {
+            scoreCount = 0;
+        }
         if (heartCollected)
         {
             lifeCount++;
@@ -198,6 +215,7 @@ public class Player2 : AnimationSprite
         {
             jumpCount += 1;
             speedY = -_jumpForce;
+            _jumpSound.Play();
             HandleJumpAnimation();
         }
     }
@@ -217,17 +235,37 @@ public class Player2 : AnimationSprite
         {
             if (Input.GetKeyDown(Key.PLUS))
             {
-                _gravity = _whipGravity;
-                usingWhip = true;
+                speedY = -1;
+                swinging = true;
+                whipSprite.rotation = -55f;
                 whipSprite.visible = true;
             }
 
             if (Input.GetKeyUp(Key.PLUS))
             {
                 _gravity = _defaultGravity;
-                usingWhip = false;
+                swinging = false;
                 whipSprite.visible = false;
                 pickupsCollected = 0;
+                whipUsedCount = 1;
+            }
+
+            if (levelScript.hud._playerCanThrowUp)
+            {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    throwingUp = true;
+                    whipSprite.rotation = 0;
+                    whipSprite.visible = true;
+                }
+
+                if (Input.GetMouseButtonUp(0))
+                {
+                    throwingUp = false;
+                    whipSprite.visible = false;
+                    pickupsCollected = 0;
+                    whipUsedCount = 1;
+                }
             }
         }
     }
@@ -255,14 +293,14 @@ public class Player2 : AnimationSprite
 
     private void CheckCollisions()
     {
-        if (!usingWhip)
-        {
+        if ((!swinging) && (!throwingUp))
+            {
             foreach (GameObject g in _collider2.GetCollisions())
             {
                 if (g is StartPlatform)
                 {
-                    jumpCount = 0;
                     _startPlatform = g as StartPlatform;
+                    jumpCount = 0;
                     y = _startPlatform.y - 55;
                 }
 
@@ -306,8 +344,13 @@ public class Player2 : AnimationSprite
                 if (g is JonesWhip)
                 {
                     _jonesWhip = g as JonesWhip;
-                    playerCanMove = false;
+                    if (_inkaWhip.visible)
+                    {
+                        HandleStunnedAnimation();
+                        playerCanMove = false;
+                    }
                 }
+
             }
         }
     }
@@ -325,6 +368,7 @@ public class Player2 : AnimationSprite
 
         if (lifeCount <= 0)
         {
+            gameOver = true;
             LateDestroy();
         }
     }

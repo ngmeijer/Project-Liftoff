@@ -48,16 +48,17 @@ public class Player1 : AnimationSprite
     private int stunnedTimer;
     private int pickupScore;
     private int scoreAhead;
-    private int rotationValue = 60;
 
     //Floats
     private float speedY;
     private const float spawnPointX = 100;
     private const float spawnPointY = 200;
     private float _animationTimer;
+    private float thrownupSpeed = 50f;
 
     //SFX
     private Sound _jumpSound;
+    private bool gameOver;
 
     #endregion
 
@@ -76,6 +77,7 @@ public class Player1 : AnimationSprite
 
         whipSprite = new JonesWhip(level);
         AddChild(whipSprite);
+        whipSprite.x += 25f;
         whipSprite.visible = false;
 
         _jumpSound = new Sound("JumpSFX.wav", false, true);
@@ -105,6 +107,8 @@ public class Player1 : AnimationSprite
     #endregion
 
     #region Functions
+
+    #region Animations
     private void HandleIdleAnimation()
     {
         if (!_playerIsMoving)
@@ -130,10 +134,20 @@ public class Player1 : AnimationSprite
     private void HandleJumpAnimation()
     {
         _animationTimer += Time.deltaTime;
-        int frame = (int)(_animationTimer / 1000f) % 4 + 4;
+        int frame = (int)(_animationTimer / 1000f) % 3 + 4;
 
         SetFrame(frame);
     }
+
+    private void HandleStunnedAnimation()
+    {
+        _animationTimer += Time.deltaTime;
+        int frame = (int)(_animationTimer / 750f) % 1 + 7;
+
+        SetFrame(frame);
+    }
+
+    #endregion 
 
     private void TrackScoreAndLives()
     {
@@ -145,6 +159,11 @@ public class Player1 : AnimationSprite
             {
                 scoreAhead += 1;
             }
+        }
+
+        if (gameOver)
+        {
+            scoreCount = 0;
         }
 
         if (heartCollected)
@@ -166,6 +185,7 @@ public class Player1 : AnimationSprite
                 stunnedTimer = 0;
             }
         }
+
         if (playerCanMove)
         {
             if (Input.GetKey(Key.A))
@@ -217,18 +237,6 @@ public class Player1 : AnimationSprite
             x += 20;
         }
 
-        if (swinging)
-        {
-            if(whipSprite.rotation < 360f)
-            {
-                whipSprite.rotation -= 5f;
-            }
-            Console.WriteLine(whipSprite.rotation);
-        } else if (!swinging)
-        {
-            whipSprite.rotation = 0;
-        }
-
         float tempPosY = y;
 
         _whipGravity = _gravity;
@@ -237,9 +245,9 @@ public class Player1 : AnimationSprite
         {
             if (Input.GetMouseButtonDown(0))
             {
-                _gravity = _whipGravity;
+                speedY = -1;
                 swinging = true;
-                whipSprite.rotation -= rotationValue;
+                whipSprite.rotation = -55f;
                 whipSprite.visible = true;
             }
 
@@ -347,7 +355,11 @@ public class Player1 : AnimationSprite
                 if(g is InkaWhip)
                 {
                     _inkaWhip = g as InkaWhip;
-                    playerCanMove = false;
+                    if (_inkaWhip.visible)
+                    {
+                        HandleStunnedAnimation();
+                        playerCanMove = false;
+                    }
                 }
             }
         }
@@ -366,6 +378,7 @@ public class Player1 : AnimationSprite
 
         if (lifeCount <= 0)
         {
+            gameOver = true;
             LateDestroy();
         }
     }
