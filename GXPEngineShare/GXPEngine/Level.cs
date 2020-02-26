@@ -52,7 +52,6 @@ public class Level : GameObject
 
     private Sprite _background1;
     private Sprite _hudBackground;
-    private Sound _backgroundMusic;
 
     #endregion
 
@@ -74,9 +73,6 @@ public class Level : GameObject
         spears = new Spears();
         AddChild(spears);
         spears.y = 920;
-
-        _backgroundMusic = new Sound("LevelTheme2.wav", true, false);
-        //_backgroundMusic.Play(false, 3);
 
         SpawnNewFallingPlatforms();
         InitializePlatforms();
@@ -182,8 +178,6 @@ public class Level : GameObject
     {
         hud = new HUD(_player1, _player2, menu);
         AddChild(hud);
-
-        Console.WriteLine(hud.height);
     }
 
     #endregion

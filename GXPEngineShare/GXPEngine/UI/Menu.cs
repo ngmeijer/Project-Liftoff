@@ -9,7 +9,7 @@ public class Menu : GameObject
 
     private SceneManager _sceneManager;
     private Cutscene _cutscene;
-    public Sound _backgroundMusic { get; set; }
+    private Sound _backgroundMusic;
     private Sprite _backgroundImage;
 
     private Sprite solo;
@@ -55,8 +55,8 @@ public class Menu : GameObject
         duo.x = game.width / 2 + 100;
         duo.y = 630;
 
-        _backgroundMusic = new Sound("MenuTheme.mp3", true, false);
-        _backgroundMusic.Play(false, 0);
+        _backgroundMusic = new Sound("MenuTheme.mp3", true, true);
+        _backgroundMusic.Play(false);
     }
 
     private void Update()
@@ -91,7 +91,6 @@ public class Menu : GameObject
                     {
                         startCutscene = true;
                         hideShowMenu();
-                        LateDestroy();
                     }
                 }
             }
