@@ -25,7 +25,7 @@ public class SceneManager : GameObject
 	{
 		if (menu.startCutscene)
 		{
-			cutscene = new Cutscene();
+			cutscene = new Cutscene(menu);
 			AddChild(cutscene);
 			menu.startCutscene = false;
 			RemoveChild(menu);
@@ -52,8 +52,10 @@ public class SceneManager : GameObject
 		{
 			if (level.hud.backToMainMenu)
 			{
+				menu = new Menu(this, cutscene);
 				AddChild(menu);
 				RemoveChild(level);
+				level.hud.backToMainMenu = false;
 			}
 		}
 	}

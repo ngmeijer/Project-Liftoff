@@ -16,6 +16,8 @@ public class Menu : GameObject
     private Sprite duo;
 
     public bool levelStarted;
+    public bool destroyMenu { get; set; }
+
     public bool startCutscene { get; set; }
 
     public bool soloPlayer { get; private set; }
@@ -63,6 +65,11 @@ public class Menu : GameObject
     private void Update()
     {
         CheckStartInput();
+
+        if (destroyMenu)
+        {
+            LateDestroy();
+        }
     }
 
     #endregion

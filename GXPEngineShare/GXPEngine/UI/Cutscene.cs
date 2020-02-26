@@ -21,11 +21,17 @@ public class Cutscene : GameObject
     private AnimationSprite part1;
     private AnimationSprite part2;
     private AnimationSprite part3;
+
+    private Menu menu;
     public bool continueToGame { get; set; }
 
-    public Cutscene()
+    public Cutscene(Menu menuScript)
     {
         playingCutscene = true;
+
+        menu = menuScript;
+
+        menu.destroyMenu = true;
 
         part1 = new AnimationSprite("CutsceneP1.png", 9, 3);
         AddChild(part1);
