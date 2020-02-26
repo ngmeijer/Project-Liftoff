@@ -31,6 +31,7 @@ public class Menu : GameObject
         _cutscene = cutscene;
 
         levelStarted = false;
+        startCutscene = false;
 
         _backgroundImage = new Sprite("Logo.png");
         AddChild(_backgroundImage);

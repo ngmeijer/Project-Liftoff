@@ -18,6 +18,7 @@ public class SceneManager : GameObject
 	{
 		CheckCutsceneStart();
 		CheckGameStart();
+		CheckGameReset();
 	}
 
 	private void CheckCutsceneStart()
@@ -41,6 +42,18 @@ public class SceneManager : GameObject
 				AddChild(level);
 				RemoveChild(cutscene);
 				cutscene.continueToGame = false;
+			}
+		}
+	}
+
+	private void CheckGameReset()
+	{
+		if(level != null)
+		{
+			if (level.hud.backToMainMenu)
+			{
+				AddChild(menu);
+				RemoveChild(level);
 			}
 		}
 	}

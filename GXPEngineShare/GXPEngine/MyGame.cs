@@ -12,7 +12,7 @@ public class MyGame : Game
 
     #endregion
 
-    public MyGame() : base(1920, 1080, false, false)
+    public MyGame() : base(1920, 1080, false, true)
     {
         targetFps = 60;
 
