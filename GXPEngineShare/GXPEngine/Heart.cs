@@ -27,7 +27,7 @@ public class Heart : Sprite
         offsetX = Utils.Random(200, 500);
         offsetY = Utils.Random(150, 400);
 
-        //_heartSound = new Sound("PickupSFX.wav", false, true);
+        _heartSound = new Sound("PickupSFX.wav", false, false);
     }
 
     public void SetSpawnPosition(float xPos, float yPos)
@@ -94,7 +94,7 @@ public class Heart : Sprite
         {
             if (hitInfo is Player1)
             {
-                //_heartSound.Play();
+                _heartSound.Play();
                 timer = 0;
                 level._player1 = hitInfo as Player1;
                 level._player1.heartCollected = true;

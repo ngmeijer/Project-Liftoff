@@ -25,7 +25,7 @@ public class Powerup : Sprite
         offsetX = Utils.Random(200, 500);
         offsetY = Utils.Random(150, 400);
 
-        _pickupSound = new Sound("PickupSFX.wav", false, true);
+        _pickupSound = new Sound("PickupSFX.wav", false, false);
     }
 
     public void SetSpawnPosition(float xPos, float yPos)

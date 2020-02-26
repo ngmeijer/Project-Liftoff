@@ -37,7 +37,7 @@ public class Player1 : AnimationSprite
     private bool playerHasDied;
     private bool _playerIsMoving;
     private bool throwingUp;
-    private bool swinging;
+    public bool swinging { get; set; }
 
     //Integers
     public int pickupsCollected { get; set; }
@@ -188,7 +188,7 @@ public class Player1 : AnimationSprite
 
         if (playerCanMove)
         {
-            if (Input.GetKey(Key.A))
+            if ((Input.GetKey(Key.A)) && (!swinging))
             {
                 scaleX = -0.65f;
                 _playerIsMoving = true;
@@ -249,6 +249,7 @@ public class Player1 : AnimationSprite
                 swinging = true;
                 whipSprite.rotation = -55f;
                 whipSprite.visible = true;
+                scaleX = 0.65f;
             }
 
             if (Input.GetMouseButtonUp(0))

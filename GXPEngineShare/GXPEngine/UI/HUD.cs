@@ -19,6 +19,7 @@ public class HUD : Canvas
 
     public Sprite _whipChargeP1;
     public Sprite _whipChargeP2;
+    private Sprite gameOverScreen;
     public bool _playerCanSwing { get; private set; }
     public bool _playerCanThrowUp { get; private set; }
 
@@ -38,6 +39,8 @@ public class HUD : Canvas
         _player2 = player2Script;
 
         _menu = menuScript;
+
+        gameOverScreen = new Sprite("GameOver.png");
 
         _whipChargeP1 = new Sprite("WhipCharge.png");
         AddChild(_whipChargeP1);
@@ -156,7 +159,8 @@ public class HUD : Canvas
     {
         if (_player1.lifeCount <= 0)
         {
-            graphics.DrawString("Player 1 WON!", _arialFont, _redBrush, game.width / 2, game.height / 2 - 100);
+            AddChild(gameOverScreen);
+            gameOverScreen.y = -50f;
             gameHasEnded = true;
         }
     }

@@ -54,6 +54,7 @@ public class Player2 : AnimationSprite
     private float _animationTimer;
     private Sound _jumpSound;
     private bool gameOver;
+    private bool throwingUp;
     #endregion
 
     #region Constructor & Update
@@ -344,7 +345,7 @@ public class Player2 : AnimationSprite
                 if (g is JonesWhip)
                 {
                     _jonesWhip = g as JonesWhip;
-                    if (_inkaWhip.visible)
+                    if (_jonesWhip.visible)
                     {
                         HandleStunnedAnimation();
                         playerCanMove = false;

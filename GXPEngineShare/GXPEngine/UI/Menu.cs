@@ -12,10 +12,12 @@ public class Menu : GameObject
     private Sound _backgroundMusic;
     private Sprite _backgroundImage;
 
-    private Sprite solo;
-    private Sprite duo;
+    public Sprite solo { get; set; }
+    public Sprite duo { get; set; }
 
     public bool levelStarted;
+    public bool clickedStart { get; private set; }
+
     public bool destroyMenu { get; set; }
 
     public bool startCutscene { get; set; }
@@ -51,12 +53,14 @@ public class Menu : GameObject
         solo.scale = 0.75f;
         solo.x = game.width / 2 - (solo.width + 200);
         solo.y = 630;
+        solo.visible = false;
 
         duo = new Sprite("TwoPlayerButton.png");
         AddChild(duo);
         duo.scale = 0.75f;
         duo.x = game.width / 2 + 100;
         duo.y = 630;
+        duo.visible = false;
 
         _backgroundMusic = new Sound("MenuTheme.mp3", true, true);
         _backgroundMusic.Play(false);
@@ -69,6 +73,18 @@ public class Menu : GameObject
         if (destroyMenu)
         {
             LateDestroy();
+        }
+
+        if (clickedStart)
+        {
+            solo.visible = true;
+            duo.visible = true;
+        }
+        else if (!clickedStart)
+        {
+            solo.visible = false;
+            duo.visible = false;
+            _startButton.visible = true;
         }
     }
 
@@ -91,12 +107,20 @@ public class Menu : GameObject
                 duoPlayers = true;
             }
 
+            if (_startButton.HitTestPoint(Input.mouseX, Input.mouseY))
+            {
+                _startButton.visible = false;
+                clickedStart = true;
+            }
+
             if (!startCutscene)
             {
                 if (!levelStarted)
                 {
-                    if (_startButton.HitTestPoint(Input.mouseX, Input.mouseY))
+                    if (soloPlayer || duoPlayers)
                     {
+                        solo.visible = false;
+                        duo.visible = false;
                         startCutscene = true;
                     }
                 }

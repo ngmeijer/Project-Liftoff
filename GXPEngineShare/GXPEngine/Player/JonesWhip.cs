@@ -17,7 +17,7 @@ public class JonesWhip : Sprite
 
     private void Update()
     {
-        if (level._player1.whipSprite.visible)
+        if (level._player1.swinging)
         {
             if (hittingScreenBorder)
             {
