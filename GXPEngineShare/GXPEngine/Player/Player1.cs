@@ -58,7 +58,10 @@ public class Player1 : AnimationSprite
 
     //SFX
     private Sound _jumpSound;
+    private Sound gameOverSound;
     private bool gameOver;
+    private bool playerCanStun;
+    private bool playerCanSwing;
 
     #endregion
 
@@ -81,6 +84,7 @@ public class Player1 : AnimationSprite
         whipSprite.visible = false;
 
         _jumpSound = new Sound("JumpSFX.wav", false, true);
+        gameOverSound = new Sound("GameOver.wav", false, false);
 
         lifeCount = 3;
         _animationSpeed = 150f;
@@ -186,27 +190,29 @@ public class Player1 : AnimationSprite
             }
         }
 
-        if (playerCanMove)
-        {
-            if ((Input.GetKey(Key.A)) && (!swinging))
+        if (!swinging) {
+            if (playerCanMove)
             {
-                scaleX = -0.65f;
-                _playerIsMoving = true;
-                HandleRunAnimation();
-                Translate(-_moveSpeed, 0);
-            }
-            else if (Input.GetKey(Key.D))
-            {
-                //Consider taking out scaleX since it causes a bit of buggy movement. Rotates around x = 0 instead of pivot point. Preferably stay at same position.
-                scaleX = 0.65f;
-                _playerIsMoving = true;
-                HandleRunAnimation();
-                Translate(_moveSpeed, 0);
-            }
-            else
-            {
-                _playerIsMoving = false;
-                HandleIdleAnimation();
+                if (Input.GetKey(Key.A))
+                {
+                    scaleX = -0.65f;
+                    _playerIsMoving = true;
+                    HandleRunAnimation();
+                    Translate(-_moveSpeed, 0);
+                }
+                else if (Input.GetKey(Key.D))
+                {
+                    //Consider taking out scaleX since it causes a bit of buggy movement. Rotates around x = 0 instead of pivot point. Preferably stay at same position.
+                    scaleX = 0.65f;
+                    _playerIsMoving = true;
+                    HandleRunAnimation();
+                    Translate(_moveSpeed, 0);
+                }
+                else
+                {
+                    _playerIsMoving = false;
+                    HandleIdleAnimation();
+                }
             }
         }
     }
@@ -232,52 +238,63 @@ public class Player1 : AnimationSprite
 
     private void UseWhip()
     {
+        if(pickupsCollected == 0)
+        {
+            playerCanStun = false;
+            playerCanSwing = false;
+        }
+
+        if (pickupsCollected == 1)
+        {
+            playerCanStun = true;
+            playerCanSwing = false;
+        }
+
+        if (pickupsCollected == 2)
+        {
+            playerCanStun = false;
+            playerCanSwing = true;
+        }
+
+        if (playerCanStun)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                whipSprite.visible = true;
+                whipSprite.rotation = 0f;
+            }
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                whipSprite.visible = false;
+                pickupsCollected = 0;
+            }
+        }
+
+        if (playerCanSwing)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                swinging = true;
+                whipSprite.scaleX = 3f;
+                scaleX = 0.65f;
+                whipSprite.visible = true;
+                whipSprite.rotation = -55f;
+                flyToBorder = true;
+            }
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                swinging = false;
+                flyToBorder = false;
+                whipSprite.visible = false;
+                pickupsCollected = 0;
+            }
+        }
+
         if (flyToBorder)
         {
             x += 20;
-        }
-
-        float tempPosY = y;
-
-        _whipGravity = _gravity;
-
-        if (levelScript.hud._playerCanSwing)
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                speedY = -1;
-                swinging = true;
-                whipSprite.rotation = -55f;
-                whipSprite.visible = true;
-                scaleX = 0.65f;
-            }
-
-            if (Input.GetMouseButtonUp(0))
-            {
-                _gravity = _defaultGravity;
-                swinging = false;
-                whipSprite.visible = false;
-                pickupsCollected = 0;
-                whipUsedCount = 1;
-            }
-        }
-
-        if (levelScript.hud._playerCanThrowUp)
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                throwingUp = true;
-                whipSprite.rotation = 0;
-                whipSprite.visible = true;
-            }
-
-            if (Input.GetMouseButtonUp(0))
-            {
-                throwingUp = false;
-                whipSprite.visible = false;
-                pickupsCollected = 0;
-                whipUsedCount = 1;
-            }
         }
     }
 
@@ -356,10 +373,11 @@ public class Player1 : AnimationSprite
                 if(g is InkaWhip)
                 {
                     _inkaWhip = g as InkaWhip;
+                    Console.WriteLine("player 1 stunned");
                     if (_inkaWhip.visible)
                     {
+                        y -= 50;
                         HandleStunnedAnimation();
-                        playerCanMove = false;
                     }
                 }
             }
@@ -379,6 +397,7 @@ public class Player1 : AnimationSprite
 
         if (lifeCount <= 0)
         {
+            gameOverSound.Play();
             gameOver = true;
             LateDestroy();
         }

@@ -67,6 +67,7 @@ public class HUD : Canvas
     {
         graphics.Clear(Color.Empty);
         ShowCountersP1();
+        ShowWhipChargeP1();
 
         if (_player2 != null)
         {
@@ -80,7 +81,6 @@ public class HUD : Canvas
             ShowYouDiedScreen();
         }
 
-        ShowWhipChargeP1();
         RestartGame();
     }
 
@@ -102,18 +102,6 @@ public class HUD : Canvas
         {
             _whipChargeP1.scaleX = 1.0f;
             WhipChargeP1 = 1.0f;
-        }
-
-        if ((WhipChargeP1 == 1.0f) && (_player1.whipUsedCount < 1))
-        {
-            _playerCanSwing = false;
-            _playerCanThrowUp = true;
-        }
-
-        if ((WhipChargeP1 == 0.5f) && (_player1.whipUsedCount < 1))
-        {
-            _playerCanThrowUp = false;
-            _playerCanSwing = true;
         }
     }
 
@@ -185,7 +173,6 @@ public class HUD : Canvas
         if (gameHasEnded)
         {
             timeBeforeRestart++;
-            Console.WriteLine(timeBeforeRestart);
             if (timeBeforeRestart > timeToRestart)
             {
                 backToMainMenu = true;

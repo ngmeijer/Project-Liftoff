@@ -12,30 +12,6 @@ public class InkaWhip : Sprite
     {
         level = levelScript;
 
-        scaleX = 20f;
-    }
-
-    private void Update()
-    {
-        if (level._player2.whipSprite.visible)
-        {
-            if (hittingScreenBorder)
-            {
-                level._player2.flyToBorder = true;
-            }
-        }
-        else
-        {
-            level._player2.flyToBorder = false;
-        }
-    }
-
-    private void OnCollision(GameObject other)
-    {
-        if(other is ScreenBorders)
-        {
-            _screenBorder = other as ScreenBorders;
-            hittingScreenBorder = true;
-        }
+        scale = 1.2f;
     }
 }

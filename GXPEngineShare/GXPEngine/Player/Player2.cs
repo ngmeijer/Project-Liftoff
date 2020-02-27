@@ -1,4 +1,5 @@
 ﻿using GXPEngine;
+using System;
 
 public class Player2 : AnimationSprite
 {
@@ -55,6 +56,8 @@ public class Player2 : AnimationSprite
     private Sound _jumpSound;
     private bool gameOver;
     private bool throwingUp;
+    private bool playerCanStun;
+    private bool playerCanSwing;
     #endregion
 
     #region Constructor & Update
@@ -223,51 +226,63 @@ public class Player2 : AnimationSprite
 
     private void UseWhip()
     {
-        if (flyToBorder)
+        if (pickupsCollected == 0)
         {
-            x += 20;
+            playerCanStun = false;
+            playerCanSwing = false;
         }
 
-        float tempPosY = y;
+        if (pickupsCollected == 1)
+        {
+            playerCanStun = true;
+            playerCanSwing = false;
+        }
 
-        _whipGravity = _gravity;
+        if (pickupsCollected == 2)
+        {
+            playerCanStun = false;
+            playerCanSwing = true;
+        }
 
-        if (levelScript.hud._playerCanSwing)
+        if (playerCanStun)
         {
             if (Input.GetKeyDown(Key.PLUS))
             {
-                speedY = -1;
-                swinging = true;
-                whipSprite.rotation = -55f;
                 whipSprite.visible = true;
+                whipSprite.rotation = 0f;
             }
 
             if (Input.GetKeyUp(Key.PLUS))
             {
-                _gravity = _defaultGravity;
-                swinging = false;
                 whipSprite.visible = false;
                 pickupsCollected = 0;
-                whipUsedCount = 1;
             }
+        }
 
-            if (levelScript.hud._playerCanThrowUp)
+        if (playerCanSwing)
+        {
+            if (Input.GetKeyDown(Key.PLUS))
             {
-                if (Input.GetMouseButtonDown(0))
-                {
-                    throwingUp = true;
-                    whipSprite.rotation = 0;
-                    whipSprite.visible = true;
-                }
-
-                if (Input.GetMouseButtonUp(0))
-                {
-                    throwingUp = false;
-                    whipSprite.visible = false;
-                    pickupsCollected = 0;
-                    whipUsedCount = 1;
-                }
+                swinging = true;
+                whipSprite.scaleX = 3f;
+                scaleX = 0.65f;
+                whipSprite.visible = true;
+                whipSprite.rotation = -55f;
+                flyToBorder = true;
             }
+
+            if (Input.GetKeyUp(Key.PLUS))
+            {
+                swinging = false;
+                flyToBorder = false;
+                whipSprite.visible = false;
+                pickupsCollected = 0;
+            }
+        }
+
+        if (flyToBorder)
+        {
+            x += 20;
         }
     }
 
@@ -294,64 +309,61 @@ public class Player2 : AnimationSprite
 
     private void CheckCollisions()
     {
-        if ((!swinging) && (!throwingUp))
+        foreach (GameObject g in _collider2.GetCollisions())
+        {
+            if (g is StartPlatform)
             {
-            foreach (GameObject g in _collider2.GetCollisions())
+                _startPlatform = g as StartPlatform;
+                jumpCount = 0;
+                y = _startPlatform.y - 55;
+            }
+
+            if (g is NormalPlatform)
             {
-                if (g is StartPlatform)
+                _normalPlatform = g as NormalPlatform;
+                jumpCount = 0;
+                y = _normalPlatform.y - 55;
+            }
+            if (g is MovingPlatform)
+            {
+                _movingPlatform = g as MovingPlatform;
+                jumpCount = 0;
+                y = _movingPlatform.y - 65;
+            }
+
+            if (g is CrumblingPlatform)
+            {
+                _crumblingPlatform = g as CrumblingPlatform;
+                if (_crumblingPlatform.visible)
                 {
-                    _startPlatform = g as StartPlatform;
                     jumpCount = 0;
-                    y = _startPlatform.y - 55;
+                    y = _crumblingPlatform.y - 60;
+                    _crumblingPlatform.playerOnPlatform = true;
+                    _crumblingPlatform.handleCrumbleAnimation();
                 }
 
-                if (g is NormalPlatform)
+                if (HitTest(_crumblingPlatform))
                 {
-                    _normalPlatform = g as NormalPlatform;
-                    jumpCount = 0;
-                    y = _normalPlatform.y - 55;
+                    _stillStandingOnCrumblingPlatform = true;
                 }
-                if (g is MovingPlatform)
+            }
+
+            if (g is Spears)
+            {
+                _spears = g as Spears;
+                playerHasDied = true;
+                RespawnPlayer2();
+            }
+
+            if (g is JonesWhip)
+            {
+                _jonesWhip = g as JonesWhip;
+                Console.WriteLine("stunned");
+                if (_jonesWhip.visible)
                 {
-                    _movingPlatform = g as MovingPlatform;
-                    jumpCount = 0;
-                    y = _movingPlatform.y - 65;
+                    HandleStunnedAnimation();
+                    playerCanMove = false;
                 }
-
-                if (g is CrumblingPlatform)
-                {
-                    _crumblingPlatform = g as CrumblingPlatform;
-                    if (_crumblingPlatform.visible)
-                    {
-                        jumpCount = 0;
-                        y = _crumblingPlatform.y - 60;
-                        _crumblingPlatform.playerOnPlatform = true;
-                        _crumblingPlatform.handleCrumbleAnimation();
-                    }
-
-                    if (HitTest(_crumblingPlatform))
-                    {
-                        _stillStandingOnCrumblingPlatform = true;
-                    }
-                }
-
-                if (g is Spears)
-                {
-                    _spears = g as Spears;
-                    playerHasDied = true;
-                    RespawnPlayer2();
-                }
-
-                if (g is JonesWhip)
-                {
-                    _jonesWhip = g as JonesWhip;
-                    if (_jonesWhip.visible)
-                    {
-                        HandleStunnedAnimation();
-                        playerCanMove = false;
-                    }
-                }
-
             }
         }
     }
@@ -373,6 +385,6 @@ public class Player2 : AnimationSprite
             LateDestroy();
         }
     }
-
-    #endregion
 }
+
+        #endregion

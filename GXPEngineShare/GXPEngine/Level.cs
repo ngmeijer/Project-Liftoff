@@ -53,6 +53,8 @@ public class Level : GameObject
     private Sprite _background1;
     private Sprite _hudBackground;
 
+    private Sound _backgroundMusic;
+
     #endregion
 
     public Level(Menu menuScript)
@@ -60,6 +62,9 @@ public class Level : GameObject
         menu = menuScript;
 
         InitializeBackground();
+
+        _backgroundMusic = new Sound("LevelTheme.wav", true, false);
+        _backgroundMusic.Play();
 
         _hudBackground = new Sprite("HUDBackground.png");
         AddChild(_hudBackground);
