@@ -179,18 +179,26 @@ public class Player1 : AnimationSprite
 
     private void MovePlayer()
     {
-        if (!playerCanMove)
+        if (levelScript._player2.whipSprite.playerIsStunned)
         {
+            HandleStunnedAnimation();
             stunnedTimer++;
-
-            if(stunnedTimer >= stunnedDuration)
-            {
-                playerCanMove = true;
-                stunnedTimer = 0;
-            }
+            playerCanMove = false;
+        }
+        else if (!levelScript._player2.whipSprite.playerIsStunned)
+        {
+            HandleIdleAnimation();
+            playerCanMove = true;
         }
 
-        if (!swinging) {
+        if (stunnedTimer >= stunnedDuration)
+        {
+            playerCanMove = true;
+            stunnedTimer = 0;
+        }
+
+        if (!swinging)
+        {
             if (playerCanMove)
             {
                 if (Input.GetKey(Key.A))
@@ -238,7 +246,7 @@ public class Player1 : AnimationSprite
 
     private void UseWhip()
     {
-        if(pickupsCollected == 0)
+        if (pickupsCollected == 0)
         {
             playerCanStun = false;
             playerCanSwing = false;
@@ -370,16 +378,16 @@ public class Player1 : AnimationSprite
                     RespawnPlayer1();
                 }
 
-                if(g is InkaWhip)
-                {
-                    _inkaWhip = g as InkaWhip;
-                    Console.WriteLine("player 1 stunned");
-                    if (_inkaWhip.visible)
-                    {
-                        y -= 50;
-                        HandleStunnedAnimation();
-                    }
-                }
+                //if(g is InkaWhip)
+                //{
+                //    _inkaWhip = g as InkaWhip;
+                //    Console.WriteLine("player 1 stunned");
+                //    if (_inkaWhip.visible)
+                //    {
+                //        y -= 50;
+                //        HandleStunnedAnimation();
+                //    }
+                //}
             }
         }
     }
