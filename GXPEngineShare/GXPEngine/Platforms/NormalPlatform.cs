@@ -25,13 +25,17 @@ public class NormalPlatform : Sprite
 
 	private void Update()
 	{
-        y += _moveSpeedY * yDir;
-
-        x -= _moveSpeedX;
-
+        MovePlatforms();
         InversePlatforms();
         RespawnPlatforms();
 	}
+
+    private void MovePlatforms()
+    {
+        y += _moveSpeedY * yDir;
+
+        x -= _moveSpeedX;
+    }
 
 	private void InversePlatforms()
 	{

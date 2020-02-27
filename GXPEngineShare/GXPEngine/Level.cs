@@ -24,8 +24,10 @@ public class Level : GameObject
     private Menu menu;
     private Spears spears;
 
+    //Sprites
     private AnimationSprite sideCrumbling;
     private AnimationSprite sideCrumbling2;
+    private Sprite _hudBackground;
 
     //Bools
     public bool resetGame;
@@ -34,28 +36,23 @@ public class Level : GameObject
     //Integers
     public int sceneTime { get; set; }
     private int fallingCount = 0;
-
     private int xPosNormal = 700;
     private int yPosNormal = 310;
     private int xPosNormal2 = 800;
     private int yPosNormal2 = 910;
-
     private int xPosFalling = 800;
     private int yPosFalling = 250;
     private int xPosFalling2 = 800;
     private int yPosFalling2 = 800;
-
     private int xPositionHeart = 600;
     private int yPositionHeart = 800;
-
     private int xPositionPowerup = 600;
     private int yPositionPowerup = 300;
-
-    private Sprite _hudBackground;
-
-    private Sound _backgroundMusic;
     private int _animationTimer;
     private int _animationTimer2;
+
+    //SFX
+    private Sound _backgroundMusic;
 
     #endregion
 
@@ -70,12 +67,6 @@ public class Level : GameObject
 
         sideCrumbling = new AnimationSprite("cracks_spritesheet.png", 4, 1);
         AddChild(sideCrumbling);
-
-        sideCrumbling2 = new AnimationSprite("cracks_spritesheet.png", 4, 1);
-        AddChild(sideCrumbling2);
-        sideCrumbling2.x = game.width;
-        sideCrumbling2.y = 1080;
-        sideCrumbling2.rotation = 180f;
 
         _hudBackground = new Sprite("HUDBackground.png");
         AddChild(_hudBackground);
@@ -94,14 +85,7 @@ public class Level : GameObject
 
     private void Update()
     {
-        sceneTime++;
-
-        if (sceneTime > 1000)
-        {
-            SpawnNewFallingPlatforms();
-            sceneTime = 0;
-        }
-
+        TrackTime();
         HandleSideCrumbling1Animation();
         HandleSideCrumbling2Animation();
     }
@@ -211,6 +195,17 @@ public class Level : GameObject
         int frame = (int)(_animationTimer2 / 1000f) % 4;
 
         //sideCrumbling2.SetFrame(frame);
+    }
+
+    private void TrackTime()
+    {
+        sceneTime++;
+
+        if (sceneTime > 1000)
+        {
+            SpawnNewFallingPlatforms();
+            sceneTime = 0;
+        }
     }
 
     private void SpawnNewFallingPlatforms()

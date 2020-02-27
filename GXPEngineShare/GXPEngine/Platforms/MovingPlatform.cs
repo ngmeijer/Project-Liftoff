@@ -7,19 +7,23 @@ public class MovingPlatform : Sprite
 {
     #region Variables
 
-    private float _moveSpeedX;
-    private float _moveSpeedY;
-    private float weight = 1;
-    private int yDir = 1;
-
-    public float offsetX;
-    public float offsetY;
-    private bool playerOnPlatform;
-
+    //Script references
+    private Player1 _player1;
     Level level;
     Menu menu;
 
-    private Player1 _player1;
+    //Floats
+    private float _moveSpeedX;
+    private float _moveSpeedY;
+    private float weight = 1;
+    public float offsetX;
+    public float offsetY;
+
+    //Integers
+    private int yDir = 1;
+
+    //Bools
+    private bool playerOnPlatform;
 
     #endregion
 

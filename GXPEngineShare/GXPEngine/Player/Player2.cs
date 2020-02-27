@@ -21,7 +21,7 @@ public class Player2 : AnimationSprite
     //Player gameplay properties
     private float _moveSpeed = 6f;
     private float _jumpForce = 15f;
-    private float _defaultGravity = 1.5f;
+    private float _defaultGravity = 4f;
     private float _gravity;
     private int jumpCount = 0;
     private int pickupPoints = 100;
@@ -73,6 +73,7 @@ public class Player2 : AnimationSprite
 
         _collider2 = new Sprite("TestPlayerCollider.png", true, true);
         AddChild(_collider2);
+        _collider2.visible = false;
 
         x = xPos;
         y = yPos;

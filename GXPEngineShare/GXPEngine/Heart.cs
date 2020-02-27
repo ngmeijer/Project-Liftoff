@@ -3,18 +3,26 @@ using GXPEngine;
 
 public class Heart : Sprite
 {
+
+    //Script references
+    Level level;
+    
+    //Floats
     public float offsetX;
     public float offsetY;
 
-    Level level;
-    private bool hidden = false;
+    //Integers
     private int timer = 0;
     private int maxTimeHidden = 150;
-
     public int[] firstSpawnsX = { 500, 800, 1200, 1600 };
     public int[] firstSpawnsY = { 200, 450, 600, 800 };
+
+
+    //Bools
+    private bool hidden = false;
     private bool relocate;
 
+    //SFX
     private Sound _heartSound;
 
     public Heart(Level levelScript) : base("Heart.png")
@@ -38,17 +46,18 @@ public class Heart : Sprite
 
     private void Update()
     {
+        MakeInvisible();
+    }
+
+    private void MakeInvisible()
+    {
         timer++;
 
         if (hidden)
         {
             timer++;
-            MakeInvisible();
         }
-    }
 
-    private void MakeInvisible()
-    {
         if (hidden)
         {
             this.visible = false;

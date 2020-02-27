@@ -80,8 +80,14 @@ public class Menu : GameObject
 
     private void Update()
     {
+        ManageButtonVisibility();
         CheckStartInput();
+    }
 
+    #endregion
+
+    private void ManageButtonVisibility()
+    {
         if (destroyMenu)
         {
             LateDestroy();
@@ -99,8 +105,6 @@ public class Menu : GameObject
             _startButton.visible = true;
         }
     }
-
-    #endregion
 
     //Checks if the start button has been pressed.
     private void CheckStartInput()

@@ -5,9 +5,9 @@ public class MyGame : Game
 {
     #region Variables
 
+    //References
     public Menu _menu { get; private set; }
     public Cutscene _cutscene { get; private set; }
-
     private SceneManager sceneManager;
 
     #endregion

@@ -3,16 +3,23 @@ using GXPEngine;
 
 public class Powerup : Sprite
 {
+
+    //Script references
+    Level level;
+
+    //Floats
     public float offsetX;
     public float offsetY;
 
-    Level level;
-    private bool hidden = false;
+    //Integers
     private int timer = 0;
     private int maxTimeHidden = 150;
 
+    //Bools
+    private bool hidden = false;
     private bool relocate;
 
+    //SFX
     private Sound _pickupSound;
 
     public Powerup(Level levelScript) : base("PickUp.png")
@@ -36,21 +43,18 @@ public class Powerup : Sprite
 
     private void Update()
     {
+        MakeInvisible();
+    }
+
+    private void MakeInvisible()
+    {
         timer++;
 
         if (hidden)
         {
             timer++;
-            MakeInvisible();
         }
-    }
 
-    private void MakeInvisible()
-    {
-        if (hidden)
-        {
-            this.visible = false;
-        }
         if (timer >= maxTimeHidden)
         {
             hidden = false;

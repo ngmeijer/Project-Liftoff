@@ -6,28 +6,34 @@ public class HUD : Canvas
 {
     #region
 
+    //Script references
     private readonly Player1 _player1;
     private readonly Player2 _player2;
     private readonly Menu _menu;
 
+    //Sprites
+    public Sprite _whipChargeP1;
+    public Sprite _whipChargeP2;
+    private Sprite gameOverScreen;
+
+    //Floats
+    private readonly float _xPosCounters = 0;
+    private readonly float _yPosCounters = 0;
+    public float WhipChargeP1 { get; private set; }
+    public float WhipChargeP2 { get; private set; }
+
+    //Integers
+    private int timeBeforeRestart;
+    private int timeToRestart = 200;
+
+    //Brushes/fonts
     private readonly Brush _whiteBrush;
     private readonly Brush _redBrush;
     private readonly Font _arialFont;
 
-    private readonly float _xPosCounters = 0;
-    private readonly float _yPosCounters = 0;
-
-    public Sprite _whipChargeP1;
-    public Sprite _whipChargeP2;
-    private Sprite gameOverScreen;
+    //Bools
     public bool _playerCanSwing { get; private set; }
     public bool _playerCanThrowUp { get; private set; }
-
-    public float WhipChargeP1 { get; private set; }
-    public float WhipChargeP2 { get; private set; }
-
-    private int timeBeforeRestart;
-    private int timeToRestart = 200;
     private bool gameHasEnded;
     public bool backToMainMenu { get; set; }
 
@@ -140,7 +146,7 @@ public class HUD : Canvas
     private void ShowCountersP2()
     {
         graphics.DrawString("Score = " + _player2.scoreCount, _arialFont, _redBrush, game.width - 500, _yPosCounters);
-        graphics.DrawString("Lives = " + _player2.lifeCount, _arialFont, _redBrush, game.width - 200, _yPosCounters);
+        graphics.DrawString("Lives = " + _player2.lifeCount, _arialFont, _redBrush, game.width - 250, _yPosCounters);
     }
 
     private void ShowYouDiedScreen()

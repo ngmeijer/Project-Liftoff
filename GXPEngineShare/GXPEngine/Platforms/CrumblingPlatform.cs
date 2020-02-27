@@ -7,22 +7,21 @@ public class CrumblingPlatform : AnimationSprite
 {
     #region Variables
 
+    //Integers
+    private int sceneTime;
+    private int timeBeforeRespawn = 1000;
+    private int movedDistance = 0;
+    private int _animationSpeed = 250;
+    private int _animationTimer;
+
+    //Floats
     public float offsetX { get; private set; }
     public float offsetY { get; private set; }
 
     //Decrease to increase speed
-    private int _animationSpeed = 50;
-    private int _animationTimer;
     public bool platformDestroyed { get; set; }
-
-    internal bool playerOnPlatform;
-
+    private bool playerOnPlatform;
     public bool changePosition { get; private set; }
-
-    private int sceneTime;
-    private int timeBeforeRespawn = 1000;
-
-    private int movedDistance = 0;
 
     #endregion
 
@@ -35,8 +34,12 @@ public class CrumblingPlatform : AnimationSprite
     }
     private void Update()
     {
+        HandleIntroSpeed();
         DestroyPlatform();
+    }
 
+    private void HandleIntroSpeed()
+    {
         int moveSpeed = 1;
         int maxMovedDistance = 600;
         movedDistance += moveSpeed;
@@ -54,7 +57,7 @@ public class CrumblingPlatform : AnimationSprite
 
         SetFrame(frame);
 
-        if(frame >= 9)
+        if(frame >= 10)
         {
             LateDestroy();
         }

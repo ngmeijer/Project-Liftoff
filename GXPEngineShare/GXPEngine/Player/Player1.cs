@@ -20,7 +20,7 @@ public class Player1 : AnimationSprite
     //Player gameplay properties
     private float _moveSpeed = 6f;
     private float _jumpForce = 15f;
-    private float _defaultGravity = 1.5f;
+    private float _defaultGravity = 4f;
     private float _gravity;
     private float _whipGravity = 0f;
     private int jumpCount = 0;
@@ -39,6 +39,9 @@ public class Player1 : AnimationSprite
     private bool _playerIsMoving;
     private bool throwingUp;
     public bool swinging { get; set; }
+    private bool gameOver;
+    private bool playerCanStun;
+    private bool playerCanSwing;
 
     //Integers
     public int pickupsCollected { get; set; }
@@ -58,9 +61,6 @@ public class Player1 : AnimationSprite
     //SFX
     private Sound _jumpSound;
     private Sound gameOverSound;
-    private bool gameOver;
-    private bool playerCanStun;
-    private bool playerCanSwing;
 
     #endregion
 
@@ -76,6 +76,7 @@ public class Player1 : AnimationSprite
 
         _collider1 = new Sprite("TestPlayerCollider.png", true, true);
         AddChild(_collider1);
+        _collider1.visible = false;
 
         whipSprite = new JonesWhip(level);
         AddChild(whipSprite);
