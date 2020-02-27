@@ -236,6 +236,7 @@ public class Player2 : AnimationSprite
             speedY = speedY + 1;
             HandleJumpAnimation();
         }
+
         if (Input.GetKey(Key.E) && (jumpCount < 2))
         {
             jumpCount += 1;
@@ -267,13 +268,13 @@ public class Player2 : AnimationSprite
 
         if (playerCanStun)
         {
-            if (Input.GetKeyDown(Key.RIGHT_ALT))
+            if (Input.GetKeyDown(Key.RIGHT_CTRL))
             {
                 whipSprite.visible = true;
                 whipSprite.rotation = 0f;
             }
 
-            if (Input.GetKeyUp(Key.RIGHT_ALT))
+            if (Input.GetKeyUp(Key.RIGHT_CTRL))
             {
                 whipSprite.visible = false;
                 pickupsCollected = 0;
@@ -282,7 +283,7 @@ public class Player2 : AnimationSprite
 
         if (playerCanSwing)
         {
-            if (Input.GetKeyDown(Key.RIGHT_ALT))
+            if (Input.GetKeyDown(Key.RIGHT_CTRL))
             {
                 swinging = true;
                 whipSprite.scaleX = 3f;
@@ -292,7 +293,7 @@ public class Player2 : AnimationSprite
                 flyToBorder = true;
             }
 
-            if (Input.GetKeyUp(Key.RIGHT_ALT))
+            if (Input.GetKeyUp(Key.RIGHT_CTRL))
             {
                 swinging = false;
                 flyToBorder = false;
@@ -303,7 +304,7 @@ public class Player2 : AnimationSprite
 
         if (flyToBorder)
         {
-            x += 20;
+            x += 15;
         }
     }
 
@@ -341,12 +342,6 @@ public class Player2 : AnimationSprite
                     y = _startPlatform.y - 55;
                 }
 
-                if (g is NormalPlatform)
-                {
-                    _normalPlatform = g as NormalPlatform;
-                    jumpCount = 0;
-                    y = _normalPlatform.y - 55;
-                }
                 if (g is MovingPlatform)
                 {
                     _movingPlatform = g as MovingPlatform;

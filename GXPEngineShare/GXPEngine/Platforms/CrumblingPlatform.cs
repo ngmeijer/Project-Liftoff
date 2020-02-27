@@ -11,7 +11,7 @@ public class CrumblingPlatform : AnimationSprite
     private int sceneTime;
     private int timeBeforeRespawn = 1000;
     private int movedDistance = 0;
-    private int _animationSpeed = 250;
+    private int _animationSpeed = 100;
     private int _animationTimer;
 
     //Floats
@@ -20,14 +20,14 @@ public class CrumblingPlatform : AnimationSprite
 
     //Decrease to increase speed
     public bool platformDestroyed { get; set; }
-    private bool playerOnPlatform;
+    public bool playerOnPlatform { get; set; }
     public bool changePosition { get; private set; }
 
     #endregion
 
     public CrumblingPlatform() : base("Platform_Crumbling_Spritesheet.png", 10, 1)
     {
-        SetScaleXY(0.5f, 0.5f);
+        SetScaleXY(1f, 0.5f);
 
         offsetX = Utils.Random(-200, 400);
         offsetY = Utils.Random(-200, 400);
@@ -53,11 +53,11 @@ public class CrumblingPlatform : AnimationSprite
     public void handleCrumbleAnimation()
     {
         _animationTimer += Time.deltaTime;
-        int frame = (int)(_animationTimer / _animationSpeed) % 10 + 5;
+        int frame = (int)(_animationTimer / _animationSpeed) % 10;
 
         SetFrame(frame);
 
-        if(frame >= 10)
+        if(frame >= 9)
         {
             LateDestroy();
         }

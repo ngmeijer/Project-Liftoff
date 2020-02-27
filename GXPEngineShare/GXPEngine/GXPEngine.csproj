@@ -36,8 +36,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Platforms\NormalPlatform.cs" />
     <Compile Include="Platforms\CrumblingPlatform.cs" />
+    <Compile Include="Platforms\NormalPlatform.cs" />
     <Compile Include="Player\InkaWhip.cs" />
     <Compile Include="Heart.cs" />
     <Compile Include="Spears.cs" />

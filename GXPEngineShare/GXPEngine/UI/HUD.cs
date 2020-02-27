@@ -18,7 +18,7 @@ public class HUD : Canvas
 
     //Floats
     private readonly float _xPosCounters = 0;
-    private readonly float _yPosCounters = 0;
+    private readonly float _yPosCounters = 30;
     public float WhipChargeP1 { get; private set; }
     public float WhipChargeP2 { get; private set; }
 
@@ -163,13 +163,13 @@ public class HUD : Canvas
     {
         if (_player1.lifeCount <= 0)
         {
-            graphics.DrawString("Player 1 WON!", _arialFont, _redBrush, game.width / 2, game.height / 2 - 100);
+            graphics.DrawString("Player 1 WON!", _arialFont, _redBrush, game.width / 2 - 180, game.height / 2 - 100);
             gameHasEnded = true;
         }
 
         if (_player2.lifeCount <= 0)
         {
-            graphics.DrawString("Player 2 WON!", _arialFont, _whiteBrush, game.width / 2, game.height / 2 - 100);
+            graphics.DrawString("Player 2 WON!", _arialFont, _whiteBrush, game.width / 2 - 180, game.height / 2 - 100);
             gameHasEnded = true;
         }
     }

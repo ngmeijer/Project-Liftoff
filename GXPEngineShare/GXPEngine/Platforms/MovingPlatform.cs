@@ -27,7 +27,7 @@ public class MovingPlatform : Sprite
 
     #endregion
 
-    public MovingPlatform(Level levelScript, Menu menuScript) : base("Platform.png", true, true)
+    public MovingPlatform(Level levelScript, Menu menuScript) : base("MovingPlatform.png", true, true)
 	{
         level = levelScript;
         menu = menuScript;

@@ -86,8 +86,7 @@ public class Level : GameObject
     private void Update()
     {
         TrackTime();
-        HandleSideCrumbling1Animation();
-        HandleSideCrumbling2Animation();
+        HandleSideCrumblingAnimation();
     }
 
     #region Draw level
@@ -161,7 +160,7 @@ public class Level : GameObject
             AddChild(_pickupArray[count]);
         }
 
-        _heartArray = new Heart[2];
+        _heartArray = new Heart[1];
 
         for (int count = 0; count < _heartArray.Length; count++)
         {
@@ -181,20 +180,12 @@ public class Level : GameObject
 
     #endregion
 
-    private void HandleSideCrumbling1Animation()
+    private void HandleSideCrumblingAnimation()
     {
         _animationTimer += Time.deltaTime;
         int frame = (int)(_animationTimer / 1000f) % 4;
 
         sideCrumbling.SetFrame(frame);
-    }
-
-    private void HandleSideCrumbling2Animation()
-    {
-        _animationTimer2 += Time.deltaTime;
-        int frame = (int)(_animationTimer2 / 1000f) % 4;
-
-        //sideCrumbling2.SetFrame(frame);
     }
 
     private void TrackTime()
@@ -210,7 +201,7 @@ public class Level : GameObject
 
     private void SpawnNewFallingPlatforms()
     {
-        _crumblingPlatformArray = new CrumblingPlatform[7];
+        _crumblingPlatformArray = new CrumblingPlatform[6];
 
         xPosFalling = 600;
 
@@ -225,7 +216,7 @@ public class Level : GameObject
 
         xPosFalling2 = 600;
 
-        _crumblingPlatformArray2 = new CrumblingPlatform[7];
+        _crumblingPlatformArray2 = new CrumblingPlatform[6];
 
         for (int count = 0; count < _crumblingPlatformArray2.Length; count++)
         {

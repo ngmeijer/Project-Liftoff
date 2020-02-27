@@ -305,7 +305,7 @@ public class Player1 : AnimationSprite
 
         if (flyToBorder)
         {
-            x += 10;
+            x += 15;
         }
     }
 
@@ -341,13 +341,6 @@ public class Player1 : AnimationSprite
                     _startPlatform = g as StartPlatform;
                     jumpCount = 0;
                     y = _startPlatform.y - 55;
-                }
-
-                if (g is NormalPlatform)
-                {
-                    _normalPlatform = g as NormalPlatform;
-                    jumpCount = 0;
-                    y = _normalPlatform.y - 55;
                 }
 
                 if (g is MovingPlatform)
