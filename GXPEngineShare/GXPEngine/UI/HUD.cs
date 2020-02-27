@@ -60,7 +60,7 @@ public class HUD : Canvas
 
         _whiteBrush = Brushes.White;
         _redBrush = Brushes.Red;
-        _arialFont = new Font("GameFont.ttf", 30);
+        _arialFont = new Font("Indiana", 30);
     }
 
     private void Update()

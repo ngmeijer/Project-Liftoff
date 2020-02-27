@@ -20,7 +20,7 @@ public class Player1 : AnimationSprite
     //Player gameplay properties
     private float _moveSpeed = 6f;
     private float _jumpForce = 18f;
-    private float _defaultGravity = 7.5f;
+    private float _defaultGravity = 1.5f;
     private float _gravity;
     private float _whipGravity = 0f;
     private int jumpCount = 0;
@@ -179,16 +179,19 @@ public class Player1 : AnimationSprite
 
     private void MovePlayer()
     {
-        if (levelScript._player2.whipSprite.playerIsStunned)
+        if (levelScript._player2 != null)
         {
-            HandleStunnedAnimation();
-            stunnedTimer++;
-            playerCanMove = false;
-        }
-        else if (!levelScript._player2.whipSprite.playerIsStunned)
-        {
-            HandleIdleAnimation();
-            playerCanMove = true;
+            if (levelScript._player2.whipSprite.playerIsStunned)
+            {
+                HandleStunnedAnimation();
+                stunnedTimer++;
+                playerCanMove = false;
+            }
+            else if (!levelScript._player2.whipSprite.playerIsStunned)
+            {
+                HandleIdleAnimation();
+                playerCanMove = true;
+            }
         }
 
         if (stunnedTimer >= stunnedDuration)
@@ -201,14 +204,14 @@ public class Player1 : AnimationSprite
         {
             if (playerCanMove)
             {
-                if (Input.GetKey(Key.A))
+                if (Input.GetKey(Key.LEFT))
                 {
                     scaleX = -0.65f;
                     _playerIsMoving = true;
                     HandleRunAnimation();
                     Translate(-_moveSpeed, 0);
                 }
-                else if (Input.GetKey(Key.D))
+                else if (Input.GetKey(Key.RIGHT))
                 {
                     //Consider taking out scaleX since it causes a bit of buggy movement. Rotates around x = 0 instead of pivot point. Preferably stay at same position.
                     scaleX = 0.65f;
@@ -235,7 +238,7 @@ public class Player1 : AnimationSprite
             HandleJumpAnimation();
         }
 
-        if (Input.GetKey(Key.SPACE) && (jumpCount < 2))
+        if (Input.GetKey(Key.UP) && (jumpCount < 2))
         {
             jumpCount += 1;
             speedY = -_jumpForce;
@@ -266,13 +269,13 @@ public class Player1 : AnimationSprite
 
         if (playerCanStun)
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetKeyDown(Key.LEFT_CTRL))
             {
                 whipSprite.visible = true;
                 whipSprite.rotation = 0f;
             }
 
-            if (Input.GetMouseButtonUp(0))
+            if (Input.GetKeyUp(Key.LEFT_CTRL))
             {
                 whipSprite.visible = false;
                 pickupsCollected = 0;
@@ -281,7 +284,7 @@ public class Player1 : AnimationSprite
 
         if (playerCanSwing)
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetKeyDown(Key.LEFT_CTRL))
             {
                 swinging = true;
                 whipSprite.scaleX = 3f;
@@ -291,7 +294,7 @@ public class Player1 : AnimationSprite
                 flyToBorder = true;
             }
 
-            if (Input.GetMouseButtonUp(0))
+            if (Input.GetKeyUp(Key.LEFT_CTRL))
             {
                 swinging = false;
                 flyToBorder = false;

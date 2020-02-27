@@ -1,6 +1,7 @@
 ﻿using GXPEngine;
 using System;
 
+
 public class Player2 : AnimationSprite
 {
     #region Variables
@@ -19,10 +20,9 @@ public class Player2 : AnimationSprite
 
     //Player gameplay properties
     private float _moveSpeed = 6f;
-    private float _jumpForce = 18f;
-    private float _defaultGravity = 7.5f;
+    private float _jumpForce = 15f;
+    private float _defaultGravity = 1.5f;
     private float _gravity;
-    private float _whipGravity = 0f;
     private int jumpCount = 0;
     private int pickupPoints = 100;
     private int stunnedDuration = 100;
@@ -147,6 +147,7 @@ public class Player2 : AnimationSprite
     }
 
     #endregion
+
     private void TrackScoreAndLives()
     {
         scoreCount = Time.time / 400 + pickupScore + scoreAhead;
@@ -183,14 +184,14 @@ public class Player2 : AnimationSprite
         }
         if (playerCanMove)
         {
-            if (Input.GetKey(Key.LEFT))
+            if (Input.GetKey(Key.A))
             {
                 scaleX = -0.65f;
                 _playerIsMoving = true;
                 HandleRunAnimation();
                 Translate(-_moveSpeed, 0);
             }
-            else if (Input.GetKey(Key.RIGHT))
+            else if (Input.GetKey(Key.D))
             {
                 //Consider taking out scaleX since it causes a bit of buggy movement. Rotates around x = 0 instead of pivot point. Preferably stay at same position.
                 scaleX = 0.65f;
@@ -215,7 +216,7 @@ public class Player2 : AnimationSprite
             speedY = speedY + 1;
             HandleJumpAnimation();
         }
-        if (Input.GetKey(Key.UP) && (jumpCount < 2))
+        if (Input.GetKey(Key.E) && (jumpCount < 2))
         {
             jumpCount += 1;
             speedY = -_jumpForce;
@@ -246,13 +247,13 @@ public class Player2 : AnimationSprite
 
         if (playerCanStun)
         {
-            if (Input.GetKeyDown(Key.PLUS))
+            if (Input.GetKeyDown(Key.RIGHT_ALT))
             {
                 whipSprite.visible = true;
                 whipSprite.rotation = 0f;
             }
 
-            if (Input.GetKeyUp(Key.PLUS))
+            if (Input.GetKeyUp(Key.RIGHT_ALT))
             {
                 whipSprite.visible = false;
                 pickupsCollected = 0;
@@ -261,7 +262,7 @@ public class Player2 : AnimationSprite
 
         if (playerCanSwing)
         {
-            if (Input.GetKeyDown(Key.PLUS))
+            if (Input.GetKeyDown(Key.RIGHT_ALT))
             {
                 swinging = true;
                 whipSprite.scaleX = 3f;
@@ -271,7 +272,7 @@ public class Player2 : AnimationSprite
                 flyToBorder = true;
             }
 
-            if (Input.GetKeyUp(Key.PLUS))
+            if (Input.GetKeyUp(Key.RIGHT_ALT))
             {
                 swinging = false;
                 flyToBorder = false;

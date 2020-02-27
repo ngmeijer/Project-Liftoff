@@ -22,9 +22,10 @@ public class Level : GameObject
     private Background _background2;
     public HUD hud { get; private set; }
     private Menu menu;
-    public ScreenBorders borders;
     private Spears spears;
 
+    private AnimationSprite sideCrumbling;
+    private AnimationSprite sideCrumbling2;
 
     //Bools
     public bool resetGame;
@@ -50,10 +51,11 @@ public class Level : GameObject
     private int xPositionPowerup = 600;
     private int yPositionPowerup = 300;
 
-    private Sprite _background1;
     private Sprite _hudBackground;
 
     private Sound _backgroundMusic;
+    private int _animationTimer;
+    private int _animationTimer2;
 
     #endregion
 
@@ -66,14 +68,18 @@ public class Level : GameObject
         _backgroundMusic = new Sound("LevelTheme.wav", true, false);
         _backgroundMusic.Play();
 
+        sideCrumbling = new AnimationSprite("cracks_spritesheet.png", 4, 1);
+        AddChild(sideCrumbling);
+
+        sideCrumbling2 = new AnimationSprite("cracks_spritesheet.png", 4, 1);
+        AddChild(sideCrumbling2);
+        sideCrumbling2.x = game.width;
+        sideCrumbling2.y = 1080;
+        sideCrumbling2.rotation = 180f;
+
         _hudBackground = new Sprite("HUDBackground.png");
         AddChild(_hudBackground);
         _hudBackground.y = 0;
-
-        borders = new ScreenBorders();
-        AddChild(borders);
-        borders.y = 50;
-        borders.x = 0;
 
         spears = new Spears();
         AddChild(spears);
@@ -95,6 +101,9 @@ public class Level : GameObject
             SpawnNewFallingPlatforms();
             sceneTime = 0;
         }
+
+        HandleSideCrumbling1Animation();
+        HandleSideCrumbling2Animation();
     }
 
     #region Draw level
@@ -127,7 +136,7 @@ public class Level : GameObject
             _movingPlatformArray[count] = new MovingPlatform(this, menu);
             _movingPlatformArray[count].SetSpawnPosition(xPosNormal, yPosNormal);
             xPosNormal += 400;
-            yPosNormal += 160;
+            yPosNormal += 200;
 
             AddChild(_movingPlatformArray[count]);
         }
@@ -139,7 +148,7 @@ public class Level : GameObject
             _movingPlatformArray2[count] = new MovingPlatform(this, menu);
             _movingPlatformArray2[count].SetSpawnPosition(xPosNormal2, yPosNormal2);
             xPosNormal2 += 300;
-            yPosNormal2 -= 150;
+            yPosNormal2 -= 200;
 
             AddChild(_movingPlatformArray2[count]);
         }
@@ -186,6 +195,22 @@ public class Level : GameObject
     }
 
     #endregion
+
+    private void HandleSideCrumbling1Animation()
+    {
+        _animationTimer += Time.deltaTime;
+        int frame = (int)(_animationTimer / 1000f) % 4;
+
+        sideCrumbling.SetFrame(frame);
+    }
+
+    private void HandleSideCrumbling2Animation()
+    {
+        _animationTimer2 += Time.deltaTime;
+        int frame = (int)(_animationTimer2 / 1000f) % 4;
+
+        //sideCrumbling2.SetFrame(frame);
+    }
 
     private void SpawnNewFallingPlatforms()
     {

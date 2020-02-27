@@ -5,7 +5,6 @@ public class InkaWhip : Sprite
     private Level level;
     private bool hittingScreenBorder;
 
-    private ScreenBorders _screenBorder;
     public bool playerIsStunned { get; private set; }
 
     public InkaWhip(Level levelScript) : base("inka_whip.png", true, true)

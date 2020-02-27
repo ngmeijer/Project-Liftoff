@@ -10,13 +10,16 @@ public class Menu : GameObject
     private SceneManager _sceneManager;
     private Cutscene _cutscene;
     private Sound _backgroundMusic;
-    private Sprite _backgroundImage;
+    private Sprite _logo;
+    private Sprite _menuBackground;
 
     public Sprite solo { get; set; }
     public Sprite duo { get; set; }
 
     public bool levelStarted;
     public bool clickedStart { get; private set; }
+
+    private bool startPressed;
 
     public bool destroyMenu { get; set; }
 
@@ -37,11 +40,14 @@ public class Menu : GameObject
         levelStarted = false;
         startCutscene = false;
 
-        _backgroundImage = new Sprite("Logo.png");
-        AddChild(_backgroundImage);
-        _backgroundImage.scale = 2;
-        _backgroundImage.x = (game.width - _backgroundImage.width) / 2;
-        _backgroundImage.y = 300;
+        _menuBackground = new Sprite("MenuBackground.png");
+        AddChild(_menuBackground);
+
+        _logo = new Sprite("Logo.png", true, false);
+        AddChild(_logo);
+        _logo.scale = 0.4f;
+        _logo.x = (game.width / 2) - (_logo.width / 2);
+        _logo.y = 400;
 
         _startButton = new StartButton();
         AddChild(_startButton);
@@ -93,8 +99,10 @@ public class Menu : GameObject
     //Checks if the start button has been pressed.
     private void CheckStartInput()
     {
+        //USE THIS CODE FOR KEYBOARD
         if (Input.GetMouseButtonDown(0))
         {
+
             if (solo.HitTestPoint(Input.mouseX, Input.mouseY))
             {
                 soloPlayer = true;
@@ -125,6 +133,41 @@ public class Menu : GameObject
                     }
                 }
             }
+
+
+            //USE THIS CODE FOR THE CONTROLLER
+            //if (Input.GetKey(Key.B))
+            //{
+            //    _startButton.visible = false;
+            //    clickedStart = true;
+
+            //    startPressed = true;
+            //}
+
+
+            //if (startPressed)
+            //{
+            //    if (Input.GetKeyDown(Key.LEFT_CTRL))
+            //    {
+            //        soloPlayer = true;
+            //        duoPlayers = false;
+            //        startPressed = false;
+            //    }
+
+            //    if (Input.GetKeyDown(Key.RIGHT_CTRL))
+            //    {
+            //        soloPlayer = false;
+            //        duoPlayers = true;
+            //        startPressed = false;
+            //    }
+
+            //    if (soloPlayer || duoPlayers)
+            //    {
+            //        solo.visible = false;
+            //        duo.visible = false;
+            //        startCutscene = true;
+            //    }
+            //}
         }
     }
 }
