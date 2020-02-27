@@ -4,29 +4,29 @@ using GXPEngine;
 public class Menu : GameObject
 {
     #region Variables
-
+    
+    //Script references
     private StartButton _startButton;
-
     private SceneManager _sceneManager;
     private Cutscene _cutscene;
     private Sound _backgroundMusic;
-    private Sprite _logo;
-    private Sprite _menuBackground;
 
-    public Sprite solo { get; set; }
-    public Sprite duo { get; set; }
-
+    //Bools
     public bool levelStarted;
     public bool clickedStart { get; private set; }
-
     private bool startPressed;
-
     public bool destroyMenu { get; set; }
-
     public bool startCutscene { get; set; }
-
     public bool soloPlayer { get; private set; }
     public bool duoPlayers { get; private set; }
+
+
+    //Sprites
+    private Sprite _teamLogo;
+    private Sprite _gameLogo;
+    private Sprite _menuBackground;
+    public Sprite solo { get; set; }
+    public Sprite duo { get; set; }
 
     #endregion
 
@@ -43,11 +43,17 @@ public class Menu : GameObject
         _menuBackground = new Sprite("MenuBackground.png");
         AddChild(_menuBackground);
 
-        _logo = new Sprite("Logo.png", true, false);
-        AddChild(_logo);
-        _logo.scale = 0.4f;
-        _logo.x = (game.width / 2) - (_logo.width / 2);
-        _logo.y = 400;
+        _teamLogo = new Sprite("55levels.png");
+        AddChild(_teamLogo);
+        _teamLogo.scale = 0.25f;
+        _teamLogo.x = game.width - _teamLogo.width;
+        _teamLogo.y = game.height - _teamLogo.height;
+
+        _gameLogo = new Sprite("Logo.png", true, false);
+        AddChild(_gameLogo);
+        _gameLogo.scale = 0.4f;
+        _gameLogo.x = (game.width / 2) - (_gameLogo.width / 2);
+        _gameLogo.y = 400;
 
         _startButton = new StartButton();
         AddChild(_startButton);
@@ -58,14 +64,14 @@ public class Menu : GameObject
         AddChild(solo);
         solo.scale = 0.75f;
         solo.x = game.width / 2 - (solo.width + 200);
-        solo.y = 630;
+        solo.y = 670;
         solo.visible = false;
 
         duo = new Sprite("TwoPlayerButton.png");
         AddChild(duo);
         duo.scale = 0.75f;
         duo.x = game.width / 2 + 100;
-        duo.y = 630;
+        duo.y = 670;
         duo.visible = false;
 
         _backgroundMusic = new Sound("MenuTheme.mp3", true, true);

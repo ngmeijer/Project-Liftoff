@@ -107,6 +107,7 @@ public class Level : GameObject
     }
 
     #region Draw level
+
     private void InitializeBackground()
     {
         _background = new Background();

@@ -19,7 +19,7 @@ public class Player1 : AnimationSprite
 
     //Player gameplay properties
     private float _moveSpeed = 6f;
-    private float _jumpForce = 18f;
+    private float _jumpForce = 15f;
     private float _defaultGravity = 1.5f;
     private float _gravity;
     private float _whipGravity = 0f;
@@ -30,6 +30,7 @@ public class Player1 : AnimationSprite
 
     //Bools
     private bool _isJumping = false;
+    public bool heartCollected { get; set; }
     public bool flyToBorder { get; set; }
     public bool _stillStandingOnCrumblingPlatform { get; private set; }
     private bool usingWhip;
@@ -41,7 +42,6 @@ public class Player1 : AnimationSprite
 
     //Integers
     public int pickupsCollected { get; set; }
-    public bool heartCollected { get; set; }
     public int scoreCount { get; private set; }
     public int lifeCount { get; private set; }
     public int whipUsedCount { get; private set; }
@@ -54,7 +54,6 @@ public class Player1 : AnimationSprite
     private const float spawnPointX = 100;
     private const float spawnPointY = 200;
     private float _animationTimer;
-    private float thrownupSpeed = 50f;
 
     //SFX
     private Sound _jumpSound;
@@ -305,7 +304,7 @@ public class Player1 : AnimationSprite
 
         if (flyToBorder)
         {
-            x += 20;
+            x += 10;
         }
     }
 
@@ -332,7 +331,7 @@ public class Player1 : AnimationSprite
 
     private void CheckCollisions()
     {
-        if ((!swinging) && (!throwingUp))
+        if (!swinging)
         {
             foreach (GameObject g in _collider1.GetCollisions())
             {
@@ -381,16 +380,16 @@ public class Player1 : AnimationSprite
                     RespawnPlayer1();
                 }
 
-                //if(g is InkaWhip)
-                //{
-                //    _inkaWhip = g as InkaWhip;
-                //    Console.WriteLine("player 1 stunned");
-                //    if (_inkaWhip.visible)
-                //    {
-                //        y -= 50;
-                //        HandleStunnedAnimation();
-                //    }
-                //}
+                if (g is InkaWhip)
+                {
+                    _inkaWhip = g as InkaWhip;
+                    Console.WriteLine("player 1 stunned");
+                    if (_inkaWhip.visible)
+                    {
+                        y -= 50;
+                        HandleStunnedAnimation();
+                    }
+                }
             }
         }
     }

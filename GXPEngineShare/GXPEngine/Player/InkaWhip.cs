@@ -3,7 +3,6 @@ using GXPEngine;
 public class InkaWhip : Sprite
 {
     private Level level;
-    private bool hittingScreenBorder;
 
     public bool playerIsStunned { get; private set; }
 
