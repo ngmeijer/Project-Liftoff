@@ -20,11 +20,11 @@ public class Player1 : AnimationSprite
     //Player gameplay properties
     private float _moveSpeed = 6f;
     private float _jumpForce = 18f;
-    private float _defaultGravity = 4f;
+    private float _defaultGravity = 2f;
     private float _gravity;
     private float _whipGravity = 0f;
     private int jumpCount = 0;
-    private int pickupPoints = 100;
+    public int pickupPoints;
     private int stunnedDuration = 100;
     private float _animationSpeed;
 
@@ -45,11 +45,11 @@ public class Player1 : AnimationSprite
 
     //Integers
     public int pickupsCollected { get; set; }
-    public int scoreCount { get; private set; }
+    public int scoreCount { get; set; }
     public int lifeCount { get; private set; }
     public int whipUsedCount { get; private set; }
     private int stunnedTimer;
-    private int pickupScore;
+    public int pickupScore { get; set; }
     private int scoreAhead;
 
     //Floats
@@ -88,6 +88,7 @@ public class Player1 : AnimationSprite
 
         lifeCount = 3;
         _animationSpeed = 150f;
+        pickupPoints = 500;
 
         _collider1.x = xPos - 85;
         _collider1.y = yPos - 110;
@@ -358,7 +359,6 @@ public class Player1 : AnimationSprite
                         jumpCount = 0;
                         y = _crumblingPlatform.y - 60;
                         _crumblingPlatform.playerOnPlatform = true;
-                        //_crumblingPlatform.handleCrumbleAnimation();
                     }
 
                     if (HitTest(_crumblingPlatform))

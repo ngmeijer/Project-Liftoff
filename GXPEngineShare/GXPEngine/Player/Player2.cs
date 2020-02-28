@@ -21,10 +21,10 @@ public class Player2 : AnimationSprite
     //Player gameplay properties
     private float _moveSpeed = 6f;
     private float _jumpForce = 18f;
-    private float _defaultGravity = 4f;
+    private float _defaultGravity = 2f;
     private float _gravity;
     private int jumpCount = 0;
-    private int pickupPoints = 100;
+    public int pickupPoints {get; set;}
     private int stunnedDuration = 100;
     private float _animationSpeed;
 
@@ -45,11 +45,11 @@ public class Player2 : AnimationSprite
 
     //Integers
     public int pickupsCollected { get; set; }
-    public int scoreCount { get; private set; }
+    public int scoreCount { get; set; }
     public int lifeCount { get; private set; }
     public int whipUsedCount { get; private set; }
     private int stunnedTimer;
-    private int pickupScore;
+    public int pickupScore { get; set; }
     private int scoreAhead;
 
     //Floats
@@ -92,6 +92,7 @@ public class Player2 : AnimationSprite
         _gameOverSound = new Sound("GameOver.wav", false, false);
         lifeCount = 3;
         _animationSpeed = 150f;
+        pickupPoints = 500;
 
         _gravity = _defaultGravity;
     }

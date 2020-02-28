@@ -74,7 +74,7 @@ public class Level : GameObject
 
         spears = new Spears();
         AddChild(spears);
-        spears.y = 920;
+        spears.y = 950;
 
         SpawnNewFallingPlatforms();
         InitializePlatforms();

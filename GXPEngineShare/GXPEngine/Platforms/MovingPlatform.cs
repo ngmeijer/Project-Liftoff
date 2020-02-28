@@ -21,7 +21,7 @@ public class MovingPlatform : Sprite
     //Integers
     private int yDir = 1;
     private int speedTimer = 0;
-    private int timeIncreaseSpeed = 1000;
+    private int timeIncreaseSpeed = 500;
     private int maxSpeed = 7;
 
     //Bools
@@ -34,7 +34,7 @@ public class MovingPlatform : Sprite
         level = levelScript;
         menu = menuScript;
 
-        _moveSpeedX = 7f;
+        _moveSpeedX = 1f;
         //speedIncrease /= 1000;
 
         SetScaleXY(0.3f, 0.3f);

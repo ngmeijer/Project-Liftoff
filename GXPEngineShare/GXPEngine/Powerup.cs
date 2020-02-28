@@ -102,6 +102,7 @@ public class Powerup : Sprite
                 {
                     level._player1.pickupsCollected++;
                 }
+                level._player1.pickupScore += level._player1.pickupPoints;
                 relocate = true;
                 hidden = true;
                 MakeInvisible();
@@ -118,6 +119,7 @@ public class Powerup : Sprite
                 {
                     level._player2.pickupsCollected++;
                 }
+                level._player2.pickupScore += level._player2.pickupPoints;
                 relocate = true;
                 hidden = true;
                 MakeInvisible();

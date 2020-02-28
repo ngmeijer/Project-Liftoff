@@ -50,18 +50,18 @@ public class HUD : Canvas
 
         _whipChargeP1 = new Sprite("WhipCharge.png");
         AddChild(_whipChargeP1);
-        _whipChargeP1.y = 50;
+        _whipChargeP1.y = 100;
         _whipChargeP1.scaleX = 0;
-        _whipChargeP1.scaleY = 0.5f;
+        _whipChargeP1.scaleY = 0.25f;
 
         if (_menu.duoPlayers)
         {
             _whipChargeP2 = new Sprite("WhipCharge.png");
             AddChild(_whipChargeP2);
-            _whipChargeP2.y = 50;
+            _whipChargeP2.y = 100;
             _whipChargeP2.x = 1300;
             _whipChargeP2.scaleX = 1;
-            _whipChargeP2.scaleY = 0.5f;
+            _whipChargeP2.scaleY = 0.25f;
         }
 
         _whiteBrush = Brushes.White;
@@ -139,13 +139,13 @@ public class HUD : Canvas
 
     private void ShowCountersP1()
     {
-        graphics.DrawString("Score = " + _player1.scoreCount, _arialFont, _whiteBrush, _xPosCounters, _yPosCounters);
-        graphics.DrawString("Lives = " + _player1.lifeCount, _arialFont, _whiteBrush, _xPosCounters + 300, _yPosCounters);
+        graphics.DrawString("Score = " + _player1.scoreCount, _arialFont, _whiteBrush, _xPosCounters + 250, _yPosCounters);
+        graphics.DrawString("Lives = " + _player1.lifeCount, _arialFont, _whiteBrush, _xPosCounters, _yPosCounters);
     }
 
     private void ShowCountersP2()
     {
-        graphics.DrawString("Score = " + _player2.scoreCount, _arialFont, _redBrush, game.width - 500, _yPosCounters);
+        graphics.DrawString("Score = " + _player2.scoreCount, _arialFont, _redBrush, game.width - 700, _yPosCounters);
         graphics.DrawString("Lives = " + _player2.lifeCount, _arialFont, _redBrush, game.width - 250, _yPosCounters);
     }
 
