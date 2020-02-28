@@ -113,70 +113,73 @@ public class Menu : GameObject
         if (Input.GetMouseButtonDown(0))
         {
 
-            if (solo.HitTestPoint(Input.mouseX, Input.mouseY))
-            {
-                soloPlayer = true;
-                duoPlayers = false;
-            }
+            //if (solo.HitTestPoint(Input.mouseX, Input.mouseY))
+            //{
+            //    soloPlayer = true;
+            //    duoPlayers = false;
+            //}
 
-            if (duo.HitTestPoint(Input.mouseX, Input.mouseY))
-            {
-                soloPlayer = false;
-                duoPlayers = true;
-            }
+            //if (duo.HitTestPoint(Input.mouseX, Input.mouseY))
+            //{
+            //    soloPlayer = false;
+            //    duoPlayers = true;
+            //}
 
-            if (_startButton.HitTestPoint(Input.mouseX, Input.mouseY))
-            {
-                _startButton.visible = false;
-                clickedStart = true;
-            }
-
-            if (!startCutscene)
-            {
-                if (!levelStarted)
-                {
-                    if (soloPlayer || duoPlayers)
-                    {
-                        solo.visible = false;
-                        duo.visible = false;
-                        startCutscene = true;
-                    }
-                }
-            }
-
-
-            //USE THIS CODE FOR THE CONTROLLER
-            //if (Input.GetKey(Key.B))
+            //if (_startButton.HitTestPoint(Input.mouseX, Input.mouseY))
             //{
             //    _startButton.visible = false;
             //    clickedStart = true;
-
-            //    startPressed = true;
             //}
 
-
-            //if (startPressed)
+            //if (!startCutscene)
             //{
-            //    if (Input.GetKeyDown(Key.LEFT_CTRL))
+            //    if (!levelStarted)
             //    {
-            //        soloPlayer = true;
-            //        duoPlayers = false;
-            //        startPressed = false;
+            //        if (soloPlayer || duoPlayers)
+            //        {
+            //            solo.visible = false;
+            //            duo.visible = false;
+            //            startCutscene = true;
+            //        }
             //    }
-
-            //    if (Input.GetKeyDown(Key.RIGHT_CTRL))
-            //    {
-            //        soloPlayer = false;
-            //        duoPlayers = true;
-            //        startPressed = false;
-            //    }
-
-            //    if (soloPlayer || duoPlayers)
-            //    {
-            //        solo.visible = false;
-            //        duo.visible = false;
-            //        startCutscene = true;
-            //    }
+            //}
         }
+
+
+        //USE THIS CODE FOR THE CONTROLLER
+        if (Input.GetKey(Key.B))
+        {
+            _startButton.visible = false;
+            clickedStart = true;
+
+            startPressed = true;
+        }
+
+
+        if (startPressed)
+        {
+            if (Input.GetKeyDown(Key.LEFT_CTRL))
+            {
+                soloPlayer = true;
+                duoPlayers = false;
+                startPressed = false;
+            }
+
+            if (Input.GetKeyDown(Key.RIGHT_CTRL))
+            {
+                soloPlayer = false;
+                duoPlayers = true;
+                startPressed = false;
+            }
+
+            if (soloPlayer || duoPlayers)
+            {
+                solo.visible = false;
+                duo.visible = false;
+                startCutscene = true;
+            }
+        }
+
     }
+
 }

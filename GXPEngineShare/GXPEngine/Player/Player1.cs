@@ -20,7 +20,7 @@ public class Player1 : AnimationSprite
     //Player gameplay properties
     private float _moveSpeed = 6f;
     private float _jumpForce = 18f;
-    private float _defaultGravity = 2f;
+    private float _defaultGravity = 5f;
     private float _gravity;
     private float _whipGravity = 0f;
     private int jumpCount = 0;
@@ -205,14 +205,14 @@ public class Player1 : AnimationSprite
         {
             if (playerCanMove)
             {
-                if (Input.GetKey(Key.LEFT))
+                if (Input.GetKey(Key.A))
                 {
                     scaleX = -0.65f;
                     _playerIsMoving = true;
                     HandleRunAnimation();
                     Translate(-_moveSpeed, 0);
                 }
-                else if (Input.GetKey(Key.RIGHT))
+                else if (Input.GetKey(Key.D))
                 {
                     //Consider taking out scaleX since it causes a bit of buggy movement. Rotates around x = 0 instead of pivot point. Preferably stay at same position.
                     scaleX = 0.65f;
@@ -231,7 +231,13 @@ public class Player1 : AnimationSprite
 
     private void PlayerJump()
     {
-        y = y + speedY;
+        if (!swinging)
+        {
+            y = y + speedY;
+        } else if (swinging)
+        {
+            speedY = 0;
+        }
 
         if (speedY <= _gravity)
         {
@@ -239,7 +245,7 @@ public class Player1 : AnimationSprite
             HandleJumpAnimation();
         }
 
-        if (Input.GetKey(Key.UP) && (jumpCount < 2))
+        if (Input.GetKey(Key.E) && (jumpCount < 2))
         {
             jumpCount += 1;
             speedY = -_jumpForce;

@@ -24,12 +24,13 @@ public class HUD : Canvas
 
     //Integers
     private int timeBeforeRestart;
-    private int timeToRestart = 200;
+    private int timeToRestart = 500;
 
     //Brushes/fonts
     private readonly Brush _whiteBrush;
     private readonly Brush _redBrush;
-    private readonly Font _arialFont;
+    private readonly Font _hudFont;
+    private readonly Font _victoryFont;
 
     //Bools
     public bool _playerCanSwing { get; private set; }
@@ -66,7 +67,8 @@ public class HUD : Canvas
 
         _whiteBrush = Brushes.White;
         _redBrush = Brushes.Red;
-        _arialFont = new Font("Indiana", 30);
+        _hudFont = new Font("Indiana", 30);
+        _victoryFont = new Font("Indiana", 60);
     }
 
     private void Update()
@@ -139,14 +141,14 @@ public class HUD : Canvas
 
     private void ShowCountersP1()
     {
-        graphics.DrawString("Score = " + _player1.scoreCount, _arialFont, _whiteBrush, _xPosCounters + 250, _yPosCounters);
-        graphics.DrawString("Lives = " + _player1.lifeCount, _arialFont, _whiteBrush, _xPosCounters, _yPosCounters);
+        graphics.DrawString("Score = " + _player1.scoreCount, _hudFont, _whiteBrush, _xPosCounters + 250, _yPosCounters);
+        graphics.DrawString("Lives = " + _player1.lifeCount, _hudFont, _whiteBrush, _xPosCounters, _yPosCounters);
     }
 
     private void ShowCountersP2()
     {
-        graphics.DrawString("Score = " + _player2.scoreCount, _arialFont, _redBrush, game.width - 700, _yPosCounters);
-        graphics.DrawString("Lives = " + _player2.lifeCount, _arialFont, _redBrush, game.width - 250, _yPosCounters);
+        graphics.DrawString("Score = " + _player2.scoreCount, _hudFont, _redBrush, game.width - 700, _yPosCounters);
+        graphics.DrawString("Lives = " + _player2.lifeCount, _hudFont, _redBrush, game.width - 250, _yPosCounters);
     }
 
     private void ShowYouDiedScreen()
@@ -163,13 +165,13 @@ public class HUD : Canvas
     {
         if (_player1.lifeCount <= 0)
         {
-            graphics.DrawString("Player 1 WON!", _arialFont, _redBrush, game.width / 2 - 180, game.height / 2 - 100);
+            graphics.DrawString("Player 1 WON!", _victoryFont, _redBrush, game.width / 2 - 400, game.height / 2 - 100);
             gameHasEnded = true;
         }
 
         if (_player2.lifeCount <= 0)
         {
-            graphics.DrawString("Player 2 WON!", _arialFont, _whiteBrush, game.width / 2 - 180, game.height / 2 - 100);
+            graphics.DrawString("Player 2 WON!", _victoryFont, _whiteBrush, game.width / 2 - 400, game.height / 2 - 100);
             gameHasEnded = true;
         }
     }

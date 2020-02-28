@@ -199,7 +199,7 @@ public class Level : GameObject
 
     private void SpawnNewFallingPlatforms()
     {
-        _crumblingPlatformArray = new CrumblingPlatform[4];
+        _crumblingPlatformArray = new CrumblingPlatform[3];
 
         xPosFalling = 600;
 
@@ -207,20 +207,20 @@ public class Level : GameObject
         {
             _crumblingPlatformArray[count] = new CrumblingPlatform();
             _crumblingPlatformArray[count].SetSpawnPosition(xPosFalling, yPosFalling);
-            xPosFalling += 520;
+            xPosFalling += 730;
 
             AddChild(_crumblingPlatformArray[count]);
         }
 
         xPosFalling2 = 600;
 
-        _crumblingPlatformArray2 = new CrumblingPlatform[4];
+        _crumblingPlatformArray2 = new CrumblingPlatform[3];
 
         for (int count = 0; count < _crumblingPlatformArray2.Length; count++)
         {
             _crumblingPlatformArray2[count] = new CrumblingPlatform();
             _crumblingPlatformArray2[count].SetSpawnPosition(xPosFalling2, yPosFalling2);
-            xPosFalling2 += 520;
+            xPosFalling2 += 730;
 
             AddChild(_crumblingPlatformArray2[count]);
         }
