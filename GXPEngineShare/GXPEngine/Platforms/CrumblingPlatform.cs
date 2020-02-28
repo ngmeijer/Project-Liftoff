@@ -48,6 +48,11 @@ public class CrumblingPlatform : AnimationSprite
         {
             x -= moveSpeed;
         }
+
+        if (playerOnPlatform)
+        {
+            handleCrumbleAnimation();
+        }
     }
 
     public void handleCrumbleAnimation()

@@ -162,10 +162,12 @@ public class Player2 : AnimationSprite
                 scoreAhead += 1;
             }
         }
+
         if (gameOver)
         {
             scoreCount = 0;
         }
+
         if (heartCollected)
         {
             lifeCount++;
@@ -357,7 +359,6 @@ public class Player2 : AnimationSprite
                         jumpCount = 0;
                         y = _crumblingPlatform.y - 60;
                         _crumblingPlatform.playerOnPlatform = true;
-                        _crumblingPlatform.handleCrumbleAnimation();
                     }
 
                     if (HitTest(_crumblingPlatform))

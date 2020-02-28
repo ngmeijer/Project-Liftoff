@@ -358,7 +358,7 @@ public class Player1 : AnimationSprite
                         jumpCount = 0;
                         y = _crumblingPlatform.y - 60;
                         _crumblingPlatform.playerOnPlatform = true;
-                        _crumblingPlatform.handleCrumbleAnimation();
+                        //_crumblingPlatform.handleCrumbleAnimation();
                     }
 
                     if (HitTest(_crumblingPlatform))
