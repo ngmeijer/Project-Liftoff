@@ -9,7 +9,7 @@ public class CrumblingPlatform : AnimationSprite
 
     //Integers
     private int sceneTime;
-    private int timeBeforeRespawn = 1000;
+    private int timeBeforeRespawn = 700;
     private int movedDistance = 0;
     private int _animationSpeed = 100;
     private int _animationTimer;

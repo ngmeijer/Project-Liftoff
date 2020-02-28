@@ -156,11 +156,14 @@ public class Player1 : AnimationSprite
 
     private void TrackScoreAndLives()
     {
-        scoreCount = Time.time / 400 + pickupScore + scoreAhead;
-
-        if (levelScript._player2 != null)
+        if (!gameOver)
         {
-            if (x > levelScript._player2.x + 100)
+            scoreCount = Time.time / 400 + pickupScore + scoreAhead;
+        }
+
+        if (levelScript._player1 != null)
+        {
+            if (x > levelScript._player1.x + 100)
             {
                 scoreAhead += 1;
             }

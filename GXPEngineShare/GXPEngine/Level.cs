@@ -190,7 +190,7 @@ public class Level : GameObject
     {
         sceneTime++;
 
-        if (sceneTime > 1000)
+        if (sceneTime > 700)
         {
             SpawnNewFallingPlatforms();
             sceneTime = 0;
