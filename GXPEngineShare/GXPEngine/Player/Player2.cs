@@ -20,7 +20,7 @@ public class Player2 : AnimationSprite
 
     //Player gameplay properties
     private float _moveSpeed = 6f;
-    private float _jumpForce = 15f;
+    private float _jumpForce = 18f;
     private float _defaultGravity = 4f;
     private float _gravity;
     private int jumpCount = 0;

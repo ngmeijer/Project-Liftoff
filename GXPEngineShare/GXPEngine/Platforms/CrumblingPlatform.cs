@@ -25,7 +25,7 @@ public class CrumblingPlatform : AnimationSprite
 
     #endregion
 
-    public CrumblingPlatform() : base("Platform_Crumbling_Spritesheet.png", 10, 1)
+    public CrumblingPlatform() : base("crumblingSpriteSheetFixed.png", 10, 1)
     {
         SetScaleXY(1f, 0.5f);
 

@@ -14,13 +14,15 @@ public class MovingPlatform : Sprite
 
     //Floats
     private float _moveSpeedX;
-    private float _moveSpeedY;
-    private float weight = 1;
     public float offsetX;
     public float offsetY;
+    private float speedIncrease = 1.5f;
 
     //Integers
     private int yDir = 1;
+    private int speedTimer = 0;
+    private int timeIncreaseSpeed = 1000;
+    private int maxSpeed = 7;
 
     //Bools
     private bool playerOnPlatform;
@@ -32,8 +34,8 @@ public class MovingPlatform : Sprite
         level = levelScript;
         menu = menuScript;
 
-        _moveSpeedX = 1f;
-        _moveSpeedY = 1f;
+        _moveSpeedX = 7f;
+        //speedIncrease /= 1000;
 
         SetScaleXY(0.3f, 0.3f);
 
@@ -44,26 +46,24 @@ public class MovingPlatform : Sprite
 	private void Update()
 	{
         InversePlatforms();
-        HandlePlayerWeight();
+        MovePlatform();
         RespawnPlatforms();
 	}
 
-    private void HandlePlayerWeight()
+    private void MovePlatform()
     {
         x -= _moveSpeedX;
 
-        if (!playerOnPlatform)
+        if (_moveSpeedX <= maxSpeed)
         {
-            //y += _moveSpeedY * yDir;
+            speedTimer++;
+
+            if (speedTimer >= timeIncreaseSpeed)
+            {
+                _moveSpeedX += speedIncrease;
+                speedTimer = 0;
+            }
         }
-        //else if(playerOnPlatform)
-        //{
-        //    y += weight;
-        //    if (weight <= 5)
-        //    {
-        //        weight *= 1.02f;
-        //    }
-        //}
     }
 
 	private void InversePlatforms()
@@ -90,7 +90,7 @@ public class MovingPlatform : Sprite
         if(x <= -64)
         {
             x = game.width + 128;
-            y = Utils.Random(50, 950);
+            //y = Utils.Random(50, 950);
         }
     }
 }
